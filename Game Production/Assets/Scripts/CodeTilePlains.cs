@@ -26,16 +26,18 @@ public class CodeTilePlains : MonoBehaviour {
 	}
 
 	public void highlightWithin(int radius) {
-		radius = radius * 2;
+		//radius = radius * 2;
 		if (radius > 0) {
-			Collider[] hitColliders = Physics.OverlapSphere (transform.position, radius);
+			Collider[] hitColliders = Physics.OverlapSphere (transform.position, 2);
 			int i = 0;
 
 			while (i < hitColliders.Length) {
 				CodeTilePlains temp = hitColliders [i].GetComponentInParent<CodeTilePlains> ();
-				temp.selected (2);
-				//Debug.Log(temp.moveCost);
-				//temp.highlightWithin(radius - temp.moveCost);
+				if (radius - temp.moveCost >= 0) {
+						temp.selected (2);
+						//Debug.Log(temp.moveCost);
+						temp.highlightWithin(radius - temp.moveCost);
+				}
 				i++;
 			}
 		}
