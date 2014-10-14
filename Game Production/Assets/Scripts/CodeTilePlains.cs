@@ -6,11 +6,18 @@ public class CodeTilePlains : MonoBehaviour {
 	public Material[] controlRingColors;
 	public Material[] tileHighlight;	
 
+	public int moveCost;
+
 	private int controller = -1;
 
 	// Use this for initialization
 	void Start () {
-
+		string temp = transform.FindChild ("ControlRing").GetComponentInChildren<MeshRenderer> ().material.name;
+		for (int i = 0; i < 3; i++) {
+			if(temp.Substring(0,temp.IndexOf(" (")) == controlRingColors[i].name) {
+				controller = i;
+			}
+		}
 	}
 
 	public void selected(int highLight) {
@@ -20,13 +27,17 @@ public class CodeTilePlains : MonoBehaviour {
 
 	public void highlightWithin(int radius) {
 		radius = radius * 2;
-		Collider[] hitColliders = Physics.OverlapSphere (transform.position, radius);
-		int i = 0;
+		if (radius > 0) {
+			Collider[] hitColliders = Physics.OverlapSphere (transform.position, radius);
+			int i = 0;
 
-		while (i < hitColliders.Length) {
-			CodeTilePlains temp = hitColliders[i].GetComponentInParent<CodeTilePlains>();
-			temp.selected(2);
-			i++;
+			while (i < hitColliders.Length) {
+				CodeTilePlains temp = hitColliders [i].GetComponentInParent<CodeTilePlains> ();
+				temp.selected (2);
+				//Debug.Log(temp.moveCost);
+				//temp.highlightWithin(radius - temp.moveCost);
+				i++;
+			}
 		}
 	}
 

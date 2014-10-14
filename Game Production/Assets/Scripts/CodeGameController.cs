@@ -20,6 +20,10 @@ public class CodeGameController : MonoBehaviour {
 				GameObject hitObject = hit.collider.gameObject;
 				CodeTilePlains hitTile = hitObject.GetComponent<CodeTilePlains>();
 				if(hitTile) {
+					foreach(CodeTilePlains i in FindObjectsOfType(typeof(CodeTilePlains))) {
+						i.deselect();
+					}
+
 					hitTile.highlightWithin(2);
 					hitTile.selected(1);
 				}
