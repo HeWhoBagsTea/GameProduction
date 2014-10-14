@@ -26,7 +26,6 @@ public class CodeTilePlains : MonoBehaviour {
 	}
 
 	public void highlightWithin(int radius) {
-		//radius = radius * 2;
 		if (radius > 0) {
 			Collider[] hitColliders = Physics.OverlapSphere (transform.position, 2);
 			int i = 0;

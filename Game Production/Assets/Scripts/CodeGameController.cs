@@ -29,6 +29,14 @@ public class CodeGameController : MonoBehaviour {
 				}
 			}
 		}
+
+		if (Input.GetMouseButtonDown (1)) {
+			foreach(CodeTilePlains i in FindObjectsOfType(typeof(CodeTilePlains))) {
+				i.deselect();
+			}
+		}
+
+	
 	}
 
 }
