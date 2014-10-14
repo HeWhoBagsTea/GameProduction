@@ -8,7 +8,7 @@ public class CameraMove : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		this.transform.position = new Vector3(0, 5, -3);
+		//this.transform.position = new Vector3(0, 5, -3);
 	}
 	
 	// Update is called once per frame
