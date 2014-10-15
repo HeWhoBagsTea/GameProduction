@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CodeTileStandard : MonoBehaviour {
 
 	public Material[] controlRingColors;
 	public Material[] tileHighlight;	
+
+	public UnitBase unitOnTile;
 
 	public int moveCost;
 
@@ -28,15 +31,21 @@ public class CodeTileStandard : MonoBehaviour {
 	public void highlightWithin(int radius) {
 		if (radius > 0) {
 			Collider[] hitColliders = Physics.OverlapSphere (transform.position, 2);
-			int i = 0;
+			List<CodeTileStandard> tiles = new List<CodeTileStandard>();
 
-			while (i < hitColliders.Length) {
-				CodeTileStandard temp = hitColliders [i].GetComponentInParent<CodeTileStandard> ();
-				if (radius - temp.moveCost >= 0) {
-						temp.selected (2);
-						temp.highlightWithin(radius - temp.moveCost);
+			foreach(Collider i in hitColliders) {
+				if(i.GetComponent<CodeTileStandard>() != null) {
+					tiles.Add (i.GetComponent<CodeTileStandard>());
 				}
-				i++;
+			}
+
+			for(int i = 0; i < tiles.Count; i++) {
+				if(radius - tiles[i].moveCost >= 0) {
+					if(tiles[i].unitOnTile == null) {
+						tiles[i].selected(2);
+					}
+					tiles[i].highlightWithin(radius - tiles[i].moveCost);
+				}
 			}
 		}
 	}

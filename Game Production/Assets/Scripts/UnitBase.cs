@@ -10,20 +10,37 @@ public class UnitBase : MonoBehaviour {
 	}
 	
 	void Start() {
-//		currentSpace = getClosestTile ();
-//		currentSpace.unitOnTile = this;
-//		this.transform.position = currentSpace.transform.position;
-		//this.init ();
-		//currentSpace = hitColliders [0].GetComponentsInParent<CodeTileStandard> ();
-		//currentSpace.unitOnTile = this;
-		//this.transform.position = currentSpace.transform.position;
+		currentSpace = getClosestTile ();
+		currentSpace.unitOnTile = this;
+		this.transform.position = currentSpace.transform.position;
+		init ();
 	}
 
 	public void showMovement() {
-		//currentSpace.highlightMovementOfUnit (this.movement);
+		currentSpace.highlightWithin (this.movement);
+		currentSpace.selected (1);
 	}
 
-//	public CodeTileStandard getClosestTile() {
-//		CodeTileStandard[] tiles = GameObject.FindGameObjectsWithTag("Tile")
-//	}
+	public void moveUnit(CodeTileStandard moveLocation) {
+		currentSpace.unitOnTile = null;
+		currentSpace = moveLocation;
+		transform.position = currentSpace.transform.position;
+		currentSpace.unitOnTile = this;
+	}
+
+	public CodeTileStandard getClosestTile() {
+		GameObject[] tiles = GameObject.FindGameObjectsWithTag ("Tile");
+		GameObject closest = null;
+		foreach(GameObject i in tiles) {
+			if(!closest) {
+				closest = i;
+			}
+
+			if(Vector3.Distance(this.transform.position, i.transform.position) <= Vector3.Distance(this.transform.position, closest.transform.position)) {
+				closest = i;
+			}
+		}
+
+		return closest.GetComponent<CodeTileStandard>();
+	}
 }
