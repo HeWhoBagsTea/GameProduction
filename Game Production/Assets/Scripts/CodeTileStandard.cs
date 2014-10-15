@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CodeTilePlains : MonoBehaviour {
+public class CodeTileStandard : MonoBehaviour {
 
 	public Material[] controlRingColors;
 	public Material[] tileHighlight;	
@@ -31,10 +31,9 @@ public class CodeTilePlains : MonoBehaviour {
 			int i = 0;
 
 			while (i < hitColliders.Length) {
-				CodeTilePlains temp = hitColliders [i].GetComponentInParent<CodeTilePlains> ();
+				CodeTileStandard temp = hitColliders [i].GetComponentInParent<CodeTileStandard> ();
 				if (radius - temp.moveCost >= 0) {
 						temp.selected (2);
-						//Debug.Log(temp.moveCost);
 						temp.highlightWithin(radius - temp.moveCost);
 				}
 				i++;

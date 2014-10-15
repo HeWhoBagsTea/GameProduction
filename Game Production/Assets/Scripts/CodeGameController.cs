@@ -18,9 +18,9 @@ public class CodeGameController : MonoBehaviour {
 
 			if(Physics.Raycast(ray, out hit)) {
 				GameObject hitObject = hit.collider.gameObject;
-				CodeTilePlains hitTile = hitObject.GetComponent<CodeTilePlains>();
+				CodeTileStandard hitTile = hitObject.GetComponent<CodeTileStandard>();
 				if(hitTile) {
-					foreach(CodeTilePlains i in FindObjectsOfType(typeof(CodeTilePlains))) {
+					foreach(CodeTileStandard i in FindObjectsOfType(typeof(CodeTileStandard))) {
 						i.deselect();
 					}
 
@@ -31,7 +31,7 @@ public class CodeGameController : MonoBehaviour {
 		}
 
 		if (Input.GetMouseButtonDown (1)) {
-			foreach(CodeTilePlains i in FindObjectsOfType(typeof(CodeTilePlains))) {
+			foreach(CodeTileStandard i in FindObjectsOfType(typeof(CodeTileStandard))) {
 				i.deselect();
 			}
 		}
