@@ -7,6 +7,14 @@ public class UnitBase : MonoBehaviour {
 
 	public int controller = -1;
 	public int movement = 1;
+	public int minAttackRange = 1;
+	public int maxAttackRange = 1;
+	public int attackPow = 1;
+	public int maxHP = 1;
+	public int currentHP = 1;
+	public int foodCost = 0;
+	public int lumberCost = 0;
+	public string unitType = "";
 
 	public bool hasMoved = false;
 	public bool hasActioned = false;
