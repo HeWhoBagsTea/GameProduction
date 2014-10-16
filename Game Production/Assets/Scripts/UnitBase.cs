@@ -12,14 +12,19 @@ public class UnitBase : MonoBehaviour {
 	public bool hasActioned = false;
 	public bool isDone = false;
 
+	public Vector3 posOffset;
+
 	public virtual void init () {
 		Debug.Log ("has unit");
+		posOffset = new Vector3 (0 , .5f, 0);
 	}
 	
 	void Start() {
+		init ();
+
 		currentSpace = getClosestTile ();
 		currentSpace.unitOnTile = this;
-		this.transform.position = currentSpace.transform.position;
+		this.transform.position = currentSpace.transform.position + posOffset;
 
 		Material tempMat = transform.GetComponent<MeshRenderer> ().material;
 
@@ -28,8 +33,6 @@ public class UnitBase : MonoBehaviour {
 				controller = i;
 			}
 		}
-
-		init ();
 	}
 
 	void Update() {
@@ -59,10 +62,9 @@ public class UnitBase : MonoBehaviour {
 	public void moveUnit(CodeTileStandard moveLocation) {
 		currentSpace.unitOnTile = null;
 		currentSpace = moveLocation;
-		transform.position = currentSpace.transform.position;
+		transform.position = currentSpace.transform.position + posOffset;
 		currentSpace.unitOnTile = this;
 		hasMoved = true;
-		isDone = true;
 	}
 
 	public CodeTileStandard getClosestTile() {
