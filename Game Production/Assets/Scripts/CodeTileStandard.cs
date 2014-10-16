@@ -10,6 +10,7 @@ public class CodeTileStandard : MonoBehaviour {
 	public UnitBase unitOnTile;
 
 	public int moveCost;
+	public int originalMoveCost = 1;
 
 	private int controller = -1;
 
@@ -20,6 +21,17 @@ public class CodeTileStandard : MonoBehaviour {
 			if(temp.Substring(0,temp.IndexOf(" (")) == controlRingColors[i].name) {
 				controller = i;
 			}
+		}
+
+		moveCost = originalMoveCost;
+	}
+
+	void Update () {
+		if (unitOnTile == null) {
+			moveCost = originalMoveCost;
+		}
+		if (unitOnTile != null && (CodeGameController.playersTurn != unitOnTile.controller)) {
+			moveCost = 10000;
 		}
 	}
 

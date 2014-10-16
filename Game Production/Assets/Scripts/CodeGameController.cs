@@ -4,9 +4,9 @@ using System.Collections;
 public class CodeGameController : MonoBehaviour {
 
 	public GameObject tilePlains;
-
-	private bool firstClick = false;
 	private UnitBase selectedUnit;
+
+	public static int playersTurn = 1;
 
 	// Use this for initialization
 	void Start () {
@@ -26,58 +26,50 @@ public class CodeGameController : MonoBehaviour {
 				case "Tile":
 					CodeTileStandard tempTile = hitObject.GetComponent<CodeTileStandard>();
 					Material tempTileMat = tempTile.transform.FindChild ("TerrainPlains").GetComponentInChildren<MeshRenderer> ().material;
-					Debug.Log(tempTileMat.name);
-					if(firstClick && tempTile.unitOnTile == null && tempTileMat.name.Substring(0, tempTileMat.name.IndexOf(" (")).Equals("MovementSpaces")) {
+					Debug.Log(tempTileMat.name.Substring(0, tempTileMat.name.IndexOf(" (")));
+
+					if(tempTile.unitOnTile != null && (selectedUnit != null || selectedUnit == null)) {
+						clearHighlights();
+						selectedUnit = tempTile.unitOnTile;
+
+						if(selectedUnit.controller == playersTurn) {
+							selectedUnit.showMovement();
+						}
+						else {
+							selectedUnit = null;
+						}
+					}
+					else if(tempTile.unitOnTile == null && selectedUnit != null && tempTileMat.name.Substring(0, tempTileMat.name.IndexOf(" (")).Equals("defaultMat")) {
+						clearHighlights();
+						selectedUnit = null;
+					}
+					else if(tempTile.unitOnTile == null && selectedUnit != null && tempTileMat.name.Substring(0, tempTileMat.name.IndexOf(" (")).Equals("MovementSpaces")) {
 						selectedUnit.moveUnit(tempTile);
 						clearHighlights();
-						firstClick = false;
 						selectedUnit = null;
 					}
 
-					else if(tempTile.unitOnTile != null && firstClick && tempTileMat.name.Substring(0, tempTileMat.name.IndexOf(" (")).Equals("defualtMat")) {
-						clearHighlights();
-						selectedUnit = tempTile.unitOnTile;
-						selectedUnit.showMovement();
-					}
 
-					else if(tempTileMat.name.Substring(0, tempTileMat.name.IndexOf(" (")).Equals("defualtMat") && firstClick) {
-						clearHighlights();
-					}
-
-					else if(tempTile.unitOnTile != null && !firstClick) {
-						clearHighlights();
-						selectedUnit = tempTile.unitOnTile;
-						selectedUnit.showMovement();
-;						firstClick = true;
-					}
 					break;
 				case "Unit":
 					UnitBase tempUnit = hitObject.GetComponent<UnitBase>();
 					clearHighlights();
 					selectedUnit = tempUnit;
-					selectedUnit.showMovement();
-					firstClick = true;
+					if(selectedUnit.controller == playersTurn) {
+						selectedUnit.showMovement();
+					}
+					else {
+						selectedUnit = null;
+					}
 					break;
 				}
 
-
-
-				//CodeTileStandard hitTile = hitObject.GetComponent<CodeTileStandard>();
-				//if(hitTile) {
-				//	foreach(CodeTileStandard i in FindObjectsOfType(typeof(CodeTileStandard))) {
-				//		i.deselect();
-				//	}
-				//
-				//	hitTile.highlightWithin(2);
-				//	hitTile.selected(1);
-				//}
 			}
 		}
 
 		if (Input.GetMouseButtonDown (1)) {
 			clearHighlights();
 			selectedUnit = null;
-			firstClick = false;
 		}
 	}
 

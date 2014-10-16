@@ -3,7 +3,14 @@ using System.Collections;
 
 public class UnitBase : MonoBehaviour {
 	public CodeTileStandard currentSpace;
+	public Material[] unitHighlights;
+
+	public int controller = -1;
 	public int movement = 1;
+
+	public bool hasMoved = false;
+	public bool hasActioned = false;
+	public bool isDone = false;
 
 	public virtual void init () {
 		Debug.Log ("has unit");
@@ -13,12 +20,40 @@ public class UnitBase : MonoBehaviour {
 		currentSpace = getClosestTile ();
 		currentSpace.unitOnTile = this;
 		this.transform.position = currentSpace.transform.position;
+
+		Material tempMat = transform.GetComponent<MeshRenderer> ().material;
+
+		for (int i = 0; i < unitHighlights.Length; i++) {
+			if(tempMat.name.Substring(0, tempMat.name.IndexOf(" (")).Equals(unitHighlights[i].name)) {
+				controller = i;
+			}
+		}
+
 		init ();
 	}
 
+	void Update() {
+		if (hasMoved && hasActioned) {
+			isDone = true;
+		}
+
+		if (isDone) {
+			renderer.material = unitHighlights[controller + 2];
+		}
+	}
+
+	public void resolveTurn() {
+		renderer.material = unitHighlights[controller + 2];
+		hasMoved = false;
+		hasActioned = false;
+		isDone = false;
+	}
+
 	public void showMovement() {
-		currentSpace.highlightWithin (this.movement);
-		currentSpace.selected (1);
+		if (!hasMoved) {
+			currentSpace.highlightWithin (this.movement);
+			currentSpace.selected (1);
+		}
 	}
 
 	public void moveUnit(CodeTileStandard moveLocation) {
@@ -26,6 +61,8 @@ public class UnitBase : MonoBehaviour {
 		currentSpace = moveLocation;
 		transform.position = currentSpace.transform.position;
 		currentSpace.unitOnTile = this;
+		hasMoved = true;
+		isDone = true;
 	}
 
 	public CodeTileStandard getClosestTile() {
