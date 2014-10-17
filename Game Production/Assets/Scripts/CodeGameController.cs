@@ -79,4 +79,21 @@ public class CodeGameController : MonoBehaviour {
 			i.deselect();
 		}
 	}
+
+	public void OnGUI() 
+	{
+		GUI.color = new Vector4(0.23f, 0.75f, 0.54f, 1);
+		if (selectedUnit != null) {
+			GUI.Box (new Rect ((Screen.width*0.4f), 0, 200, 100), 
+			         "Unit Stats:");	
+			GUI.Box(new Rect ((Screen.width*0.40f), 25, 200, 25),
+			        "HP:" + selectedUnit.currentHP + "/"+selectedUnit.maxHP +
+			        " AttackRange: " + selectedUnit.minAttackRange + "-"+ selectedUnit.maxAttackRange);
+			GUI.Box(new Rect ((Screen.width*0.40f), 50, 200, 25),
+			        "Movement: " + selectedUnit.movement +
+			        " Attack Power: " + selectedUnit.attackPow);
+			GUI.Box(new Rect ((Screen.width*0.40f), 75, 200, 25),
+			        "Unit Type: " + selectedUnit.unitType);
+		}
+	}
 }
