@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class UnitBase : MonoBehaviour {
 	public CodeTileStandard currentSpace;
 	public Material[] unitHighlights;
+	public Material[] highlights;
 
 	public int controller = -1;
 	public int movement = 1;
@@ -53,17 +55,32 @@ public class UnitBase : MonoBehaviour {
 		}
 	}
 
-	public void resolveTurn() {
-		renderer.material = unitHighlights[controller + 2];
-		hasMoved = false;
-		hasActioned = false;
-		isDone = false;
-	}
-
 	public void showMovement() {
 		if (!hasMoved) {
-			currentSpace.highlightWithin (this.movement);
-			currentSpace.selected (1);
+			showMovementRangeHelper(movement, currentSpace);
+			highlightCurrentSpace(highlights[1]);
+		}
+	}
+
+	private void showMovementRangeHelper(int moveRange, CodeTileStandard tile) {
+		if (moveRange > 0) {
+			Collider[] hitColliders = Physics.OverlapSphere (tile.transform.position, 2);
+			List<CodeTileStandard> tiles = new List<CodeTileStandard>();
+			
+			foreach(Collider i in hitColliders) {
+				if(i.GetComponent<CodeTileStandard>() != null) {
+					tiles.Add (i.GetComponent<CodeTileStandard>());
+				}
+			}
+
+			for(int i = 0; i < tiles.Count; i++) {
+				if(moveRange - tiles[i].moveCost >= 0) {
+					if(tiles[i].unitOnTile == null) {
+						tiles[i].transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer>().material = highlights[2];
+					}
+					showMovementRangeHelper(moveRange - tiles[i].moveCost, tiles[i]);
+				}
+			}
 		}
 	}
 
@@ -75,7 +92,19 @@ public class UnitBase : MonoBehaviour {
 		hasMoved = true;
 	}
 
-	public CodeTileStandard getClosestTile() {
+	public void resolveTurn() {
+		renderer.material = unitHighlights[controller];
+		hasMoved = false;
+		hasActioned = false;
+		isDone = false;
+	}
+
+	public void highlightCurrentSpace(Material highlight) {
+		MeshRenderer currentSpaceTile = currentSpace.transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer> ();
+		currentSpaceTile.material = highlight;
+	}
+
+	private CodeTileStandard getClosestTile() {
 		GameObject[] tiles = GameObject.FindGameObjectsWithTag ("Tile");
 		GameObject closest = null;
 		foreach(GameObject i in tiles) {

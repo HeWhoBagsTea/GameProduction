@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CodeGameController : MonoBehaviour {
 
-	public GameObject tilePlains;
+	public GameObject tile;
 	private UnitBase selectedUnit;
 
 	public static int playersTurn = 1;
@@ -15,6 +15,7 @@ public class CodeGameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 		if (Input.GetMouseButtonDown (0)) {
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit = new RaycastHit();
@@ -25,7 +26,7 @@ public class CodeGameController : MonoBehaviour {
 				switch(hitObject.tag) {
 				case "Tile":
 					CodeTileStandard tempTile = hitObject.GetComponent<CodeTileStandard>();
-					Material tempTileMat = tempTile.transform.FindChild ("TerrainPlains").GetComponentInChildren<MeshRenderer> ().material;
+					Material tempTileMat = tempTile.transform.FindChild ("Terrain").GetComponentInChildren<MeshRenderer> ().material;
 					Debug.Log(tempTileMat.name.Substring(0, tempTileMat.name.IndexOf(" (")));
 
 					if(tempTile.unitOnTile != null && (selectedUnit != null || selectedUnit == null)) {
