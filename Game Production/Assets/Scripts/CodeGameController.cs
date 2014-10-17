@@ -2,78 +2,100 @@
 using System.Collections;
 
 public class CodeGameController : MonoBehaviour {
-
+	
 	public GameObject tile;
 	private UnitBase selectedUnit;
-
+	private UnitBase previousSelectedUnit;
+	
 	public static int playersTurn = 1;
-
+	
 	// Use this for initialization
 	void Start () {
-
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
+		if (previousSelectedUnit == null) {
+			previousSelectedUnit = selectedUnit;
+		} else if (selectedUnit != previousSelectedUnit) {
+			previousSelectedUnit.deselect();
+			previousSelectedUnit = selectedUnit;
+		}
+		
+		if (selectedUnit != null && !selectedUnit.isDone) {
+			selectedUnit.selected();
+		}
+		
+		//if (selectedUnit != null && selectedUnit.controller != playersTurn) {
+		//	selectedUnit = null;
+		//}
+		
 		if (Input.GetMouseButtonDown (0)) {
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit = new RaycastHit();
-
+			
 			if(Physics.Raycast(ray, out hit)) {
 				GameObject hitObject = hit.collider.gameObject;
-
+				
 				switch(hitObject.tag) {
 				case "Tile":
 					CodeTileStandard tempTile = hitObject.GetComponent<CodeTileStandard>();
 					Material tempTileMat = tempTile.transform.FindChild ("Terrain").GetComponentInChildren<MeshRenderer> ().material;
-					Debug.Log(tempTileMat.name.Substring(0, tempTileMat.name.IndexOf(" (")));
-
-					if(tempTile.unitOnTile != null && (selectedUnit != null || selectedUnit == null)) {
-						clearHighlights();
-						selectedUnit = tempTile.unitOnTile;
-
-						if(selectedUnit.controller == playersTurn) {
-							selectedUnit.showMovement();
-						}
-						else {
-							selectedUnit = null;
-						}
-					}
-					else if(tempTile.unitOnTile == null && selectedUnit != null && tempTileMat.name.Substring(0, tempTileMat.name.IndexOf(" (")).Equals("defaultMat")) {
+					string materialName = tempTileMat.name.Substring(0, tempTileMat.name.IndexOf(" ("));
+					Debug.Log(materialName);
+					
+					
+					if(tempTile.unitOnTile == null && selectedUnit != null && materialName.Equals("defaultMat")) {
 						clearHighlights();
 						selectedUnit = null;
 					}
-					else if(tempTile.unitOnTile == null && selectedUnit != null && tempTileMat.name.Substring(0, tempTileMat.name.IndexOf(" (")).Equals("MovementSpaces")) {
+					else if(tempTile.unitOnTile == null && selectedUnit != null && materialName.Equals("MovementSpace")) {
 						selectedUnit.moveUnit(tempTile);
 						clearHighlights();
 						selectedUnit = null;
 					}
-
-
+					else if(tempTile.unitOnTile != null && selectedUnit != null && materialName.Equals("AttackSpace")) {
+						selectedUnit.attackUnit(tempTile.unitOnTile);
+						clearHighlights();
+						selectedUnit = null;
+					} 
+					else if(tempTile.unitOnTile != null && (selectedUnit != null || selectedUnit == null)) {
+						clearHighlights();
+						selectedUnit = tempTile.unitOnTile;
+						if(selectedUnit.controller != playersTurn) {
+							selectedUnit = null;
+						}
+					}
+					
+					
 					break;
 				case "Unit":
 					UnitBase tempUnit = hitObject.GetComponent<UnitBase>();
+					Material tempUnitSpaceMat = tempUnit.currentSpace.transform.FindChild ("Terrain").GetComponentInChildren<MeshRenderer> ().material;
+					string tempUnitSpaceMatName = tempUnitSpaceMat.name.Substring(0, tempUnitSpaceMat.name.IndexOf(" ("));;
 					clearHighlights();
-					selectedUnit = tempUnit;
-					if(selectedUnit.controller == playersTurn) {
-						selectedUnit.showMovement();
+					if(tempUnit.controller == playersTurn) {
+						selectedUnit = tempUnit;
 					}
-					else {
+					else if(selectedUnit != null && tempUnitSpaceMatName.Equals("AttackSpace")) {
+						selectedUnit.attackUnit(tempUnit);
+						clearHighlights();
 						selectedUnit = null;
 					}
+					
 					break;
 				}
-
+				
 			}
 		}
-
+		
 		if (Input.GetMouseButtonDown (1)) {
 			clearHighlights();
 			selectedUnit = null;
 		}
 	}
-
+	
 	public void clearHighlights() {
 		foreach(CodeTileStandard i in FindObjectsOfType(typeof(CodeTileStandard))) {
 			i.deselect();
