@@ -96,32 +96,28 @@ public class UnitBase : MonoBehaviour {
 	private void showAttack() {
 		if (!hasActioned) {
 			clearHighlights();
-			Collider[] hitCollidersMax = Physics.OverlapSphere (this.transform.position - this.posOffset, this.maxAttackRange * 2);
-			List<CodeTileStandard> maxTiles = new List<CodeTileStandard>();
+			showAttackHelper(maxAttackRange, this.currentSpace, highlights[3]);
+			showAttackHelper(minAttackRange, this.currentSpace, highlights[0]);
+		}
+	}
+
+	private void showAttackHelper(int attackRange, CodeTileStandard tile, Material mat) {
+		if (attackRange > 0) {
+			Collider[] hitColliders = Physics.OverlapSphere (tile.transform.position, 2);
+			List<CodeTileStandard> tiles = new List<CodeTileStandard>();
 			
-			Collider[] hitCollidersMin = Physics.OverlapSphere (this.transform.position - this.posOffset, this.minAttackRange * 2);
-			List<CodeTileStandard> minTiles = new List<CodeTileStandard>();
-			
-			foreach(Collider i in hitCollidersMax) {
+			foreach(Collider i in hitColliders) {
 				if(i.GetComponent<CodeTileStandard>() != null) {
-					maxTiles.Add (i.GetComponent<CodeTileStandard>());
+					tiles.Add (i.GetComponent<CodeTileStandard>());
 				}
 			}
 			
-			foreach(Collider i in hitCollidersMin) {
-				if(i.GetComponent<CodeTileStandard>() != null) {
-					minTiles.Add (i.GetComponent<CodeTileStandard>());
-				}
-			}
-			
-			foreach(CodeTileStandard i in minTiles) {
-				if(maxTiles.Contains(i))
-					maxTiles.Remove(i);
-			}
-			
-			for(int i = 0; i < maxTiles.Count; i++) {
-				if((maxTiles[i].unitOnTile != null && maxTiles[i].unitOnTile.controller != this.controller) || maxTiles[i].unitOnTile == null) {
-					maxTiles[i].transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer>().material = highlights[3];
+			for(int i = 0; i < tiles.Count; i++) {
+				if(attackRange - 1 >= 0) {
+					if((tiles[i].unitOnTile != null && tiles[i].unitOnTile.controller != this.controller) || tiles[i].unitOnTile == null) {
+						tiles[i].transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer>().material = mat;
+					}
+					showAttackHelper(attackRange - 1, tiles[i], mat);
 				}
 			}
 		}
