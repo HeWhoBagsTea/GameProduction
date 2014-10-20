@@ -69,6 +69,10 @@ public class UnitBase : MonoBehaviour {
 		HP_WIDTH = Screen.width * 0.1f;
 		HP_HEIGHT = Screen.height * 0.05f;
 
+		if (this.currentHP <= 0) {
+			Destroy(this.gameObject);
+		}
+
 		if (hasMoved && hasActioned) {	
 			isDone = true;
 		}
@@ -89,14 +93,7 @@ public class UnitBase : MonoBehaviour {
 
 	void OnGUI() {
 		if (entered) {
-			if(controller == 1)
-			{
-				GUI.color = Color.red;
-			}
-			else
-			{
-				GUI.color = Color.cyan;
-			}
+			GUI.color = (controller == 1) ? Color.red : Color.cyan;
 			GUI.Box (new Rect (HP_X_POS, HP_Y_POS, HP_WIDTH, HP_HEIGHT),
 		    "HP:" + currentHP + "/" + maxHP);
 		}
@@ -129,7 +126,7 @@ public class UnitBase : MonoBehaviour {
 		if (!hasActioned) {
 			clearHighlights();
 			showAttackHelper(maxAttackRange, this.currentSpace, highlights[3]);
-			showAttackHelper(minAttackRange, this.currentSpace, highlights[0]);
+			showAttackHelper(minAttackRange - 1, this.currentSpace, highlights[0]);
 		}
 	}
 

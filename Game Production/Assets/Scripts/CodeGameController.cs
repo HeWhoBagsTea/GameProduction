@@ -6,8 +6,11 @@ public class CodeGameController : MonoBehaviour {
 	public GameObject tile;
 	private UnitBase selectedUnit;
 	private UnitBase previousSelectedUnit;
-	
+
+	private Player[] players;
+
 	public static int playersTurn = 1;
+	public static bool gameOver = false;
 	private float BOX_X_POS = Screen.width*0.4f;
 	private float BOX_Y_POS = Screen.height*.05f;
 	private float BOX_WIDTH = Screen.width * 0.3f;
@@ -15,7 +18,12 @@ public class CodeGameController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		players = new Player[2];
 		
+		for (int i = 0; i < players.Length; i++) {
+			players[i] = new Player();
+			players[i].setPlayer(i + 1);
+		}
 	}
 	
 	// Update is called once per frame
@@ -24,6 +32,10 @@ public class CodeGameController : MonoBehaviour {
 		BOX_Y_POS = Screen.height * 0.05f;
 		BOX_WIDTH = Screen.width * 0.225f;
 		BOX_HEIGHT = Screen.height * 0.1f;
+
+		for (int i = 0; i < players.Length; i++) {
+			players[i].numberOfUnits = players[i].getNumberOfControlledUnits();
+		}
 
 		if (previousSelectedUnit == null) {
 			previousSelectedUnit = selectedUnit;
@@ -113,6 +125,21 @@ public class CodeGameController : MonoBehaviour {
 
 	public void OnGUI() 
 	{
+
+
+		if (players [0].numberOfUnits == 0) {
+			GUI.color = Color.cyan;
+			GUI.Box (new Rect (BOX_X_POS, BOX_Y_POS + 100, BOX_WIDTH, BOX_HEIGHT/2), 
+			         "Blue Player Wins");
+			gameOver = true;
+		}
+		else if(players [1].numberOfUnits == 0) {
+			GUI.color = Color.red;
+			GUI.Box (new Rect (BOX_X_POS, BOX_Y_POS + 100, BOX_WIDTH, BOX_HEIGHT/2), 
+			         "Red Player Wins");
+			gameOver = true;
+		}
+
 		GUI.skin.box.alignment = TextAnchor.UpperCenter;
 		GUI.color = new Vector4(0.23f, 0.75f, 0.54f, 1);
 		if (selectedUnit != null) {
