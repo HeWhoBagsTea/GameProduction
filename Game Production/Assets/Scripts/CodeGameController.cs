@@ -8,6 +8,10 @@ public class CodeGameController : MonoBehaviour {
 	private UnitBase previousSelectedUnit;
 	
 	public static int playersTurn = 1;
+	private float BOX_X_POS = Screen.width*0.4f;
+	private float BOX_Y_POS = Screen.height*.05f;
+	private float BOX_WIDTH = Screen.width * 0.3f;
+	private float BOX_HEIGHT = Screen.height * 0.1f;
 	
 	// Use this for initialization
 	void Start () {
@@ -16,6 +20,11 @@ public class CodeGameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		BOX_X_POS = Screen.width * 0.4f;
+		BOX_Y_POS = Screen.height * 0.05f;
+		BOX_WIDTH = Screen.width * 0.225f;
+		BOX_HEIGHT = Screen.height * 0.1f;
+
 		if (previousSelectedUnit == null) {
 			previousSelectedUnit = selectedUnit;
 		} else if (selectedUnit != previousSelectedUnit) {
@@ -104,17 +113,18 @@ public class CodeGameController : MonoBehaviour {
 
 	public void OnGUI() 
 	{
+		GUI.skin.box.alignment = TextAnchor.UpperCenter;
 		GUI.color = new Vector4(0.23f, 0.75f, 0.54f, 1);
 		if (selectedUnit != null) {
-			GUI.Box (new Rect ((Screen.width*0.4f), 0, 200, 100), 
-			         "Unit Stats:");	
-			GUI.Box(new Rect ((Screen.width*0.40f), 25, 200, 25),
+			GUI.Box (new Rect (BOX_X_POS, BOX_Y_POS*0f, BOX_WIDTH, BOX_HEIGHT), 
+			         "Unit Stats:");
+			GUI.Box(new Rect (BOX_X_POS, BOX_Y_POS, BOX_WIDTH, BOX_HEIGHT),
 			        "HP:" + selectedUnit.currentHP + "/"+selectedUnit.maxHP +
 			        " AttackRange: " + selectedUnit.minAttackRange + "-"+ selectedUnit.maxAttackRange);
-			GUI.Box(new Rect ((Screen.width*0.40f), 50, 200, 25),
+			GUI.Box(new Rect (BOX_X_POS, BOX_Y_POS*2f, BOX_WIDTH, BOX_HEIGHT),
 			        "Movement: " + selectedUnit.movement +
 			        " Attack Power: " + selectedUnit.attackPow);
-			GUI.Box(new Rect ((Screen.width*0.40f), 75, 200, 25),
+			GUI.Box(new Rect (BOX_X_POS, BOX_Y_POS*3f, BOX_WIDTH, BOX_HEIGHT),
 			        "Unit Type: " + selectedUnit.unitType);
 		}
 	}

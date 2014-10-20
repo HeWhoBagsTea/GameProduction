@@ -28,6 +28,12 @@ public class UnitBase : MonoBehaviour {
 	private float BUTTON_WIDTH = Screen.width/9;
 	private float BUTTON_HEIGHT = Screen.height/20;
 	private float BUTTON_SPACING = Screen.height/100 + Screen.height/20;
+
+	private float HP_X_POS = Screen.width * 0.45f;
+	private float HP_Y_POS = Screen.height * 0.3f;
+	private float HP_WIDTH = Screen.width * 0.1f;
+	private float HP_HEIGHT = Screen.height * 0.05f;
+	private bool entered = false;
 	
 	public Vector3 posOffset;
 	
@@ -57,8 +63,13 @@ public class UnitBase : MonoBehaviour {
 		BUTTON_WIDTH = Screen.width/9;
 		BUTTON_HEIGHT = Screen.height/20;
 		BUTTON_SPACING = Screen.height/100 + Screen.height/20;
-		
-		if (hasMoved && hasActioned) {
+
+		HP_X_POS = Screen.width * 0.45f;
+		HP_Y_POS = Screen.height * 0.3f;
+		HP_WIDTH = Screen.width * 0.1f;
+		HP_HEIGHT = Screen.height * 0.05f;
+
+		if (hasMoved && hasActioned) {	
 			isDone = true;
 		}
 		
@@ -66,10 +77,31 @@ public class UnitBase : MonoBehaviour {
 			renderer.material = unitHighlights[controller + 2];
 		}
 	}
-	
+
+	void OnMouseEnter()
+	{
+		entered = true;
+	}
+	void OnMouseExit()
+	{
+		entered = false;
+	}
+
 	void OnGUI() {
+		if (entered) {
+			if(controller == 1)
+			{
+				GUI.color = Color.red;
+			}
+			else
+			{
+				GUI.color = Color.cyan;
+			}
+			GUI.Box (new Rect (HP_X_POS, HP_Y_POS, HP_WIDTH, HP_HEIGHT),
+		    "HP:" + currentHP + "/" + maxHP);
+		}
 		if (!showOptions)return;
-		
+		GUI.color = Color.white;
 		Rect attackButton = new Rect (BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
 		Rect moveButton = new Rect (BUTTON_X_POS, attackButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
 		
