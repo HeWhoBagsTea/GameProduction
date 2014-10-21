@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class CommanderInfo : UnitBase {
 	
 	override public void init() {
-		this.maxHP = 60;
-		this.currentHP = this.maxHP;
+		this.HPmax = 60;
+		this.HPcurr = this.HPmax;
 		this.minAttackRange = 1;
 		this.maxAttackRange = 2;
 		this.attackPow = 6;

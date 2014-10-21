@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 
 public class OnGUIButtons : MonoBehaviour
 {
@@ -10,6 +12,8 @@ public class OnGUIButtons : MonoBehaviour
 	private Vector3 player1CamPos = new Vector3 (20, 15, 0.05f);
 	private Vector3 player2CamPos = new Vector3 (-21, 15, -0.5f);
 	private Quaternion newRot;
+
+	private int cameraView = 1;
 	//private Vector3 targetPosition = Vector3(25, -90, 0);
 		
 	void Start ()
@@ -19,8 +23,8 @@ public class OnGUIButtons : MonoBehaviour
 		
 	void decidePlayerPOV ()
 	{
-			transform.eulerAngles = (CodeGameController.playersTurn == 1) ? PoV1 : PoV2;
-			transform.position = (CodeGameController.playersTurn == 1) ? player1CamPos : player2CamPos;
+		transform.eulerAngles = (cameraView == 1) ? PoV1 : PoV2;
+		transform.position = (cameraView == 1) ? player1CamPos : player2CamPos;
 	}
 
 //	void smoothCamSwitch()
@@ -41,26 +45,54 @@ public class OnGUIButtons : MonoBehaviour
 		
 	void OnGUI ()
 	{
-			GameObject[] units = GameObject.FindGameObjectsWithTag ("Unit");
-		
-			if (GUI.Button (new Rect (Screen.width * 0.01f, Screen.height * 0.9f, Screen.width * 0.1f, Screen.height * 0.06f), "End Turn")) 
+		GameObject[] units = GameObject.FindGameObjectsWithTag ("Unit");
+	
+		if (GUI.Button (new Rect (Screen.width * 0.01f, Screen.height * 0.9f, Screen.width * 0.1f, Screen.height * 0.06f), "End Turn")) 
+		{
+			foreach (GameObject u in units) 
 			{
-					foreach (GameObject u in units) 
-					{
-						u.GetComponent<UnitBase> ().resolveTurn ();
-					}
-					CodeGameController.playersTurn = (CodeGameController.playersTurn == 1) ? 2 : 1;    
-					decidePlayerPOV ();
-					//smoothCamSwitch ();
-					
-					
-
-					Debug.Log ("You have ended your turn.");
+				u.GetComponent<UnitBase> ().resolveTurn ();
 			}
+
+			nextPlayer();
+			cameraView = (NewGameController.currentPlayer.playerID == 1) ? 1 : 2;    
+			decidePlayerPOV ();
+			//smoothCamSwitch ();
+			
+			
+
+			Debug.Log ("You have ended your turn.");
+		}
 	}
 
 	void update ()
 	{
 	
+	}
+
+	private void nextPlayer() {
+		bool isNext = false;
+		int index = 0;
+
+		List<Player> players = new List<Player>();
+		GameObject[] playersObjs = GameObject.FindGameObjectsWithTag ("Player"); 
+		foreach (GameObject i in playersObjs) {
+			if(i.GetComponent<Player>() != null) {
+				players.Add(i.GetComponent<Player>());
+			}
+		}
+		
+		while(!isNext) {
+			if(NewGameController.currentPlayer.getPlayerID() + 1 == players[index].getPlayerID()) {
+				NewGameController.currentPlayer = players[index];
+				isNext = true;
+			}
+			else if(NewGameController.currentPlayer.playerID >= players.Count && players[index].playerID == 1) {
+				NewGameController.currentPlayer = players[index];
+				isNext = true;
+			}
+			
+			index++;
+		}
 	}
 }

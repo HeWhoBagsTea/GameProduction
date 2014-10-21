@@ -1,18 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MeleeInfo : UnitBase {
+public class BuilderInfo : UnitBase {
 	
 	override public void init() {
-		this.maxHP = 12;
-		this.currentHP = this.maxHP;
+		this.HPmax = 8;
+		this.HPcurr = this.HPmax;
 		this.minAttackRange = 1;
 		this.maxAttackRange = 1;
-		this.attackPow = 6;
 		this.movement = 6;
-		this.foodCost = 2;
+		this.attackPow = 2;
+		this.foodCost = 1;
 		this.lumberCost = 0;
 		this.unitType = "Infantry";
-		Debug.Log ("Melee Unit");
+		Debug.Log ("Builder Unit");
 	}
 }
+
