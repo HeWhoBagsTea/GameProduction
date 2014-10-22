@@ -155,8 +155,8 @@ public class UnitBase : MonoBehaviour {
 	}
 
 	public void selected () {
+		NewGameController.deselectAllUnits ();
 		NewGameController.selectedUnit = this;
-		NewGameController.clearHighlights ();
 		highlightCurrentSpace (spaceHighlights[1]);
 		isSelected = true;
 	}

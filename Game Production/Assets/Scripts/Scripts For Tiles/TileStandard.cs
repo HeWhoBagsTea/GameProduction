@@ -9,7 +9,9 @@ public class TileStandard : MonoBehaviour {
 	public UnitBase unitOnTile;
 	public Player controller = null;
 	public bool hasStructure = false;
-	
+	public bool canMoveTo = false;
+	public bool canAttackUnitOnThis = false;
+
 	public int moveCost;
 	public int originalMoveCost = 1;
 
@@ -33,6 +35,10 @@ public class TileStandard : MonoBehaviour {
 	//Called when tile is pressed
 	void OnMouseUpAsButton() {
 		Debug.Log (getTerrainMatName ());
+
+		if (this.unitOnTile == null) {
+			this.canAttackUnitOnThis = false;
+		}
 
 		if (this.unitOnTile == null && getTerrainMatName ().Equals ("defaultMat") && !hasStructure) {
 			NewGameController.deselectAllUnits();
