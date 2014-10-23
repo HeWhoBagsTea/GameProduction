@@ -10,8 +10,8 @@ public class UnitBase : MonoBehaviour {
 	public Material[] spaceHighlights;
 
 	public bool isSelected = false;
-	private bool hasMoved = false;
-	private bool hasActioned = false;
+	protected bool hasMoved = false;
+	protected bool hasActioned = false;
 	public bool isDone = false;
 
 	//Units Stats
@@ -28,10 +28,10 @@ public class UnitBase : MonoBehaviour {
 	public Vector3 posOffset;
 
 	//Button Stuff;
-	private float BUTTON_X_POS = Screen.width - (Screen.width / 8);
-	private float BUTTON_WIDTH = Screen.width/9;
-	private float BUTTON_HEIGHT = Screen.height/20;
-	private float BUTTON_SPACING = Screen.height/100 + Screen.height/20;
+	protected float BUTTON_X_POS = Screen.width - (Screen.width / 8);
+	protected float BUTTON_WIDTH = Screen.width/9;
+	protected float BUTTON_HEIGHT = Screen.height/20;
+	protected float BUTTON_SPACING = Screen.height/100 + Screen.height/20;
 
 	//Unit Hp Stuff;
 	private float HP_X_POS = Screen.width * 0.45f;
@@ -42,11 +42,12 @@ public class UnitBase : MonoBehaviour {
 	
 	//use this to modify unit stats
 	public virtual void init() {
-		posOffset = new Vector3 (0 , .5f, 0);
+
 	}
 
 	// Use this for initialization
 	void Start () {
+		posOffset = new Vector3 (0 , .5f, 0);
 		init ();
 
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
@@ -55,6 +56,7 @@ public class UnitBase : MonoBehaviour {
 				this.controller = i.GetComponent<Player>();
 			}
 		}
+		Debug.Log (this.controller.playerID);
 
 		this.currentSpace = getClosestTile ();
 		this.currentSpace.unitOnTile = this;
@@ -78,7 +80,7 @@ public class UnitBase : MonoBehaviour {
 		if (NewGameController.currentPlayer == this.controller) {
 			this.selected ();
 		}
-		else if (NewGameController.selectedUnit != null && this.currentSpace.getTerrainMatName().Equals("AttackSpace")) {
+		else if (NewGameController.selectedUnit != null && this.currentSpace.canAttackUnitOnThis && !this.hasActioned) {
 			NewGameController.selectedUnit.attackUnit(this);
 		}
 		else {
@@ -99,15 +101,15 @@ public class UnitBase : MonoBehaviour {
 	}
 
 	void OnGUI() {
-		BUTTON_X_POS = Screen.width - (Screen.width / 8);
-		BUTTON_WIDTH = Screen.width/9;
-		BUTTON_HEIGHT = Screen.height/20;
-		BUTTON_SPACING = Screen.height/100 + Screen.height/20;
-		
-		HP_X_POS = Screen.width * 0.45f;
-		HP_Y_POS = Screen.height * 0.3f;
-		HP_WIDTH = Screen.width * 0.1f;
-		HP_HEIGHT = Screen.height * 0.05f;
+//		BUTTON_X_POS = Screen.width - (Screen.width / 8);
+//		BUTTON_WIDTH = Screen.width/9;
+//		BUTTON_HEIGHT = Screen.height/20;
+//		BUTTON_SPACING = Screen.height/100 + Screen.height/20;
+//		
+//		HP_X_POS = Screen.width * 0.45f;
+//		HP_Y_POS = Screen.height * 0.3f;
+//		HP_WIDTH = Screen.width * 0.1f;
+//		HP_HEIGHT = Screen.height * 0.05f;
 
 		if (entered) {
 			GUI.color = (this.controller == NewGameController.currentPlayer) ? Color.green : Color.red;
@@ -115,20 +117,20 @@ public class UnitBase : MonoBehaviour {
 			         "HP:" + this.HPcurr + "/" + this.HPmax);
 		}
 
-		if (isSelected) {
-			Rect attackButton = new Rect (BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-			Rect moveButton = new Rect (BUTTON_X_POS, attackButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-
-			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
-			if (GUI.Button (attackButton, "Attack")) {
-					showAttack();
-			}
-
-			GUI.color = (!this.hasMoved) ? Color.white : Color.gray;
-			if (GUI.Button (moveButton, "Move")) {
-					showMovement();
-			}
-		}
+//		if (isSelected) {
+//			Rect attackButton = new Rect (BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+//			Rect moveButton = new Rect (BUTTON_X_POS, attackButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+//
+//			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
+//			if (GUI.Button (attackButton, "Attack")) {
+//					showAttack();
+//			}
+//
+//			GUI.color = (!this.hasMoved) ? Color.white : Color.gray;
+//			if (GUI.Button (moveButton, "Move")) {
+//					showMovement();
+//			}
+//		}
 	}
 
 	public void attackUnit (UnitBase target) {
@@ -150,7 +152,7 @@ public class UnitBase : MonoBehaviour {
 		this.hasMoved = false;
 		this.hasActioned = false;
 		this.isDone = false;
-		this.renderer.material = this.unitColors[this.controller.playerID];
+		this.renderer.material = this.unitColors [this.controller.playerID];
 		deselect ();
 	}
 
@@ -190,7 +192,7 @@ public class UnitBase : MonoBehaviour {
 		currentSpaceTile.material = highlight;
 	}
 
-	private void showAttack() {
+	protected void showAttack() {
 		if (!hasActioned) {
 			NewGameController.clearHighlights();
 			showAttackHelper(this.maxAttackRange, this.currentSpace, this.spaceHighlights[3]);
@@ -222,7 +224,7 @@ public class UnitBase : MonoBehaviour {
 		}
 	}
 
-	private void showMovement() {
+	protected void showMovement() {
 		if (!hasMoved) {
 			NewGameController.clearHighlights();
 			showMovementRangeHelper(this.movement, this.currentSpace);
