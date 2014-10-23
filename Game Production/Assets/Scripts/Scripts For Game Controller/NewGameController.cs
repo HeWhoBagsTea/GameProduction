@@ -72,6 +72,7 @@ public class NewGameController : MonoBehaviour {
 	public static void deselectAllUnits() {
 		foreach (UnitBase i in FindObjectsOfType(typeof(UnitBase))) {
 			i.deselect();
+			i.isSelected = false;
 		}
 
 		selectedUnit = null;

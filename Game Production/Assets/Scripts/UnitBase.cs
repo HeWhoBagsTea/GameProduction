@@ -9,7 +9,7 @@ public class UnitBase : MonoBehaviour {
 	public Material[] unitColors;
 	public Material[] spaceHighlights;
 
-	private bool isSelected = false;
+	public bool isSelected = false;
 	private bool hasMoved = false;
 	private bool hasActioned = false;
 	public bool isDone = false;
@@ -159,6 +159,14 @@ public class UnitBase : MonoBehaviour {
 		NewGameController.selectedUnit = this;
 		highlightCurrentSpace (spaceHighlights[1]);
 		isSelected = true;
+
+		if (!hasActioned) {
+			showAttack();
+		}
+
+		if (!hasMoved) {
+			showMovement();
+		}
 	}
 
 	public void deselect () {
@@ -206,6 +214,7 @@ public class UnitBase : MonoBehaviour {
 				if(attackRange - 1 >= 0) {
 					if((tiles[i].unitOnTile != null && tiles[i].unitOnTile.controller != this.controller) || tiles[i].unitOnTile == null) {
 						tiles[i].transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer>().material = mat;
+						tiles[i].canAttackUnitOnThis = true;
 					}
 					showAttackHelper(attackRange - 1, tiles[i], mat);
 				}
@@ -236,6 +245,7 @@ public class UnitBase : MonoBehaviour {
 				if(moveRange - tiles[i].moveCost >= 0) {
 					if(tiles[i].unitOnTile == null) {
 						tiles[i].transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer>().material = this.spaceHighlights[2];
+						tiles[i].canMoveTo = true;
 					}
 					showMovementRangeHelper(moveRange - tiles[i].moveCost, tiles[i]);
 				}

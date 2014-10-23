@@ -8,7 +8,7 @@ public class TileStandard : MonoBehaviour {
 	public Material defualtMat;
 	public UnitBase unitOnTile;
 	public Player controller = null;
-	public bool hasStructure = false;
+	public bool isStructure = false;
 	public bool canMoveTo = false;
 	public bool canAttackUnitOnThis = false;
 
@@ -40,10 +40,10 @@ public class TileStandard : MonoBehaviour {
 			this.canAttackUnitOnThis = false;
 		}
 
-		if (this.unitOnTile == null && getTerrainMatName ().Equals ("defaultMat") && !hasStructure) {
+		if (this.unitOnTile == null && getTerrainMatName ().Equals ("defaultMat") && !isStructure) {
 			NewGameController.deselectAllUnits();
 		}
-		else if (this.unitOnTile != null && this.unitOnTile.controller != NewGameController.currentPlayer && getTerrainMatName ().Equals ("defaultMat") && !hasStructure) {
+		else if (this.unitOnTile != null && this.unitOnTile.controller != NewGameController.currentPlayer && getTerrainMatName ().Equals ("defaultMat") && !isStructure) {
 			NewGameController.deselectAllUnits();
 		}
 		else {
@@ -51,10 +51,10 @@ public class TileStandard : MonoBehaviour {
 				if (this.unitOnTile != null && NewGameController.currentPlayer == this.unitOnTile.controller) {
 					this.unitOnTile.selected ();
 				} 
-				else if(this.unitOnTile == null && NewGameController.selectedUnit != null && getTerrainMatName().Equals("MovementSpace")) {
+				else if(this.unitOnTile == null && NewGameController.selectedUnit != null && canMoveTo) {
 					NewGameController.selectedUnit.moveUnit(this);
 				}
-				else if(this.unitOnTile != null && NewGameController.selectedUnit != null && getTerrainMatName().Equals("AttackSpace")) {
+				else if(this.unitOnTile != null && NewGameController.selectedUnit != null && canAttackUnitOnThis) {
 					NewGameController.selectedUnit.attackUnit(this.unitOnTile);
 				}
 			}
@@ -62,7 +62,7 @@ public class TileStandard : MonoBehaviour {
 				if (this.unitOnTile != null && NewGameController.currentPlayer == this.unitOnTile.controller) {
 					this.unitOnTile.selected ();
 				} 
-				else if(this.unitOnTile == null && this.hasStructure) {
+				else if(this.unitOnTile == null && this.isStructure) {
 					NewGameController.deselectAllUnits();
 					//Have structure do things
 				}
@@ -94,6 +94,8 @@ public class TileStandard : MonoBehaviour {
 	public void deselect() {
 		MeshRenderer planeRenderer = transform.FindChild ("Terrain").GetComponentInChildren<MeshRenderer> ();
 		planeRenderer.material = defualtMat;
+		canMoveTo = false;
+		canAttackUnitOnThis = false;
 	}
 	
 	public void setControl(Player player) {
