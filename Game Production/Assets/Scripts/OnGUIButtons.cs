@@ -51,7 +51,9 @@ public class OnGUIButtons : MonoBehaviour
 		{
 			foreach (GameObject u in units) 
 			{
-				u.GetComponent<UnitBase> ().resolveTurn ();
+				if(u.GetComponent<UnitBase>() != null) {
+					u.GetComponent<UnitBase> ().resolveTurn ();
+				}
 			}
 
 			nextPlayer();

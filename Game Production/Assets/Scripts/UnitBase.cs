@@ -39,6 +39,12 @@ public class UnitBase : MonoBehaviour {
 	private float HP_WIDTH = Screen.width * 0.1f;
 	private float HP_HEIGHT = Screen.height * 0.05f;
 	private bool entered = false;
+
+	//Unit Stat Stuff
+	private float STAT_BOX_X_POS = Screen.width*0.4f;
+	private float STAT_BOX_Y_POS = Screen.height*.05f;
+	private float STAT_BOX_WIDTH = Screen.width * 0.3f;
+	private float STAT_BOX_HEIGHT = Screen.height * 0.1f;
 	
 	//use this to modify unit stats
 	public virtual void init() {
@@ -56,7 +62,6 @@ public class UnitBase : MonoBehaviour {
 				this.controller = i.GetComponent<Player>();
 			}
 		}
-		Debug.Log (this.controller.playerID);
 
 		this.currentSpace = getClosestTile ();
 		this.currentSpace.unitOnTile = this;
@@ -79,13 +84,19 @@ public class UnitBase : MonoBehaviour {
 	void OnMouseUpAsButton() {
 		if (NewGameController.currentPlayer == this.controller) {
 			this.selected ();
-		}
-		else if (NewGameController.selectedUnit != null && this.currentSpace.canAttackUnitOnThis && !this.hasActioned) {
+		} else if (NewGameController.selectedUnit != null && this.currentSpace.canAttackUnitOnThis) {
 			NewGameController.selectedUnit.attackUnit(this);
 		}
-		else {
-			NewGameController.deselectAllUnits();
-		}
+
+		//if (NewGameController.currentPlayer == this.controller) {
+		//	this.selected ();
+		//}
+		//else if (NewGameController.selectedUnit != null && this.currentSpace.canAttackUnitOnThis && !this.hasActioned) {
+		//	NewGameController.selectedUnit.attackUnit(this);
+		//}
+		//else {
+		//	NewGameController.deselectAllUnits();
+		//}
 	}
 
 	// Update is called once per frame
@@ -101,15 +112,36 @@ public class UnitBase : MonoBehaviour {
 	}
 
 	void OnGUI() {
-//		BUTTON_X_POS = Screen.width - (Screen.width / 8);
-//		BUTTON_WIDTH = Screen.width/9;
-//		BUTTON_HEIGHT = Screen.height/20;
-//		BUTTON_SPACING = Screen.height/100 + Screen.height/20;
-//		
-//		HP_X_POS = Screen.width * 0.45f;
-//		HP_Y_POS = Screen.height * 0.3f;
-//		HP_WIDTH = Screen.width * 0.1f;
-//		HP_HEIGHT = Screen.height * 0.05f;
+		BUTTON_X_POS = Screen.width - (Screen.width / 8);
+		BUTTON_WIDTH = Screen.width/9;
+		BUTTON_HEIGHT = Screen.height/20;
+		BUTTON_SPACING = Screen.height/100 + Screen.height/20;
+		
+		HP_X_POS = Screen.width * 0.45f;
+		HP_Y_POS = Screen.height * 0.3f;
+		HP_WIDTH = Screen.width * 0.1f;
+		HP_HEIGHT = Screen.height * 0.05f;
+
+		STAT_BOX_X_POS = Screen.width * 0.4f;
+		STAT_BOX_Y_POS = Screen.height * 0.05f;
+		STAT_BOX_WIDTH = Screen.width * 0.225f;
+		STAT_BOX_HEIGHT = Screen.height * 0.1f;
+		
+		GUI.skin.box.alignment = TextAnchor.UpperCenter;
+		GUI.color = new Vector4(0.23f, 0.75f, 0.54f, 1);
+		if (isSelected) {
+			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS*0f, STAT_BOX_WIDTH, STAT_BOX_HEIGHT), 
+			         "Unit Stats:");
+			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+			        "HP:" + this.HPcurr + "/"+this.HPmax +
+			        " AttackRange: " + this.minAttackRange + "-"+ this.maxAttackRange);
+			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS*2f, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+			        "Movement: " + this.movement +
+			        " Attack Power: " + this.attackPow);
+			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS*3f, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+			        "Unit Type: " + this.unitType);
+		}
+
 
 		if (entered) {
 			GUI.color = (this.controller == NewGameController.currentPlayer) ? Color.green : Color.red;
@@ -117,20 +149,20 @@ public class UnitBase : MonoBehaviour {
 			         "HP:" + this.HPcurr + "/" + this.HPmax);
 		}
 
-//		if (isSelected) {
-//			Rect attackButton = new Rect (BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-//			Rect moveButton = new Rect (BUTTON_X_POS, attackButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-//
-//			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
-//			if (GUI.Button (attackButton, "Attack")) {
-//					showAttack();
-//			}
-//
-//			GUI.color = (!this.hasMoved) ? Color.white : Color.gray;
-//			if (GUI.Button (moveButton, "Move")) {
-//					showMovement();
-//			}
-//		}
+		if (isSelected) {
+			Rect attackButton = new Rect (BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+			Rect moveButton = new Rect (BUTTON_X_POS, attackButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+
+			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
+			if (GUI.Button (attackButton, "Attack")) {
+					showAttack();
+			}
+
+			GUI.color = (!this.hasMoved) ? Color.white : Color.gray;
+			if (GUI.Button (moveButton, "Move")) {
+					showMovement();
+			}
+		}
 	}
 
 	public void attackUnit (UnitBase target) {

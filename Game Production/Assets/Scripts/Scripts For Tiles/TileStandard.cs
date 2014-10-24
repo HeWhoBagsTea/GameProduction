@@ -34,8 +34,6 @@ public class TileStandard : MonoBehaviour {
 
 	//Called when tile is pressed
 	void OnMouseUpAsButton() {
-		Debug.Log (getTerrainMatName ());
-
 		if (this.unitOnTile == null) {
 			this.canAttackUnitOnThis = false;
 		}
