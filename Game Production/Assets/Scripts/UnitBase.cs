@@ -219,6 +219,16 @@ public class UnitBase : MonoBehaviour {
 		return matName;
 	}
 
+	public void giveControl(Material mat) {
+		this.renderer.material = mat;
+		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
+		foreach(GameObject i in players) {
+			if(i.GetComponent<Player>() != null && getMaterialName() == i.GetComponent<Player>().getPlayerColor()) {
+				this.controller = i.GetComponent<Player>();
+			}
+		}
+	}
+
 	private void highlightCurrentSpace(Material highlight) {
 		MeshRenderer currentSpaceTile = currentSpace.transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer> ();
 		currentSpaceTile.material = highlight;

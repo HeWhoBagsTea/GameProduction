@@ -62,12 +62,14 @@ public class TileStandard : MonoBehaviour {
 				} 
 				else if(this.unitOnTile == null && this.isStructure) {
 					NewGameController.deselectAllUnits();
-					//Have structure do things
+					buildingSelected();
 				}
 			}
 		}
 	}
+
 	
+
 	void Update () {
 		if (unitOnTile != null && (NewGameController.currentPlayer != unitOnTile.controller)) {
 			moveCost = 10000;
@@ -75,6 +77,10 @@ public class TileStandard : MonoBehaviour {
 		else {
 			moveCost = originalMoveCost;
 		}
+	}
+
+	public virtual void buildingSelected()
+	{
 	}
 
 	public string getControlRingMatName() {
