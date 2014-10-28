@@ -269,40 +269,18 @@ public class UnitBase : MonoBehaviour {
 	
 	private void showMovementRangeHelper(int moveRange, TileStandard tile) {
 		Collider[] hitColliders = Physics.OverlapSphere (tile.transform.position, 1.5f + (2 * (moveRange - 1)));
-
+		
 		List<TileStandard> tiles = new List<TileStandard> ();
 		foreach (Collider i in hitColliders) {
 			if(i.GetComponent<TileStandard>() != null) {
 				tiles.Add(i.GetComponent<TileStandard>());
 			}
 		}
-
+		
 		foreach (TileStandard i in tiles) {
 			i.transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer>().material = this.spaceHighlights[2];
 			i.canMoveTo = true;
 		}
-
-
-		//if (moveRange > 0) {
-		//	Collider[] hitColliders = Physics.OverlapSphere (tile.transform.position, 2);
-		//	List<TileStandard> tiles = new List<TileStandard>();
-		//	
-		//	foreach(Collider i in hitColliders) {
-		//		if(i.GetComponent<TileStandard>() != null && !i.GetComponent<TileStandard>().canMoveTo) {
-		//			tiles.Add (i.GetComponent<TileStandard>());
-		//		}
-		//	}
-		//	
-		//	for(int i = 0; i < tiles.Count; i++) {
-		//		if(moveRange - tiles[i].moveCost >= 0) {
-		//			if(tiles[i].unitOnTile == null) {
-		//				tiles[i].transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer>().material = this.spaceHighlights[2];
-		//				tiles[i].canMoveTo = true;
-		//			}
-		//			showMovementRangeHelper(moveRange - tiles[i].moveCost, tiles[i]);
-		//		}
-		//	}
-		//}
 	}
 	
 	private TileStandard getClosestTile() {
