@@ -278,18 +278,27 @@ public class UnitBase : MonoBehaviour {
 	}
 	
 	private void showMovementRangeHelper(int moveRange, TileStandard tile) {
-		Collider[] hitColliders = Physics.OverlapSphere (tile.transform.position, 1.5f + (2 * (moveRange - 1)));
-		
-		List<TileStandard> tiles = new List<TileStandard> ();
-		foreach (Collider i in hitColliders) {
-			if(i.GetComponent<TileStandard>() != null) {
-				tiles.Add(i.GetComponent<TileStandard>());
+		if (moveRange > 0) {
+			Collider[] hitCollider = Physics.OverlapSphere(tile.transform.position, 2);
+			List<TileStandard> tiles = new List<TileStandard>();
+
+			foreach(Collider i in hitCollider) {
+				if(i.GetComponent<TileStandard>() != null && !i.GetComponent<TileStandard>().canMoveTo){
+					tiles.Add(i.GetComponent<TileStandard>());
+				}
 			}
-		}
-		
-		foreach (TileStandard i in tiles) {
-			i.transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer>().material = this.spaceHighlights[2];
-			i.canMoveTo = true;
+
+			foreach(TileStandard i in tiles) {
+				if(!i.unitOnTile) {
+					i.transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer>().material = this.spaceHighlights[2];
+					i.canMoveTo = true;
+				}
+			}
+
+			foreach(TileStandard i in tiles) {
+				showMovementRangeHelper(moveRange - i.moveCost, i);
+			}
+
 		}
 	}
 	
