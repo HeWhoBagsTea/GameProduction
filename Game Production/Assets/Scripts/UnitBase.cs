@@ -244,29 +244,59 @@ public class UnitBase : MonoBehaviour {
 	}
 	
 	private void showAttackHelper(int attackRange, TileStandard tile, Material mat) {
+
 		if (attackRange > 0) {
-			Collider[] hitColliders = Physics.OverlapSphere (tile.transform.position, 2);
+			Collider[] hitCollider = Physics.OverlapSphere(tile.transform.position, 2);
 			List<TileStandard> tiles = new List<TileStandard>();
 			
-			foreach(Collider i in hitColliders) {
-				if(i.GetComponent<TileStandard>() != null) {
-					tiles.Add (i.GetComponent<TileStandard>());
+			foreach(Collider i in hitCollider) {
+				if(i.GetComponent<TileStandard>() != null){
+					tiles.Add(i.GetComponent<TileStandard>());
 				}
 			}
 			
-			for(int i = 0; i < tiles.Count; i++) {
-				if(attackRange - 1 >= 0) {
-					if((tiles[i].unitOnTile != null && tiles[i].unitOnTile.controller != this.controller) || tiles[i].unitOnTile == null) {
-
-						tiles[i].canAttackUnitOnThis = true;
-						tiles[i].transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer>().material = mat;
-
-
+			foreach(TileStandard i in tiles) {
+				if((i.unitOnTile != null && i.unitOnTile.controller != this.controller) || i.unitOnTile == null) {
+					i.transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer>().material = mat;
+					if(mat == this.spaceHighlights[3]) {
+						i.canAttackUnitOnThis = true;
+					} 
+					else {
+						i.canAttackUnitOnThis = false;
 					}
-					showAttackHelper(attackRange - 1, tiles[i], mat);
 				}
 			}
+
+			foreach(TileStandard i in tiles) {
+				showAttackHelper(attackRange - 1, i, mat);
+			}
+
 		}
+
+
+		//if (attackRange > 0) {
+		//	Collider[] hitColliders = Physics.OverlapSphere (tile.transform.position, 2);
+		//	List<TileStandard> tiles = new List<TileStandard>();
+		//	
+		//	foreach(Collider i in hitColliders) {
+		//		if(i.GetComponent<TileStandard>() != null) {
+		//			tiles.Add (i.GetComponent<TileStandard>());
+		//		}
+		//	}
+		//	
+		//	for(int i = 0; i < tiles.Count; i++) {
+		//		if(attackRange - 1 >= 0) {
+		//			if((tiles[i].unitOnTile != null && tiles[i].unitOnTile.controller != this.controller) || tiles[i].unitOnTile == null) {
+		//
+		//				tiles[i].canAttackUnitOnThis = true;
+		//				tiles[i].transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer>().material = mat;
+		//
+		//
+		//			}
+		//			showAttackHelper(attackRange - 1, tiles[i], mat);
+		//		}
+		//	}
+		//}
 	}
 
 	protected void showMovement() {
@@ -283,7 +313,7 @@ public class UnitBase : MonoBehaviour {
 			List<TileStandard> tiles = new List<TileStandard>();
 
 			foreach(Collider i in hitCollider) {
-				if(i.GetComponent<TileStandard>() != null && !i.GetComponent<TileStandard>().canMoveTo){
+				if(i.GetComponent<TileStandard>() != null) {// && !i.GetComponent<TileStandard>().canMoveTo){
 					tiles.Add(i.GetComponent<TileStandard>());
 				}
 			}
@@ -298,7 +328,6 @@ public class UnitBase : MonoBehaviour {
 			foreach(TileStandard i in tiles) {
 				showMovementRangeHelper(moveRange - i.moveCost, i);
 			}
-
 		}
 	}
 	
