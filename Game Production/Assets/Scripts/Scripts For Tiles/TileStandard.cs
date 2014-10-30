@@ -19,7 +19,7 @@ public class TileStandard : MonoBehaviour {
 
 	}
 
-	void Start () {
+	public void Start () {
 		init ();
 
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
@@ -33,7 +33,8 @@ public class TileStandard : MonoBehaviour {
 	}
 
 	//Called when tile is pressed
-	void OnMouseUpAsButton() {
+	public void OnMouseUpAsButton() {
+		Debug.Log ("clicked");
 		if (this.unitOnTile == null) {
 			this.canAttackUnitOnThis = false;
 		}

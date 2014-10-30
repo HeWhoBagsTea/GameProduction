@@ -8,5 +8,4 @@ public class TileMountains : TileStandard {
 		this.originalMoveCost = 3;
 	}
 	//Should units be able to shoot through mountain tiles?
-
 }
