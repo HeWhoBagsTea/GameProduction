@@ -1,64 +1,68 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InfantryUnits : UnitBase {
-	private bool isAlive = false;
-	private Vector3 actionPos;
-	private Vector3 buttonOffset = new Vector3(0.0f, 25.0f, 0);
-
-//	void onGUI()
-//	{
-//		BUTTON_X_POS =  - (Screen.width / 8);
-//		BUTTON_WIDTH = Screen.width/9;
-//		BUTTON_HEIGHT = Screen.height/20;
-//		BUTTON_SPACING = Screen.height/100 + Screen.height/20;
-//	
-//		if (isSelected) {
-//			Rect attackButton = new Rect (BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-//			Rect moveButton = new Rect (BUTTON_X_POS, attackButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-//		
-//			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
-//			if (GUI.Button (attackButton, "Attack")) {
-//					showAttack();
-//			}
-//		
-//			GUI.color = (!this.hasMoved) ? Color.white : Color.gray;
-//			if (GUI.Button (moveButton, "Move")) {
-//					showMovement();
-//			}
-//		}
-//	}
-
-
-	void Update()
-	{
-		if (Input.GetMouseButtonDown (1)) 
+public class InfantryUnits : UnitBase
+{
+		private bool isAlive = false;
+		private Vector3 actionPos;
+		private Vector3 buttonOffset = new Vector3 (0.0f, 25.0f, 0);
+		private Rect moveButton;
+		private Rect attackButton;
+	
+		private void disableScripts ()
 		{
-			actionPos.x = Input.mousePosition.x;// + buttonOffset;
-			actionPos.y = Screen.height - Input.mousePosition.y;
-			isAlive = true;
+				GameObject[] disabledTiles = GameObject.FindGameObjectsWithTag ("Tile");
+				foreach (GameObject t in disabledTiles) {
+						t.GetComponent<TileStandard> ().enabled = false;
+				}
+		}
+	
+		private void enableTiles ()
+		{
+				GameObject[] enabledTiles = GameObject.FindGameObjectsWithTag ("Tile");
+				foreach (GameObject tiles in enabledTiles) {
+						tiles.GetComponent<TileStandard> ().enabled = true;
+				}
+		}
+	
+		void Update ()
+		{
+			if (Input.GetMouseButtonDown (1)) {
+						actionPos.y = Screen.height - Input.mousePosition.y;
+						actionPos.x = Input.mousePosition.x;
+						isAlive = true;
+				}
 		}
 
+//public override 
 
-	}
 
-	//public override 
-
-	void OnGUI()  
-	{
-		if (isAlive && this.isSelected) 
+		void OnGUI ()
 		{
-			//GUI.Box(new Rect(actionPos.x, actionPos.y, 120, 120), "TEST BOX");
-			if(GUI.Button(new Rect(actionPos.x, actionPos.y, Screen.width / 18, Screen.height / 40), "Move"))
-			{
-				showMovement();
-			}
-
-			if(GUI.Button(new Rect(actionPos.x, actionPos.y + buttonOffset.y, Screen.width / 18, Screen.height / 40), "Attack"))
-			{
-				showAttack();
-			}
+				moveButton = new Rect (actionPos.x, actionPos.y, Screen.width / 18, Screen.height / 40);
+				attackButton = new Rect (actionPos.x, actionPos.y + buttonOffset.y, Screen.width / 18, Screen.height / 40);
+	
+				if (this.isSelected && isAlive) {
+						disableScripts ();
+		
+						//GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
+						if (GUI.Button (moveButton, "Move") && GUIUtility.hotControl == 0) {
+								showMovement ();
+								GUIUtility.hotControl = 1;
+								isAlive = false;
+								enableTiles ();
+								//Debug.Log(isAlive);
+						} else if (GUI.Button (attackButton, "Attack") && GUIUtility.hotControl == 0) {
+								showAttack ();
+								GUIUtility.hotControl = 1;
+								isAlive = false;
+			
+						} else if (GUIUtility.hotControl == 1) {
+								GUIUtility.hotControl = 0;
+								//isAlive = false;
+						}
+				}
+	
 		}
-
-	}
 }
+
