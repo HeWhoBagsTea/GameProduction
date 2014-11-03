@@ -107,6 +107,7 @@ public class UnitBase : MonoBehaviour {
 
 		if(this.isDone) {
 			this.renderer.material = this.unitColors[this.controller.playerID + (this.unitColors.Length / 2)];
+			this.transform.FindChild("unit").renderer.material = this.unitColors[this.controller.playerID + (this.unitColors.Length / 2)];
 		}
 
 		if (this.HPcurr <= 0) {
@@ -188,6 +189,7 @@ public class UnitBase : MonoBehaviour {
 		this.hasActioned = false;
 		this.isDone = false;
 		this.renderer.material = this.unitColors [this.controller.playerID];
+		this.transform.FindChild("unit").renderer.material = this.unitColors[this.controller.playerID];
 		deselect ();
 	}
 
