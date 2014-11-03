@@ -8,8 +8,8 @@ public class MeleeUnit : UnitBase {
 		this.HPcurr = this.HPmax;
 		this.minAttackRange = 1;
 		this.maxAttackRange = 1;
-		this.attackPow = 6;
-		this.movement = 6;
+		this.attackPow = 3;
+		this.movement = 3;
 		this.foodCost = 2;
 		this.lumberCost = 0;
 		this.unitType = "Infantry";
