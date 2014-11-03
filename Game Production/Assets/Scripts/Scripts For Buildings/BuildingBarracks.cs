@@ -10,19 +10,23 @@ public class BuildingBarracks : TileStandard {
 	private float BUTTON_SPACING = Screen.height/100 + Screen.height/20;
 	public int numOfUnitsToBuild = 1;
 	private bool isSelected = false;
-	Vector3 posOffset = new Vector3 (0 , .5f, 0);
 
 	public GameObject[] units;
 
-
+	public bool hasBuilt;
 
 	override public void init()
 	{
+		hasBuilt = false;
 		this.isStructure = true;
 	}
 
 	override public void buildingSelected() {
 		this.isSelected = true;
+	}
+
+	override public void deselectAction() {
+		this.isSelected = false;
 	}
 
 	public void OnGUI()
@@ -42,23 +46,38 @@ public class BuildingBarracks : TileStandard {
 					buildUnit[i] = new Rect(BUTTON_X_POS, buildUnit[i+1].position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
 				}
 			}
-
-			//Change string to fit name of unit.
-			for(int i = 0; i < buildUnit.Length; i++)
-			{
-				if(GUI.Button(buildUnit[i], "Build " + units[i].name))
+			if(hasBuilt == false){
+				//Change string to fit name of unit.
+				for(int i = 0; i < buildUnit.Length; i++)
 				{
-					// change units[i] to find prefab by name?
-					GameObject prefab = units[i];
-					GameObject instantiate = Instantiate(
-						prefab, 
-						(this.transform.position + this.posOffset),
-						this.transform.rotation) as GameObject;
-					
-					instantiate.GetComponent<UnitBase>().giveControl(transform.FindChild ("ControlRing").GetComponentInChildren<MeshRenderer> ().material);
-					this.isSelected = false;
+					if(GUI.Button(buildUnit[i], "Build " + units[i].name))
+					{
+						Debug.Log("Before: " + this.transform.position);
+						// change units[i] to find prefab by name?
+						GameObject prefab = units[i];
+						GameObject instantiate = Instantiate(
+							prefab, 
+							(this.transform.position),
+							this.transform.rotation) as GameObject;
+						
+						instantiate.GetComponent<UnitBase>().giveControl(transform.FindChild ("ControlRing").GetComponentInChildren<MeshRenderer> ().material);
+						this.isSelected = false;
+
+						instantiate.GetComponent<UnitBase>().isDone = true;
+
+						//Uncomment this line out after finding a solution to how ending the turn should act.
+						//this.hasBuilt = true; 
+						Debug.Log("After: " + instantiate.transform.position);
+					}
 				}
 			}
 		}
+	}
+
+	public void resolveTurn()
+	{
+		this.hasBuilt = false;
+		this.isSelected = false;
+		Debug.Log ("HERE");
 	}
 }

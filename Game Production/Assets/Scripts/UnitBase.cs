@@ -103,6 +103,9 @@ public class UnitBase : MonoBehaviour {
 	void Update () {
 		if (this.hasMoved && this.hasActioned) {
 			this.isDone = true;
+		}
+
+		if(this.isDone) {
 			this.renderer.material = this.unitColors[this.controller.playerID + (this.unitColors.Length / 2)];
 		}
 
@@ -207,7 +210,6 @@ public class UnitBase : MonoBehaviour {
 		if (NewGameController.selectedUnit == this) {
 			NewGameController.selectedUnit = null;
 		}
-
 		NewGameController.clearHighlights ();
 		isSelected = false;
 	}

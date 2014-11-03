@@ -84,6 +84,10 @@ public class TileStandard : MonoBehaviour {
 	{
 	}
 
+	public virtual void deselectAction ()
+	{
+	}
+
 	public string getControlRingMatName() {
 		string ringName = transform.FindChild ("ControlRing").GetComponentInChildren<MeshRenderer> ().material.name;
 		ringName = ringName.Substring (0, ringName.IndexOf (" ("));
@@ -101,6 +105,7 @@ public class TileStandard : MonoBehaviour {
 		planeRenderer.material = defualtMat;
 		canMoveTo = false;
 		canAttackUnitOnThis = false;
+		deselectAction ();
 	}
 	
 	public void setControl(Player player) {
