@@ -31,9 +31,18 @@ public class NewGameController : MonoBehaviour {
 	void Update () {
 		Debug.Log (selectedUnit);
 
+		//isGameOver = true;
 		isGameOver = checkIfGameOver ();
 		if (isGameOver) {
 			Debug.Log("GameOver");
+		}
+	}
+
+	void OnGUI()
+	{
+		if (isGameOver) 
+		{
+			GUI.Button(new Rect(Screen.width / 3, Screen.height / 4, Screen.width / 4, Screen.height / 5), "Game Over!\n" + currentPlayer.getPlayerColor() + " Wins!");
 		}
 	}
 	

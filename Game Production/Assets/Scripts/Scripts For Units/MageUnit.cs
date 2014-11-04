@@ -9,7 +9,7 @@ public class MageUnit : UnitBase {
 		this.minAttackRange = 1;
 		this.maxAttackRange = 3;
 		this.movement = 2;
-		this.attackPow = 5;
+		this.attackPow = 6;
 		this.foodCost = 3;
 		this.lumberCost = 0;
 		this.unitType = "Infantry";
