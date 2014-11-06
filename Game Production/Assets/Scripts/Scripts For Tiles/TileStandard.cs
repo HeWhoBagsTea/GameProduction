@@ -11,6 +11,7 @@ public class TileStandard : MonoBehaviour {
 	public bool isStructure = false;
 	public bool canMoveTo = false;
 	public bool canAttackUnitOnThis = false;
+	private bool isEnabled = true;
 
 	public int moveCost;
 	public int originalMoveCost = 1;
@@ -119,6 +120,7 @@ public class TileStandard : MonoBehaviour {
 				} 
 				else if(this.unitOnTile == null && this.isStructure) {
 					NewGameController.deselectAllUnits();
+					gameObject.GetComponent<BuildingBarracks>().enabled = true;
 					buildingSelected();
 				}
 			}
@@ -133,6 +135,23 @@ public class TileStandard : MonoBehaviour {
 		}
 		else {
 			moveCost = originalMoveCost;
+		}
+		if(isEnabled)
+		{
+			if(this.unitOnTile != null && this.isStructure
+			   && NewGameController.selectedUnit == null)
+			{
+				if(!gameObject.GetComponent<BuildingBarracks>().Equals(null))
+				{
+					gameObject.GetComponent<BuildingBarracks>().enabled = false;
+					isEnabled = false;
+				}
+			}
+		}
+		if(!isEnabled)
+		{
+			gameObject.GetComponent<BuildingBarracks>().enabled = true;
+			isEnabled = true;
 		}
 	}
 

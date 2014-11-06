@@ -123,6 +123,8 @@ public class UnitBase : MonoBehaviour {
 		buffMe ();
 
 		if(this.isDone) {
+			this.hasMoved = true;
+			this.hasActioned = true;
 			this.renderer.material = this.unitColors[this.controller.playerID + (this.unitColors.Length / 2)];
 			this.transform.FindChild("unit").renderer.material = this.unitColors[this.controller.playerID + (this.unitColors.Length / 2)];
 		}

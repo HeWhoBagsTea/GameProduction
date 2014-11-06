@@ -17,7 +17,7 @@ public class BuildingBarracks : TileStandard {
 
 	override public void init()
 	{
-		hasBuilt = false;
+		this.hasBuilt = false;
 		this.isStructure = true;
 	}
 
@@ -27,6 +27,17 @@ public class BuildingBarracks : TileStandard {
 
 	override public void deselectAction() {
 		this.isSelected = false;
+		this.enabled = false;
+	}
+
+	public void Update()
+	{
+		BUTTON_X_POS = Screen.width - (Screen.width / 8);
+     	BUTTON_WIDTH = Screen.width/9;
+     	BUTTON_HEIGHT = Screen.height/20;
+     	BUTTON_SPACING = Screen.height/100 + Screen.height/20;
+
+
 	}
 
 	public void OnGUI()
@@ -64,7 +75,6 @@ public class BuildingBarracks : TileStandard {
 						this.isSelected = false;
 
 						instantiate.GetComponent<UnitBase>().isDone = true;
-
 						//Uncomment this line out after finding a solution to how ending the turn should act.
 						//this.hasBuilt = true; 
 						Debug.Log("After: " + instantiate.transform.position);
