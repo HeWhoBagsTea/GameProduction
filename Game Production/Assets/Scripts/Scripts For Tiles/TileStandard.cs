@@ -70,6 +70,8 @@ public class TileStandard : MonoBehaviour {
 		if (entered) {
 			GUI.color = Color.cyan;
 			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS*0f, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+			         this.TerrainName);
+			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS*0.5f, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			         "Resource: " + this.ResourceType +  " " + this.ResourceValue);
 
 			if(this.controller != null) {
