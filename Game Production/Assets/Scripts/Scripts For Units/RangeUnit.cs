@@ -6,13 +6,39 @@ public class RangeUnit : UnitBase {
 	override public void init() {
 		this.HPmax = 8;
 		this.HPcurr = this.HPmax;
-		this.minAttackRange = 2;
-		this.maxAttackRange = 3;
-		this.movement = 4;
-		this.attackPow = 3;
+		
+		this.OriginalMinAttackRange = 2;
+		this.OriginalMaxAttackRange = 3;
+		this.OriginalMovement = 4;
+		this.OriginalAttackPow = 3;
+		this.hasBeenUpgraded = false;
+
+		this.minAttackRange = OriginalMinAttackRange;
+		this.maxAttackRange = OriginalMaxAttackRange;
+		this.movement = OriginalMovement;
+		this.attackPow = OriginalAttackPow;
+
 		this.foodCost = 4;
 		this.lumberCost = 0;
 		this.unitType = "Infantry";
+		this.unitClass = "Archer";
 		Debug.Log ("Range Unit");
+	}
+
+	override protected void buffMe() {
+			if (this.currentSpace.TerrainName.Equals ("Forest")) {
+					this.minAttackRange = this.OriginalMinAttackRange - 1;
+					this.maxAttackRange = this.OriginalMaxAttackRange - 1;
+					//this.hasTempBuff = true;
+			} else if (this.currentSpace.TerrainName.Equals ("Mountain")) {
+					this.minAttackRange = this.OriginalMinAttackRange;		
+					this.maxAttackRange = this.OriginalMaxAttackRange + 1;
+					//this.hasTempBuff = true;
+			} else {
+					this.minAttackRange = OriginalMinAttackRange;
+					this.maxAttackRange = OriginalMaxAttackRange;
+					this.movement = OriginalMovement;
+					this.attackPow = OriginalAttackPow;
+			}
 	}
 }

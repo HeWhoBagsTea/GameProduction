@@ -6,13 +6,37 @@ public class MeleeUnit : UnitBase {
 	override public void init() {
 		this.HPmax = 12;
 		this.HPcurr = this.HPmax;
-		this.minAttackRange = 1;
-		this.maxAttackRange = 1;
-		this.attackPow = 3;
-		this.movement = 3;
+
+		this.OriginalMinAttackRange = 1;
+		this.OriginalMaxAttackRange = 1;
+		this.OriginalMovement = 3;
+		this.OriginalAttackPow = 3;
+		this.hasBeenUpgraded = false;
+		
+
+		this.minAttackRange = OriginalMinAttackRange;
+		this.maxAttackRange = OriginalMaxAttackRange;
+		this.movement = OriginalMovement;
+		this.attackPow = OriginalAttackPow;
+
 		this.foodCost = 2;
 		this.lumberCost = 0;
 		this.unitType = "Infantry";
+		this.unitClass = "Warrior";
 		Debug.Log ("Melee Unit");
+	}
+
+	override protected void buffMe() {
+		if (this.currentSpace.TerrainName.Equals ("Forest")) {
+			//this.hasTempBuff = true;
+		} else if (this.currentSpace.TerrainName.Equals ("Mountain")) {	
+			this.attackPow = this.OriginalAttackPow + 1;
+			//this.hasTempBuff = true;
+		} else {
+			this.minAttackRange = OriginalMinAttackRange;
+			this.maxAttackRange = OriginalMaxAttackRange;
+			this.movement = OriginalMovement;
+			this.attackPow = OriginalAttackPow;
+		}
 	}
 }

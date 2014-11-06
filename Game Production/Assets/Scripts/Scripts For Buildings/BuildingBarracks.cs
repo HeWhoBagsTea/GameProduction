@@ -74,10 +74,10 @@ public class BuildingBarracks : TileStandard {
 		}
 	}
 
-	public void resolveTurn()
-	{
-		this.hasBuilt = false;
-		this.isSelected = false;
-		Debug.Log ("HERE");
-	}
+//	public void resolveTurn()
+//	{
+//		this.hasBuilt = false;
+//		this.isSelected = false;
+//		Debug.Log ("HERE");
+//	}
 }

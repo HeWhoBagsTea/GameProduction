@@ -15,6 +15,20 @@ public class TileStandard : MonoBehaviour {
 	public int moveCost;
 	public int originalMoveCost = 1;
 
+	//Resource Implementation
+	public int ResourceValue = 0;
+	public string ResourceType = "";
+	public string TerrainName = "";
+	public bool hasBeenHarvested = false;
+	public bool isControlled = false;
+
+	//UI Stat stuff
+	private bool entered = false;
+	private float STAT_BOX_X_POS = Screen.width*0.2f;
+	private float STAT_BOX_Y_POS = Screen.height*.03f;
+	private float STAT_BOX_WIDTH = Screen.width * 0.3f;
+	private float STAT_BOX_HEIGHT = Screen.height * 0.1f;
+
 	public virtual void init() {
 
 	}
@@ -30,6 +44,41 @@ public class TileStandard : MonoBehaviour {
 		}
 		
 		moveCost = originalMoveCost;
+	}
+
+	//Called when mouse is over unit
+	void OnMouseEnter()
+	{
+		entered = true;
+	}
+	
+	//Called when mouse leaves unit
+	void OnMouseExit()
+	{
+		entered = false;
+	}
+
+	void OnGUI() {
+		STAT_BOX_X_POS = Screen.width * 0.2f;
+		STAT_BOX_Y_POS = Screen.height * 0.05f;
+		STAT_BOX_WIDTH = Screen.width * 0.225f;
+		STAT_BOX_HEIGHT = Screen.height * 0.1f;
+		
+		GUI.skin.box.alignment = TextAnchor.UpperCenter;
+		GUI.color = new Vector4(0.23f, 0.75f, 0.54f, 1);
+
+		if (entered) {
+			GUI.color = Color.cyan;
+			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS*0f, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+			         "Resource: " + this.ResourceType +  " " + this.ResourceValue);
+
+			if(this.controller != null) {
+				GUI.color = this.controller.getColor();
+				GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+				         "Owner: " + this.controller.getPlayerID());
+			}
+
+		}
 	}
 
 	//Called when tile is pressed
@@ -85,6 +134,11 @@ public class TileStandard : MonoBehaviour {
 		}
 	}
 
+	protected virtual void tempModsUpdate()
+	{
+
+	}
+
 	public virtual void buildingSelected()
 	{
 	}
@@ -117,6 +171,29 @@ public class TileStandard : MonoBehaviour {
 		MeshRenderer planeRenderer = transform.FindChild ("ControlRing").GetComponentInChildren<MeshRenderer> ();
 		planeRenderer.material = player.playerColor;
 		controller = player;
+	}
+
+	public virtual void resolveTurn() {
+		//GameObject[] Territory = GameObject.FindGameObjectsWithTag ("Tile");
+		//foreach (GameObject i in Territory) {
+
+		//Debug.Log (NewGameController.currentPlayer.getPlayerColor ());
+		//Debug.Log (this.controller.getPlayerColor ());
+			if (this.controller != null && NewGameController.currentPlayer.getPlayerColor() == this.controller.getPlayerColor()) {
+				if(this.ResourceType.Equals("Food"))
+				{
+					this.controller.FoodPool += this.ResourceValue;
+				}
+				else if(this.ResourceType.Equals("Lumber"))
+				{
+					this.controller.LumberPool += this.ResourceValue;
+				}
+				else if(this.ResourceType.Equals("Ore"))
+				{
+					this.controller.OrePool += this.ResourceValue;
+				}
+			}
+		//}
 	}
 	
 }

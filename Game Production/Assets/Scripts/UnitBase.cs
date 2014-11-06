@@ -19,11 +19,22 @@ public class UnitBase : MonoBehaviour {
 	public int minAttackRange = 1;
 	public int maxAttackRange = 1;
 	public int attackPow = 1;
+
+	public bool hasBeenUpgraded = false;
+	//public bool hasTempBuff = false;
+
+	//Original Stats
+	public int OriginalMovement = 2;
+	public int OriginalMinAttackRange = 1;
+	public int OriginalMaxAttackRange = 1;
+	public int OriginalAttackPow = 1;
+
 	public int HPmax = 1;
 	public int HPcurr = 1;
 	public int foodCost = 0;
 	public int lumberCost = 0;
 	public string unitType = "";
+	public string unitClass = "";
 
 	public Vector3 posOffset;
 
@@ -99,11 +110,17 @@ public class UnitBase : MonoBehaviour {
 		//}
 	}
 
+	protected virtual void buffMe() {
+
+	}
+
 	// Update is called once per frame
 	void Update () {
 		if (this.hasMoved && this.hasActioned) {
 			this.isDone = true;
 		}
+
+		buffMe ();
 
 		if(this.isDone) {
 			this.renderer.material = this.unitColors[this.controller.playerID + (this.unitColors.Length / 2)];
@@ -144,6 +161,8 @@ public class UnitBase : MonoBehaviour {
 			        " Attack Power: " + this.attackPow);
 			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS*3f, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			        "Unit Type: " + this.unitType);
+			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS*4f, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+			        "Resource " + this.currentSpace.ResourceType + " " + this.currentSpace.ResourceValue);
 		}
 
 
@@ -156,6 +175,9 @@ public class UnitBase : MonoBehaviour {
 		if (isSelected) {
 			Rect attackButton = new Rect (BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
 			Rect moveButton = new Rect (BUTTON_X_POS, attackButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+			Rect harvestButton = new Rect(BUTTON_X_POS, moveButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+			Rect captureButton = new Rect(BUTTON_X_POS, harvestButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+			
 
 			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
 			if (GUI.Button (attackButton, "Attack")) {
@@ -165,6 +187,15 @@ public class UnitBase : MonoBehaviour {
 			GUI.color = (!this.hasMoved) ? Color.white : Color.gray;
 			if (GUI.Button (moveButton, "Move")) {
 					showMovement();
+			}
+
+			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
+			if (GUI.Button (harvestButton, "Harvest")) {
+				harvestTile(this.currentSpace);
+			}
+			GUI.color = (!this.hasActioned && !this.hasMoved) ? Color.white : Color.gray;
+			if (GUI.Button (captureButton, "Capture")) {
+				captureTile(this.currentSpace);
 			}
 		}
 	}
@@ -184,9 +215,26 @@ public class UnitBase : MonoBehaviour {
 		deselect ();
 	}
 
+	//Harvest Method
+	public void harvestTile(TileStandard currentLocation){
+		this.currentSpace.hasBeenHarvested = true;
+		this.currentSpace.ResourceValue--;
+		this.hasActioned = true;
+		deselect ();
+	}
+	//Capture
+	public void captureTile(TileStandard currentLocation){
+		this.currentSpace.hasBeenHarvested = true;
+		this.currentSpace.setControl (this.controller);
+		this.hasMoved = true;
+		this.hasActioned = true;
+		deselect ();
+	}
+
 	public void resolveTurn() {
 		this.hasMoved = false;
 		this.hasActioned = false;
+
 		this.isDone = false;
 		this.renderer.material = this.unitColors [this.controller.playerID];
 		this.transform.FindChild("unit").renderer.material = this.unitColors[this.controller.playerID];

@@ -29,7 +29,7 @@ public class NewGameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log (selectedUnit);
+//		Debug.Log (selectedUnit);
 
 		//isGameOver = true;
 		isGameOver = checkIfGameOver ();

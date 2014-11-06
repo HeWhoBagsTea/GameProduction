@@ -8,6 +8,12 @@ public class Player : MonoBehaviour{
 	public Material playerColor;
 	public bool hasLost = false;
 
+	public int FoodPool = 0;
+	public int LumberPool = 0;
+	public int OrePool = 0;
+
+	public Vector4 color;
+
 	void Start() {
 		numberOfUnits = getNumberOfControlledUnits ();
 	}
@@ -27,6 +33,10 @@ public class Player : MonoBehaviour{
 	public int getPlayerID() {
 		return playerID;
 	}
+
+	public Vector4 getColor() {
+		return this.color;
+	}
 	
 	public int getNumberOfControlledUnits() {
 		int numUnits = 0;
@@ -37,7 +47,18 @@ public class Player : MonoBehaviour{
 				numUnits++;		
 			}
 		}
-
 		return numUnits;
+	}
+
+	public int getNumberOfControlledTerrain() {
+		int tilesControlled = 0;
+
+		GameObject[] Territory = GameObject.FindGameObjectsWithTag ("Tile");
+		foreach (GameObject i in Territory) {
+			if (i.GetComponent<TileStandard> () != null && i.GetComponent<TileStandard> ().controller == this) {
+				tilesControlled++;
+			}		
+		}
+		return tilesControlled;
 	}
 }

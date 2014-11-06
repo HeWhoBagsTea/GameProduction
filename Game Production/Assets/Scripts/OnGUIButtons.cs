@@ -46,6 +46,11 @@ public class OnGUIButtons : MonoBehaviour
 	void OnGUI ()
 	{
 		GameObject[] units = GameObject.FindGameObjectsWithTag ("Unit");
+		GameObject[] tiles = GameObject.FindGameObjectsWithTag ("Tile");
+		GUI.Button (new Rect (Screen.width * 0.01f, Screen.height * 0.6f, Screen.width * 0.1f, Screen.height * 0.03f), "FoodPool " + NewGameController.currentPlayer.FoodPool);
+		GUI.Button (new Rect (Screen.width * 0.01f, Screen.height * 0.7f, Screen.width * 0.1f, Screen.height * 0.04f), "LumberPool " + NewGameController.currentPlayer.LumberPool);
+		GUI.Button (new Rect (Screen.width * 0.01f, Screen.height * 0.8f, Screen.width * 0.1f, Screen.height * 0.05f), "OrePool " + NewGameController.currentPlayer.OrePool);
+		
 	
 		if (GUI.Button (new Rect (Screen.width * 0.01f, Screen.height * 0.9f, Screen.width * 0.1f, Screen.height * 0.06f), "End Turn")) 
 		{
@@ -56,6 +61,14 @@ public class OnGUIButtons : MonoBehaviour
 				}
 			}
 
+			foreach(GameObject t in tiles)
+			{
+				if(t.GetComponent<TileStandard>() !=null)
+				{
+					t.GetComponent<TileStandard>().resolveTurn();
+				}
+			}
+			Debug.Log("reached tile resolve end");
 			nextPlayer();
 			cameraView = (NewGameController.currentPlayer.playerID == 1) ? 1 : 2;    
 			decidePlayerPOV ();
@@ -63,7 +76,7 @@ public class OnGUIButtons : MonoBehaviour
 			
 			
 
-			Debug.Log ("You have ended your turn.");
+//			Debug.Log ("You have ended your turn.");
 		}
 	}
 
