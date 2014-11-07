@@ -200,7 +200,11 @@ public class UnitBase : MonoBehaviour {
 	public void attackUnit (UnitBase target) {
 		target.HPcurr -= this.attackPow;
 		this.hasActioned = true;
-		deselect ();
+		if (this.hasMoved) {
+			deselect ();
+		} else {
+			showMovement();
+		}
 	}
 
 	public void moveUnit(TileStandard moveLocation) {
@@ -209,7 +213,11 @@ public class UnitBase : MonoBehaviour {
 		this.currentSpace.unitOnTile = this;
 		this.transform.position = this.currentSpace.transform.position + this.posOffset;
 		this.hasMoved = true;
-		deselect ();
+		if (this.hasActioned) {
+			deselect ();
+		} else {
+			showAttack();
+		}
 	}
 
 	//Harvest Method
