@@ -21,7 +21,6 @@ public class UnitBase : MonoBehaviour {
 	public int attackPow = 1;
 
 	public bool hasBeenUpgraded = false;
-	//public bool hasTempBuff = false;
 
 	//Original Stats
 	public int OriginalMovement = 2;
@@ -46,16 +45,17 @@ public class UnitBase : MonoBehaviour {
 
 	//Unit Hp Stuff;
 	private float HP_X_POS = Screen.width * 0.45f;
-	private float HP_Y_POS = Screen.height * 0.3f;
-	private float HP_WIDTH = Screen.width * 0.1f;
-	private float HP_HEIGHT = Screen.height * 0.05f;
+	private float HP_Y_POS = 0;
+	private float HP_WIDTH = 100;
+	private float HP_HEIGHT = 25;
 	private bool entered = false;
 
 	//Unit Stat Stuff
 	private float STAT_BOX_X_POS = Screen.width*0.4f;
-	private float STAT_BOX_Y_POS = Screen.height*.05f;
-	private float STAT_BOX_WIDTH = Screen.width * 0.3f;
-	private float STAT_BOX_HEIGHT = Screen.height * 0.1f;
+	private float STAT_BOX_Y_POS = 10;
+	private float STAT_BOX_WIDTH = 400;
+	private float STAT_BOX_HEIGHT = 25;
+	private float STAT_BOX_OFFSET = 30;
 	
 	//use this to modify unit stats
 	public virtual void init() {
@@ -116,19 +116,20 @@ public class UnitBase : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		buffMe ();
 		if (this.hasMoved && this.hasActioned) {
 			this.isDone = true;
 		}
-
-		buffMe ();
-
-		if(this.isDone) {
-			this.hasMoved = true;
-			this.hasActioned = true;
-			this.renderer.material = this.unitColors[this.controller.playerID + (this.unitColors.Length / 2)];
-			this.transform.FindChild("unit").renderer.material = this.unitColors[this.controller.playerID + (this.unitColors.Length / 2)];
+		else if (this.hasMoved || this.hasActioned) {
+			this.renderer.material = this.unitColors[this.controller.playerID + (this.unitColors.Length/2) + 1] ;
+			this.transform.FindChild("unit").renderer.material = this.unitColors[this.controller.playerID + (this.unitColors.Length / 2) + 1];
 		}
-
+		
+		if(this.isDone) {
+			this.renderer.material = this.unitColors[this.controller.playerID + (this.unitColors.Length / 3)];
+			this.transform.FindChild("unit").renderer.material = this.unitColors[this.controller.playerID + (this.unitColors.Length / 3)];
+		}
+		
 		if (this.HPcurr <= 0) {
 			Destroy(this.gameObject);
 		}
@@ -141,30 +142,24 @@ public class UnitBase : MonoBehaviour {
 		BUTTON_SPACING = Screen.height/100 + Screen.height/20;
 		
 		HP_X_POS = Screen.width * 0.45f;
-		HP_Y_POS = Screen.height * 0.3f;
-		HP_WIDTH = Screen.width * 0.1f;
-		HP_HEIGHT = Screen.height * 0.05f;
+		STAT_BOX_X_POS = Screen.width * 0.35f;
+		HP_Y_POS = (STAT_BOX_OFFSET * 6);
 
-		STAT_BOX_X_POS = Screen.width * 0.4f;
-		STAT_BOX_Y_POS = Screen.height * 0.05f;
-		STAT_BOX_WIDTH = Screen.width * 0.225f;
-		STAT_BOX_HEIGHT = Screen.height * 0.1f;
-		
 		GUI.skin.box.alignment = TextAnchor.UpperCenter;
 		GUI.color = new Vector4(0.23f, 0.75f, 0.54f, 1);
 		if (isSelected) {
-			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS*0f, STAT_BOX_WIDTH, STAT_BOX_HEIGHT), 
+			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT), 
 			         "Unit Stats:");
-			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + (STAT_BOX_OFFSET * 1), STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			        "HP:" + this.HPcurr + "/"+this.HPmax +
 			        " AttackRange: " + this.minAttackRange + "-"+ this.maxAttackRange);
-			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS*2f, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + (STAT_BOX_OFFSET * 2), STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			        "Movement: " + this.movement +
 			        " Attack Power: " + this.attackPow);
-			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS*3f, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + (STAT_BOX_OFFSET * 3), STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			        "Unit Type: " + this.unitType);
-			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS*4f, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
-			        "Resource " + this.currentSpace.ResourceType + " " + this.currentSpace.ResourceValue);
+			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + (STAT_BOX_OFFSET * 4), STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+			        "Resource: " + this.currentSpace.ResourceType + " " + this.currentSpace.ResourceValue);
 		}
 
 
@@ -373,7 +368,7 @@ public class UnitBase : MonoBehaviour {
 			}
 
 			foreach(TileStandard i in tiles) {
-				if(!i.unitOnTile) {
+				if(!i.unitOnTile && (moveRange - i.moveCost) >= 0) {
 					i.transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer>().material = this.spaceHighlights[2];
 					i.canMoveTo = true;
 				}

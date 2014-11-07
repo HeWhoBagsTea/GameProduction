@@ -25,10 +25,11 @@ public class TileStandard : MonoBehaviour {
 
 	//UI Stat stuff
 	private bool entered = false;
-	private float STAT_BOX_X_POS = Screen.width*0.2f;
-	private float STAT_BOX_Y_POS = Screen.height*.03f;
-	private float STAT_BOX_WIDTH = Screen.width * 0.3f;
-	private float STAT_BOX_HEIGHT = Screen.height * 0.1f;
+	private float STAT_BOX_X_POS = 10;
+	private float STAT_BOX_Y_POS = 10;
+	private float STAT_BOX_WIDTH = 200;
+	private float STAT_BOX_HEIGHT = 20;
+	private float STAT_BOX_OFFSET = 25;
 
 	public virtual void init() {
 
@@ -59,25 +60,20 @@ public class TileStandard : MonoBehaviour {
 		entered = false;
 	}
 
-	void OnGUI() {
-		STAT_BOX_X_POS = Screen.width * 0.2f;
-		STAT_BOX_Y_POS = Screen.height * 0.05f;
-		STAT_BOX_WIDTH = Screen.width * 0.225f;
-		STAT_BOX_HEIGHT = Screen.height * 0.1f;
-		
+	void OnGUI() {		
 		GUI.skin.box.alignment = TextAnchor.UpperCenter;
 		GUI.color = new Vector4(0.23f, 0.75f, 0.54f, 1);
 
 		if (entered) {
 			GUI.color = Color.cyan;
-			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS*0f, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			         this.TerrainName);
-			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS*0.5f, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + STAT_BOX_OFFSET, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			         "Resource: " + this.ResourceType +  " " + this.ResourceValue);
 
 			if(this.controller != null) {
 				GUI.color = this.controller.getColor();
-				GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+				GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + (STAT_BOX_OFFSET * 2), STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 				         "Owner: " + this.controller.getPlayerID());
 			}
 

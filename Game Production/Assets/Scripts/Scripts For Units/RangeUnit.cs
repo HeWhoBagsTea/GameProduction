@@ -9,7 +9,7 @@ public class RangeUnit : UnitBase {
 		
 		this.OriginalMinAttackRange = 2;
 		this.OriginalMaxAttackRange = 3;
-		this.OriginalMovement = 4;
+		this.OriginalMovement = 3;
 		this.OriginalAttackPow = 3;
 		this.hasBeenUpgraded = false;
 

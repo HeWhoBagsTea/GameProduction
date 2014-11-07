@@ -9,7 +9,7 @@ public class MeleeUnit : UnitBase {
 
 		this.OriginalMinAttackRange = 1;
 		this.OriginalMaxAttackRange = 1;
-		this.OriginalMovement = 3;
+		this.OriginalMovement = 4;
 		this.OriginalAttackPow = 3;
 		this.hasBeenUpgraded = false;
 		
