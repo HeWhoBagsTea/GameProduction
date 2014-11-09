@@ -242,18 +242,22 @@ public class UnitBase : MonoBehaviour {
 
 	//Harvest Method
 	public void harvestTile(TileStandard currentLocation){
-		this.currentSpace.hasBeenHarvested = true;
-		this.currentSpace.ResourceValue--;
-		this.hasActioned = true;
-		deselect ();
+		if (!this.hasActioned) {
+			this.currentSpace.hasBeenHarvested = true;
+			this.currentSpace.ResourceValue--;
+			this.hasActioned = true;
+			deselect ();
+		}
 	}
 	//Capture
 	public void captureTile(TileStandard currentLocation){
-		this.currentSpace.hasBeenHarvested = true;
-		this.currentSpace.setControl (this.controller);
-		this.hasMoved = true;
-		this.hasActioned = true;
-		deselect ();
+		if (!this.hasActioned && !this.hasMoved) {
+			this.currentSpace.hasBeenHarvested = true;
+			this.currentSpace.setControl (this.controller);
+			this.hasMoved = true;
+			this.hasActioned = true;
+			deselect ();
+		}
 	}
 
 	public void resolveTurn() {
