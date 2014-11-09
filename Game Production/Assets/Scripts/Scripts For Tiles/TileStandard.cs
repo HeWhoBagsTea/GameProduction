@@ -27,7 +27,7 @@ public class TileStandard : MonoBehaviour {
 	private bool entered = false;
 	private float STAT_BOX_X_POS = 10;
 	private float STAT_BOX_Y_POS = 10;
-	private float STAT_BOX_WIDTH = 200;
+	private float STAT_BOX_WIDTH = 175;
 	private float STAT_BOX_HEIGHT = 20;
 	private float STAT_BOX_OFFSET = 25;
 
@@ -63,20 +63,20 @@ public class TileStandard : MonoBehaviour {
 	void OnGUI() {		
 		GUI.skin.box.alignment = TextAnchor.UpperCenter;
 		GUI.color = new Vector4(0.23f, 0.75f, 0.54f, 1);
-
+		
 		if (entered) {
 			GUI.color = Color.cyan;
 			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			         this.TerrainName);
 			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + STAT_BOX_OFFSET, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			         "Resource: " + this.ResourceType +  " " + this.ResourceValue);
-
+			
 			if(this.controller != null) {
 				GUI.color = this.controller.getColor();
 				GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + (STAT_BOX_OFFSET * 2), STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 				         "Owner: " + this.controller.getPlayerID());
 			}
-
+			
 		}
 	}
 

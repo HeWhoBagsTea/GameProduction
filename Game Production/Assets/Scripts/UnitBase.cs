@@ -42,24 +42,31 @@ public class UnitBase : MonoBehaviour {
 	public Vector3 posOffset;
 
 	//Button Stuff;
-	protected float BUTTON_X_POS = Screen.width - (Screen.width / 8);
-	protected float BUTTON_WIDTH = Screen.width/9;
-	protected float BUTTON_HEIGHT = Screen.height/20;
-	protected float BUTTON_SPACING = Screen.height/100 + Screen.height/20;
-
+	protected float BUTTON_X_POS = Screen.width - 130;
+	protected float BUTTON_WIDTH = 120;
+	protected float BUTTON_HEIGHT = 25;
+	protected float BUTTON_SPACING = 30;
+	
 	//Unit Hp Stuff;
 	private float HP_X_POS = Screen.width * 0.45f;
 	private float HP_Y_POS = 0;
 	private float HP_WIDTH = 100;
-	private float HP_HEIGHT = 25;
+	private float HP_HEIGHT = 20;
 	private bool entered = false;
-
+	
 	//Unit Stat Stuff
-	private float STAT_BOX_X_POS = Screen.width*0.4f;
+	private float STAT_BOX_X_POS = 0;
 	private float STAT_BOX_Y_POS = 10;
 	private float STAT_BOX_WIDTH = 400;
 	private float STAT_BOX_HEIGHT = 25;
 	private float STAT_BOX_OFFSET = 30;
+	
+	//Tile Stat
+	private float TILE_BOX_X_POS = 10;
+	private float TILE_BOX_Y_POS = 10;
+	private float TILE_BOX_WIDTH = 175;
+	private float TILE_BOX_HEIGHT = 20;
+	private float TILE_BOX_OFFSET = 25;
 	
 	//use this to modify unit stats
 	public virtual void init() {
@@ -140,17 +147,13 @@ public class UnitBase : MonoBehaviour {
 	}
 
 	void OnGUI() {
-		BUTTON_X_POS = Screen.width - (Screen.width / 8);
-		BUTTON_WIDTH = Screen.width/9;
-		BUTTON_HEIGHT = Screen.height/20;
-		BUTTON_SPACING = Screen.height/100 + Screen.height/20;
+		STAT_BOX_X_POS = Screen.width * 0.5f - (STAT_BOX_WIDTH/2);
 		
-		HP_X_POS = Screen.width * 0.45f;
-		STAT_BOX_X_POS = Screen.width * 0.35f;
-		HP_Y_POS = (STAT_BOX_OFFSET * 6);
-
+		HP_X_POS = Camera.main.WorldToScreenPoint (this.transform.position).x - (HP_WIDTH/2);
+		HP_Y_POS = Screen.height - Camera.main.WorldToScreenPoint (this.transform.position).y - 40;
 		GUI.skin.box.alignment = TextAnchor.UpperCenter;
 		GUI.color = new Vector4(0.23f, 0.75f, 0.54f, 1);
+
 		if (isSelected) {
 			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT), 
 			         "Unit Stats:");
@@ -168,9 +171,30 @@ public class UnitBase : MonoBehaviour {
 
 
 		if (entered) {
-			GUI.color = (this.controller == NewGameController.currentPlayer) ? Color.green : Color.red;
+			//GUI.color = (this.controller == NewGameController.currentPlayer) ? new Vector4(0f, 0f, .6f, 1f) : Color.red;
+			
+			if(this.controller == NewGameController.currentPlayer){
+				GUI.color = new Vector4(0.3f, 0.9f, 0.3f, 1.0f);
+			}
+			else {
+				GUI.color =Color.red;
+			}
+			
 			GUI.Box (new Rect (HP_X_POS, HP_Y_POS, HP_WIDTH, HP_HEIGHT),
 			         "HP:" + this.HPcurr + "/" + this.HPmax);
+			
+			
+			GUI.color = Color.cyan;
+			GUI.Box (new Rect (TILE_BOX_X_POS, TILE_BOX_Y_POS, TILE_BOX_WIDTH, TILE_BOX_HEIGHT),
+			         this.currentSpace.TerrainName);
+			GUI.Box (new Rect (TILE_BOX_X_POS, TILE_BOX_Y_POS + TILE_BOX_OFFSET, TILE_BOX_WIDTH, TILE_BOX_HEIGHT),
+			         "Resource: " + this.currentSpace.ResourceType +  " " + this.currentSpace.ResourceValue);
+			
+			if(this.controller != null) {
+				GUI.color = this.controller.getColor();
+				GUI.Box (new Rect (TILE_BOX_X_POS, TILE_BOX_Y_POS + (TILE_BOX_OFFSET * 2), TILE_BOX_WIDTH, TILE_BOX_HEIGHT),
+				         "Owner: " + this.controller.getPlayerID());
+			}
 		}
 
 		if (isSelected) {
@@ -179,17 +203,17 @@ public class UnitBase : MonoBehaviour {
 			Rect harvestButton = new Rect(BUTTON_X_POS, moveButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
 			Rect captureButton = new Rect(BUTTON_X_POS, harvestButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
 			
-
+			
 			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
 			if (GUI.Button (attackButton, "Attack")) {
-					showAttack();
+				showAttack();
 			}
-
+			
 			GUI.color = (!this.hasMoved) ? Color.white : Color.gray;
 			if (GUI.Button (moveButton, "Move")) {
-					showMovement();
+				showMovement();
 			}
-
+			
 			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
 			if (GUI.Button (harvestButton, "Harvest")) {
 				harvestTile(this.currentSpace);
@@ -207,7 +231,8 @@ public class UnitBase : MonoBehaviour {
 		if (this.hasMoved) {
 			deselect ();
 		} else {
-			showMovement();
+			buffMe();
+			selected();
 		}
 	}
 
@@ -220,7 +245,8 @@ public class UnitBase : MonoBehaviour {
 		if (this.hasActioned) {
 			deselect ();
 		} else {
-			showAttack();
+			buffMe();
+			selected();
 		}
 	}
 

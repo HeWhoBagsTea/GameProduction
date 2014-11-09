@@ -15,6 +15,11 @@ public class OnGUIButtons : MonoBehaviour
 
 	private int cameraView = 1;
 	//private Vector3 targetPosition = Vector3(25, -90, 0);
+
+	private float RESOURCE_X_POS = 10;
+	private float RESOURCE_WIDTH = 120;
+	private float RESOURCE_HEIGHT = 25;
+	private float RESOURCE_SPACING = 30;
 		
 	void Start ()
 	{
@@ -45,14 +50,18 @@ public class OnGUIButtons : MonoBehaviour
 		
 	void OnGUI ()
 	{
+		Rect endButton = new Rect (RESOURCE_X_POS, Screen.height - RESOURCE_SPACING, RESOURCE_WIDTH, RESOURCE_HEIGHT);
+		Rect oreButton = new Rect (RESOURCE_X_POS, endButton.position.y - RESOURCE_SPACING, RESOURCE_WIDTH, RESOURCE_HEIGHT);
+		Rect woodButton = new Rect(RESOURCE_X_POS, oreButton.position.y - RESOURCE_SPACING, RESOURCE_WIDTH, RESOURCE_HEIGHT);
+		Rect foodButton = new Rect(RESOURCE_X_POS, woodButton.position.y - RESOURCE_SPACING, RESOURCE_WIDTH, RESOURCE_HEIGHT);
+		
 		GameObject[] units = GameObject.FindGameObjectsWithTag ("Unit");
 		GameObject[] tiles = GameObject.FindGameObjectsWithTag ("Tile");
-		GUI.Button (new Rect (Screen.width * 0.01f, Screen.height * 0.6f, Screen.width * 0.1f, Screen.height * 0.03f), "FoodPool " + NewGameController.currentPlayer.FoodPool);
-		GUI.Button (new Rect (Screen.width * 0.01f, Screen.height * 0.7f, Screen.width * 0.1f, Screen.height * 0.04f), "LumberPool " + NewGameController.currentPlayer.LumberPool);
-		GUI.Button (new Rect (Screen.width * 0.01f, Screen.height * 0.8f, Screen.width * 0.1f, Screen.height * 0.05f), "OrePool " + NewGameController.currentPlayer.OrePool);
-		
-	
-		if (GUI.Button (new Rect (Screen.width * 0.01f, Screen.height * 0.9f, Screen.width * 0.1f, Screen.height * 0.06f), "End Turn")) 
+		GUI.Button (foodButton, "FoodPool " + NewGameController.currentPlayer.FoodPool);
+		GUI.Button (woodButton, "LumberPool " + NewGameController.currentPlayer.LumberPool);
+		GUI.Button (oreButton, "OrePool " + NewGameController.currentPlayer.OrePool);
+
+		if (GUI.Button (endButton, "End Turn")) 
 		{
 			foreach(GameObject t in tiles)
 			{
