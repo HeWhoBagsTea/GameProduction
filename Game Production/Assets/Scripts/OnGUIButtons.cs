@@ -54,13 +54,6 @@ public class OnGUIButtons : MonoBehaviour
 	
 		if (GUI.Button (new Rect (Screen.width * 0.01f, Screen.height * 0.9f, Screen.width * 0.1f, Screen.height * 0.06f), "End Turn")) 
 		{
-			foreach (GameObject u in units) 
-			{
-				if(u.GetComponent<UnitBase>() != null) {
-					u.GetComponent<UnitBase> ().resolveTurn ();
-				}
-			}
-
 			foreach(GameObject t in tiles)
 			{
 				if(t.GetComponent<TileStandard>() !=null)
@@ -68,6 +61,14 @@ public class OnGUIButtons : MonoBehaviour
 					t.GetComponent<TileStandard>().resolveTurn();
 				}
 			}
+
+			foreach (GameObject u in units) 
+			{
+				if(u.GetComponent<UnitBase>() != null) {
+					u.GetComponent<UnitBase> ().resolveTurn ();
+				}
+			}
+
 			Debug.Log("reached tile resolve end");
 			nextPlayer();
 			cameraView = (NewGameController.currentPlayer.playerID == 1) ? 1 : 2;    

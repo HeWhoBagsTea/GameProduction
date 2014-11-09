@@ -14,6 +14,10 @@ public class UnitBase : MonoBehaviour {
 	protected bool hasActioned = false;
 	public bool isDone = false;
 
+	//Upkeep Stuff
+	protected int UpkeepCost = 0;
+	public bool isFirstTurn = true;
+
 	//Units Stats
 	public int movement = 2;
 	public int minAttackRange = 1;
@@ -220,6 +224,22 @@ public class UnitBase : MonoBehaviour {
 		}
 	}
 
+	//Eat Well
+	public void EatWell()
+	{
+		if (this.controller == NewGameController.currentPlayer) {
+						if (!this.isFirstTurn) {
+								this.controller.FoodPool -= this.UpkeepCost;
+								if (this.controller.FoodPool < this.UpkeepCost) {
+										this.HPcurr--;
+								}
+						} else if (this.controller == NewGameController.currentPlayer) {
+
+								this.isFirstTurn = false;
+						}
+				}
+	}
+
 	//Harvest Method
 	public void harvestTile(TileStandard currentLocation){
 		this.currentSpace.hasBeenHarvested = true;
@@ -241,6 +261,7 @@ public class UnitBase : MonoBehaviour {
 		this.hasActioned = false;
 
 		this.isDone = false;
+		this.EatWell();
 		this.renderer.material = this.unitColors [this.controller.playerID];
 		this.transform.FindChild("unit").renderer.material = this.unitColors[this.controller.playerID];
 		deselect ();

@@ -12,6 +12,7 @@ public class MageUnit : UnitBase {
 		this.OriginalMovement = 2;
 		this.OriginalAttackPow = 6;
 		this.hasBeenUpgraded = false;
+		this.UpkeepCost = 2;
 		
 
 		this.minAttackRange = OriginalMinAttackRange;
