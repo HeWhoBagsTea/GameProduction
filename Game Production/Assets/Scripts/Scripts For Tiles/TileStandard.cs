@@ -109,6 +109,10 @@ public class TileStandard : MonoBehaviour {
 				else if(this.unitOnTile != null && NewGameController.selectedUnit != null && canAttackUnitOnThis) {
 					NewGameController.selectedUnit.attackUnit(this.unitOnTile);
 				}
+				else if(this.unitOnTile == null && NewGameController.selectedUnit != null && !canMoveTo)
+				{
+					NewGameController.deselectAllUnits();
+				}
 			}
 			else if(NewGameController.selectedUnit == null) {
 				if (this.unitOnTile != null && NewGameController.currentPlayer == this.unitOnTile.controller) {
@@ -116,8 +120,8 @@ public class TileStandard : MonoBehaviour {
 				} 
 				else if(this.unitOnTile == null && this.isStructure) {
 					NewGameController.deselectAllUnits();
-					gameObject.GetComponent<BuildingBarracks>().enabled = true;
-					buildingSelected();
+					gameObject.GetComponent<UnitBuilding>().enabled = true;
+					buildingSelected(NewGameController.currentPlayer.playerID);
 				}
 			}
 		}
@@ -137,16 +141,16 @@ public class TileStandard : MonoBehaviour {
 			if(this.unitOnTile != null && this.isStructure
 			   && NewGameController.selectedUnit == null)
 			{
-				if(!gameObject.GetComponent<BuildingBarracks>().Equals(null))
+				if(!gameObject.GetComponent<UnitBuilding>().Equals(null))
 				{
-					gameObject.GetComponent<BuildingBarracks>().enabled = false;
+					gameObject.GetComponent<UnitBuilding>().enabled = false;
 					isEnabled = false;
 				}
 			}
 		}
 		if(!isEnabled)
 		{
-			gameObject.GetComponent<BuildingBarracks>().enabled = true;
+			gameObject.GetComponent<UnitBuilding>().enabled = true;
 			isEnabled = true;
 		}
 	}
@@ -156,7 +160,7 @@ public class TileStandard : MonoBehaviour {
 
 	}
 
-	public virtual void buildingSelected()
+	public virtual void buildingSelected(int val)
 	{
 	}
 

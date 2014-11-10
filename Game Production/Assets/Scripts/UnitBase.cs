@@ -137,6 +137,8 @@ public class UnitBase : MonoBehaviour {
 		}
 		
 		if(this.isDone) {
+			this.hasMoved = true;
+			this.hasActioned = true;
 			this.renderer.material = this.unitColors[this.controller.playerID + (this.unitColors.Length / 3)];
 			this.transform.FindChild("unit").renderer.material = this.unitColors[this.controller.playerID + (this.unitColors.Length / 3)];
 		}
@@ -174,7 +176,7 @@ public class UnitBase : MonoBehaviour {
 			//GUI.color = (this.controller == NewGameController.currentPlayer) ? new Vector4(0f, 0f, .6f, 1f) : Color.red;
 			
 			if(this.controller == NewGameController.currentPlayer){
-				GUI.color = new Vector4(0.3f, 0.9f, 0.3f, 1.0f);
+				GUI.color = new Vector4(0.2f, 1.0f, 0.2f, 1.0f);
 			}
 			else {
 				GUI.color =Color.red;
@@ -268,9 +270,21 @@ public class UnitBase : MonoBehaviour {
 
 	//Harvest Method
 	public void harvestTile(TileStandard currentLocation){
-		if (!this.hasActioned) {
+		if (!this.hasActioned && this.currentSpace.ResourceValue >0) {
 			this.currentSpace.hasBeenHarvested = true;
 			this.currentSpace.ResourceValue--;
+			if(this.currentSpace.ResourceType.Equals("Food"))
+			{
+				this.controller.FoodPool ++;
+			}
+			else if(this.currentSpace.ResourceType.Equals("Lumber"))
+			{
+				this.controller.LumberPool ++;
+			}
+			else if(this.currentSpace.ResourceType.Equals("Ore"))
+			{
+				this.controller.OrePool ++;
+			}
 			this.hasActioned = true;
 			deselect ();
 		}
