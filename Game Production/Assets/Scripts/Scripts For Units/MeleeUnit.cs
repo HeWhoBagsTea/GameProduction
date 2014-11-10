@@ -21,6 +21,7 @@ public class MeleeUnit : UnitBase {
 
 		this.foodCost = 2;
 		this.lumberCost = 0;
+		this.oreCost = 1;
 		this.unitType = "Infantry";
 		this.unitClass = "Warrior";
 		Debug.Log ("Melee Unit");

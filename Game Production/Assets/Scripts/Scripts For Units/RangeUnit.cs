@@ -20,7 +20,8 @@ public class RangeUnit : UnitBase {
 		this.attackPow = OriginalAttackPow;
 
 		this.foodCost = 4;
-		this.lumberCost = 0;
+		this.lumberCost = 1;
+		this.oreCost = 0;
 		this.unitType = "Infantry";
 		this.unitClass = "Archer";
 		Debug.Log ("Range Unit");

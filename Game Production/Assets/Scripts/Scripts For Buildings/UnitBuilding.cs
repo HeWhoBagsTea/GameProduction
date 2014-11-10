@@ -37,43 +37,55 @@ public class UnitBuilding : TileStandard {
 	
 	public void OnGUI()
 	{
-		if(isSelected){
+		if (isSelected) {
 			Rect[] buildUnit = new Rect[units.Length];
-			
 			//sets up the Rects to go from bottom to top.
-			for(int i = buildUnit.Length-1; i >= 0; i--)
-			{
-				if(i == buildUnit.Length-1)
-				{
-					buildUnit[i] = new Rect(BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-				}
-				else
-				{
-					buildUnit[i] = new Rect(BUTTON_X_POS, buildUnit[i+1].position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+			for (int i = buildUnit.Length-1; i >= 0; i--) {
+				if (i == buildUnit.Length - 1) {
+					buildUnit [i] = new Rect (BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+				} else {
+					buildUnit [i] = new Rect (BUTTON_X_POS, buildUnit [i + 1].position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
 				}
 			}
 			//Change string to fit name of unit.
-			for(int i = 0; i < buildUnit.Length; i++)
-			{
-				if(GUI.Button(buildUnit[i], "Build " + units[i].name))
-				{
-					Vector3 rotate = new Vector3(0, 0, 0);
-					if(this.playerControl == 1)
-						rotate = new Vector3(0, 90, 0);
-					else if(this.playerControl == 2)
-						rotate = new Vector3(0, 270, 0);
-					GameObject prefab = units[i];
-					GameObject instantiate = Instantiate(
-						prefab, 
-						(this.transform.position),
-						this.transform.rotation) as GameObject;
-					
-					instantiate.GetComponent<UnitBase>().giveControl(transform.FindChild ("ControlRing").GetComponentInChildren<MeshRenderer> ().material);
-					this.isSelected = false;
-					instantiate.transform.rotation = Quaternion.Euler(rotate);
-					instantiate.GetComponent<UnitBase>().isDone = true;
+			for (int i = 0; i < buildUnit.Length; i++) {
+				if (GUI.Button (buildUnit [i], "Build " + units [i].name)) {
+					if (haveEnoughResources (units [i].GetComponent<UnitBase> ())) {
+						Vector3 rotate = new Vector3 (0, 0, 0);
+						if (this.playerControl == 1)
+							rotate = new Vector3 (0, 90, 0);
+						else if (this.playerControl == 2)
+							rotate = new Vector3 (0, 270, 0);
+						GameObject prefab = units [i];
+						GameObject instantiate = Instantiate (
+							prefab,
+							(this.transform.position),
+							this.transform.rotation) as GameObject;
+						instantiate.GetComponent<UnitBase> ().giveControl (transform.FindChild ("ControlRing").GetComponentInChildren<MeshRenderer> ().material);
+						this.isSelected = false;
+						instantiate.transform.rotation = Quaternion.Euler (rotate);
+						instantiate.GetComponent<UnitBase> ().isDone = true;
+					}
 				}
-			}
+			}		
 		}
+	}
+
+	public bool haveEnoughResources(UnitBase unitInQuestion)
+	{
+		bool meetCost = false;
+		if (this.controller.FoodPool >= unitInQuestion.foodCost && 
+		    this.controller.LumberPool >= unitInQuestion.lumberCost && 
+		    this.controller.OrePool >= unitInQuestion.oreCost) {
+			meetCost = true;
+			this.controller.FoodPool -= unitInQuestion.foodCost;
+			this.controller.LumberPool -= unitInQuestion.lumberCost;
+			this.controller.OrePool -= unitInQuestion.oreCost;
+			}
+		Debug.Log (this.controller.FoodPool);
+		Debug.Log (this.controller.LumberPool);
+		Debug.Log (this.controller.OrePool);
+		return meetCost;
+		
 	}
 }

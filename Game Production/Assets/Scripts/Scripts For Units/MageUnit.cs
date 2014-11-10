@@ -21,7 +21,8 @@ public class MageUnit : UnitBase {
 		this.attackPow = OriginalAttackPow;
 
 		this.foodCost = 3;
-		this.lumberCost = 0;
+		this.lumberCost = 1;
+		this.oreCost = 1;
 		this.unitType = "Infantry";
 		this.unitClass = "Mage";
 		Debug.Log ("Mage Unit");

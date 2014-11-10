@@ -36,6 +36,7 @@ public class UnitBase : MonoBehaviour {
 	public int HPcurr = 1;
 	public int foodCost = 0;
 	public int lumberCost = 0;
+	public int oreCost = 0;
 	public string unitType = "";
 	public string unitClass = "";
 
