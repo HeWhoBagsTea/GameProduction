@@ -82,9 +82,9 @@ public class UnitBuilding : TileStandard {
 			this.controller.LumberPool -= unitInQuestion.lumberCost;
 			this.controller.OrePool -= unitInQuestion.oreCost;
 			}
-		Debug.Log (this.controller.FoodPool);
-		Debug.Log (this.controller.LumberPool);
-		Debug.Log (this.controller.OrePool);
+		//Debug.Log (this.controller.FoodPool);
+		//Debug.Log (this.controller.LumberPool);
+		//Debug.Log (this.controller.OrePool);
 		return meetCost;
 		
 	}

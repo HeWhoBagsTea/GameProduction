@@ -88,6 +88,7 @@ public class TileStandard : MonoBehaviour {
 			return;
 		}
 
+
 		if (this.unitOnTile == null) {
 			this.canAttackUnitOnThis = false;
 		}
@@ -153,6 +154,8 @@ public class TileStandard : MonoBehaviour {
 			gameObject.GetComponent<UnitBuilding>().enabled = true;
 			isEnabled = true;
 		}
+		tempModsUpdate ();
+		
 	}
 
 	protected virtual void tempModsUpdate()
