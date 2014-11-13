@@ -167,7 +167,7 @@ public class UnitBase : MonoBehaviour {
 			        "Movement: " + this.movement +
 			        " Attack Power: " + this.attackPow);
 			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + (STAT_BOX_OFFSET * 3), STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
-			        "Unit Type: " + this.unitType);
+			        "Unit Type: " + this.unitClass);
 			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + (STAT_BOX_OFFSET * 4), STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			        "Resource: " + this.currentSpace.ResourceType + " " + this.currentSpace.ResourceValue);
 		}
@@ -175,12 +175,12 @@ public class UnitBase : MonoBehaviour {
 
 		if (entered) {
 			//GUI.color = (this.controller == NewGameController.currentPlayer) ? new Vector4(0f, 0f, .6f, 1f) : Color.red;
-			
+
 			if(this.controller == NewGameController.currentPlayer){
 				GUI.color = new Vector4(0.2f, 1.0f, 0.2f, 1.0f);
 			}
 			else {
-				GUI.color =Color.red;
+				GUI.color =new Vector4(1.0f, 1.0f, 0.0f, 1.0f);
 			}
 			
 			GUI.Box (new Rect (HP_X_POS, HP_Y_POS, HP_WIDTH, HP_HEIGHT),
@@ -369,7 +369,7 @@ public class UnitBase : MonoBehaviour {
 	private void showAttackHelper(int attackRange, TileStandard tile, Material mat) {
 
 		if (attackRange > 0) {
-			Collider[] hitCollider = Physics.OverlapSphere(tile.transform.position, 2);
+			Collider[] hitCollider = Physics.OverlapSphere(tile.transform.position, 4);
 			List<TileStandard> tiles = new List<TileStandard>();
 			
 			foreach(Collider i in hitCollider) {
@@ -432,7 +432,7 @@ public class UnitBase : MonoBehaviour {
 	
 	private void showMovementRangeHelper(int moveRange, TileStandard tile) {
 		if (moveRange > 0) {
-			Collider[] hitCollider = Physics.OverlapSphere(tile.transform.position, 2);
+			Collider[] hitCollider = Physics.OverlapSphere(tile.transform.position, 4);
 			List<TileStandard> tiles = new List<TileStandard>();
 
 			foreach(Collider i in hitCollider) {

@@ -9,8 +9,8 @@ public class OnGUIButtons : MonoBehaviour
 	//private float rotateSpeed = 2.5f;
 	private Vector3 PoV1 = new Vector3 (30, 270, 0);
 	private Vector3 PoV2 = new Vector3 (30, 90, 0);
-	private Vector3 player1CamPos = new Vector3 (20, 15, 0.05f);
-	private Vector3 player2CamPos = new Vector3 (-22, 15, -0.5f);
+	private Vector3 player1CamPos = new Vector3 (32, 15, 0.05f);
+	private Vector3 player2CamPos = new Vector3 (-35, 15, -0.5f);
 	private Quaternion newRot;
 
 	private int cameraView = 1;
