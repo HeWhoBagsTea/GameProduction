@@ -8,8 +8,12 @@ public class UnitBuilding : TileStandard {
 	private float BUTTON_WIDTH = Screen.width/9;
 	private float BUTTON_HEIGHT = Screen.height/20;
 	private float BUTTON_SPACING = Screen.height/100 + Screen.height/20;
+
 	public int playerControl = -1;
 	private bool isSelected = false;
+	
+	//Text Sizing
+	private int TextSize = (int)Screen.height/60;
 	
 	public GameObject[] units;
 	
@@ -37,6 +41,7 @@ public class UnitBuilding : TileStandard {
 	
 	public void OnGUI()
 	{
+		GUI.skin.button.fontSize = TextSize;
 		if (isSelected) {
 			Rect[] buildUnit = new Rect[units.Length];
 			//sets up the Rects to go from bottom to top.

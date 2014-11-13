@@ -43,31 +43,36 @@ public class UnitBase : MonoBehaviour {
 	public Vector3 posOffset;
 
 	//Button Stuff;
-	protected float BUTTON_X_POS = Screen.width - 130;
-	protected float BUTTON_WIDTH = 120;
-	protected float BUTTON_HEIGHT = 25;
-	protected float BUTTON_SPACING = 30;
+	private float BUTTON_X_POS = Screen.width - (Screen.width / 8);
+	private float BUTTON_WIDTH = Screen.width/9;
+	private float BUTTON_HEIGHT = Screen.height/20;
+	private float BUTTON_SPACING = Screen.height/100 + Screen.height/20;
 	
 	//Unit Hp Stuff;
-	private float HP_X_POS = Screen.width * 0.45f;
-	private float HP_Y_POS = 0;
+	private float HP_X_POS; //(Works just fine without this) = Screen.width * 0.45f;
+	private float HP_Y_POS; //(Works just fine without this) = 0;
 	private float HP_WIDTH = 100;
-	private float HP_HEIGHT = 20;
 	private bool entered = false;
 	
 	//Unit Stat Stuff
 	private float STAT_BOX_X_POS = 0;
 	private float STAT_BOX_Y_POS = 10;
-	private float STAT_BOX_WIDTH = 400;
-	private float STAT_BOX_HEIGHT = 25;
-	private float STAT_BOX_OFFSET = 30;
+	private float STAT_BOX_WIDTH = Screen.width/3;
+	private float STAT_BOX_HEIGHT = Screen.height/30;
+	private float STAT_BOX_OFFSET = Screen.height/100 + Screen.height/30;
 	
 	//Tile Stat
 	private float TILE_BOX_X_POS = 10;
 	private float TILE_BOX_Y_POS = 10;
-	private float TILE_BOX_WIDTH = 175;
-	private float TILE_BOX_HEIGHT = 20;
-	private float TILE_BOX_OFFSET = 25;
+
+	//Text Sizing
+	private int TextSize = (int)Screen.height/50;
+
+	//Reused values
+	//private float HP_HEIGHT = Screen.height/30;
+	//private float TILE_BOX_HEIGHT = Screen.height/30;
+	//private float TILE_BOX_OFFSET = Screen.height/100 + Screen.height/30;
+	//private float TILE_BOX_WIDTH = Screen.width/9;
 	
 	//use this to modify unit stats
 	public virtual void init() {
@@ -155,6 +160,11 @@ public class UnitBase : MonoBehaviour {
 		HP_X_POS = Camera.main.WorldToScreenPoint (this.transform.position).x - (HP_WIDTH/2);
 		HP_Y_POS = Screen.height - Camera.main.WorldToScreenPoint (this.transform.position).y - 40;
 		GUI.skin.box.alignment = TextAnchor.UpperCenter;
+
+		GUI.skin.box.fontSize = TextSize;
+		GUI.skin.button.fontSize = TextSize;
+		GUI.skin.label.fontSize = TextSize;
+		
 		GUI.color = new Vector4(0.23f, 0.75f, 0.54f, 1);
 
 		if (isSelected) {
@@ -167,9 +177,8 @@ public class UnitBase : MonoBehaviour {
 			        "Movement: " + this.movement +
 			        " Attack Power: " + this.attackPow);
 			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + (STAT_BOX_OFFSET * 3), STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
-			        "Unit Type: " + this.unitClass);
-			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + (STAT_BOX_OFFSET * 4), STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
-			        "Resource: " + this.currentSpace.ResourceType + " " + this.currentSpace.ResourceValue);
+			        "Unit Type: " + this.unitClass +
+			        " Upkeep Cost: " + this.UpkeepCost);
 		}
 
 
@@ -182,20 +191,18 @@ public class UnitBase : MonoBehaviour {
 			else {
 				GUI.color =new Vector4(1.0f, 1.0f, 0.0f, 1.0f);
 			}
-			
-			GUI.Box (new Rect (HP_X_POS, HP_Y_POS, HP_WIDTH, HP_HEIGHT),
+			GUI.skin.box.fontStyle = FontStyle.Bold;
+			GUI.Box (new Rect (HP_X_POS, HP_Y_POS - STAT_BOX_OFFSET, HP_WIDTH, STAT_BOX_HEIGHT),
 			         "HP:" + this.HPcurr + "/" + this.HPmax);
-			
-			
+
+			GUI.skin.box.fontStyle = FontStyle.Normal;
 			GUI.color = Color.cyan;
-			GUI.Box (new Rect (TILE_BOX_X_POS, TILE_BOX_Y_POS, TILE_BOX_WIDTH, TILE_BOX_HEIGHT),
-			         this.currentSpace.TerrainName);
-			GUI.Box (new Rect (TILE_BOX_X_POS, TILE_BOX_Y_POS + TILE_BOX_OFFSET, TILE_BOX_WIDTH, TILE_BOX_HEIGHT),
-			         "Resource: " + this.currentSpace.ResourceType +  " " + this.currentSpace.ResourceValue);
+			GUI.Box (new Rect (TILE_BOX_X_POS, TILE_BOX_Y_POS, BUTTON_WIDTH, STAT_BOX_HEIGHT),
+			         this.currentSpace.TerrainName + " " + this.currentSpace.ResourceType +  " " + this.currentSpace.ResourceValue);
 			
 			if(this.controller != null) {
 				GUI.color = this.controller.getColor();
-				GUI.Box (new Rect (TILE_BOX_X_POS, TILE_BOX_Y_POS + (TILE_BOX_OFFSET * 2), TILE_BOX_WIDTH, TILE_BOX_HEIGHT),
+				GUI.Box (new Rect (TILE_BOX_X_POS, TILE_BOX_Y_POS + STAT_BOX_OFFSET, BUTTON_WIDTH, STAT_BOX_HEIGHT),
 				         "Owner: " + this.controller.getPlayerID());
 			}
 		}

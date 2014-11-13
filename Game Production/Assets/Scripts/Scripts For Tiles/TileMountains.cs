@@ -16,7 +16,7 @@ public class TileMountains : TileStandard {
 	{
 		if (this.unitOnTile != null) {
 			Debug.Log("is called");
-			this.unitOnTile.transform.position = new Vector3(this.unitOnTile.transform.position.x, 1.5f, this.unitOnTile.transform.position.z);
+			this.unitOnTile.transform.position = new Vector3(this.unitOnTile.transform.position.x, 3.0f, this.unitOnTile.transform.position.z);
 				}
 	}
 

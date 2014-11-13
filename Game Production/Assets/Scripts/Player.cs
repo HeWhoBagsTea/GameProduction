@@ -9,8 +9,8 @@ public class Player : MonoBehaviour{
 	public bool hasLost = false;
 
 	public int FoodPool = 10;
-	public int LumberPool = 10;
-	public int OrePool = 10;
+	public int LumberPool = 2;
+	public int OrePool = 2;
 
 	public Vector4 color;
 

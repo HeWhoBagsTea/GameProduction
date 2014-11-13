@@ -1,4 +1,4 @@
-﻿	using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -17,9 +17,10 @@ public class OnGUIButtons : MonoBehaviour
 	//private Vector3 targetPosition = Vector3(25, -90, 0);
 
 	private float RESOURCE_X_POS = 10;
-	private float RESOURCE_WIDTH = 120;
-	private float RESOURCE_HEIGHT = 25;
-	private float RESOURCE_SPACING = 30;
+	private float RESOURCE_WIDTH = Screen.width/9;
+	private float RESOURCE_HEIGHT = Screen.height/20;
+	private float RESOURCE_SPACING = Screen.height/100 + Screen.height/20;
+
 		
 	void Start ()
 	{
@@ -57,9 +58,9 @@ public class OnGUIButtons : MonoBehaviour
 		
 		GameObject[] units = GameObject.FindGameObjectsWithTag ("Unit");
 		GameObject[] tiles = GameObject.FindGameObjectsWithTag ("Tile");
-		GUI.Button (foodButton, "FoodPool " + NewGameController.currentPlayer.FoodPool);
-		GUI.Button (woodButton, "LumberPool " + NewGameController.currentPlayer.LumberPool);
-		GUI.Button (oreButton, "OrePool " + NewGameController.currentPlayer.OrePool);
+		GUI.Label (foodButton, "FoodPool " + NewGameController.currentPlayer.FoodPool);
+		GUI.Label (woodButton, "LumberPool " + NewGameController.currentPlayer.LumberPool);
+		GUI.Label (oreButton, "OrePool " + NewGameController.currentPlayer.OrePool);
 
 		if (GUI.Button (endButton, "End Turn")) 
 		{
