@@ -157,7 +157,9 @@ public class TileStandard : MonoBehaviour {
 			gameObject.GetComponent<UnitBuilding>().enabled = true;
 			isEnabled = true;
 		}
-		tempModsUpdate ();
+		if (this.unitOnTile != null) {
+			tempModsUpdate ();
+		}
 		
 	}
 

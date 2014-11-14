@@ -13,7 +13,7 @@ public class UnitBuilding : TileStandard {
 	private bool isSelected = false;
 	
 	//Text Sizing
-	private int TextSize = (int)Screen.height/60;
+	public int Text = (int)Screen.height/60;
 	
 	public GameObject[] units;
 	
@@ -41,7 +41,7 @@ public class UnitBuilding : TileStandard {
 	
 	public void OnGUI()
 	{
-		GUI.skin.button.fontSize = TextSize;
+		GUI.skin.button.fontSize = Text;
 		if (isSelected) {
 			Rect[] buildUnit = new Rect[units.Length];
 			//sets up the Rects to go from bottom to top.

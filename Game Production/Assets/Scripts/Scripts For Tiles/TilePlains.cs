@@ -18,8 +18,8 @@ public class TilePlains : TileStandard {
 
 	override protected void tempModsUpdate()
 	{
-		if (this.unitOnTile != null && this.unitOnTile.unitClass.Equals("Warrior") || this.unitOnTile.unitClass.Equals("Mage")){
-			Debug.Log("is called");
+		if (this.unitOnTile.unitClass.Equals("Warrior") || this.unitOnTile.unitClass.Equals("Mage")){
+			//Debug.Log("is called");
 			this.unitOnTile.transform.position = new Vector3(this.unitOnTile.transform.position.x, 1.0f, this.unitOnTile.transform.position.z);
 		}
 	}
