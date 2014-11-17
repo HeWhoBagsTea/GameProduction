@@ -8,6 +8,9 @@ public class UnitBase : MonoBehaviour {
 	public TileStandard currentSpace;
 	public Material[] unitColors;
 	public Material[] spaceHighlights;
+	public AudioClip attackingSound;
+	public AudioClip takeDamageSound;
+	public GameObject damageParticleFX;
 
 	public bool isSelected = false;
 	protected bool hasMoved = false;
@@ -238,6 +241,8 @@ public class UnitBase : MonoBehaviour {
 	public void attackUnit (UnitBase target) {
 		target.HPcurr -= this.attackPow;
 		this.hasActioned = true;
+		audio.PlayOneShot (attackingSound);
+		StartCoroutine (hurtSound (target));
 		if (this.hasMoved) {
 			deselect ();
 		} else {
@@ -475,5 +480,13 @@ public class UnitBase : MonoBehaviour {
 		}
 		
 		return closest.GetComponent<TileStandard>();
+	}
+
+	private IEnumerator hurtSound(UnitBase target){
+		yield return new WaitForSeconds (.25f);
+		audio.PlayOneShot (takeDamageSound);
+		GameObject temp;
+		temp = Instantiate(damageParticleFX, target.transform.position, this.transform.rotation) as GameObject;
+		temp.particleSystem.Play();
 	}
 }

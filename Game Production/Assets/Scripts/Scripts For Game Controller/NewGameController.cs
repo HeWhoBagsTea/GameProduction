@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class NewGameController : MonoBehaviour {
 	public List<Player> players;
+	public AudioClip clickSound;
 	public bool isGameOver = false;
 	private int gameoverCount;
 
@@ -36,6 +37,13 @@ public class NewGameController : MonoBehaviour {
 		if (isGameOver) {
 			Debug.Log("GameOver");
 		}
+
+		if (Input.GetMouseButtonDown (0)) {
+			audio.PlayOneShot(clickSound);
+		}
+
+		checkTurn ();
+
 	}
 
 	void OnGUI()
@@ -44,6 +52,17 @@ public class NewGameController : MonoBehaviour {
 		{
 			GUI.Button(new Rect(Screen.width / 3, Screen.height / 4, Screen.width / 4, Screen.height / 5), "Game Over!\n" + currentPlayer.getPlayerColor() + " Wins!");
 		}
+	}
+
+	private void checkTurn() {
+		GameObject[] playersObjs = GameObject.FindGameObjectsWithTag ("Player"); 
+		foreach (GameObject i in playersObjs) {
+			if(i.GetComponent<Player>() != null && i.GetComponent<Player>() != currentPlayer) {
+				i.GetComponent<Player>().isTurn = false;
+			}
+		}
+
+		currentPlayer.isTurn = true;
 	}
 	
 	public static void clearHighlights() {

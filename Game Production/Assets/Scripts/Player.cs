@@ -12,6 +12,13 @@ public class Player : MonoBehaviour{
 	public int LumberPool = 2;
 	public int OrePool = 2;
 
+	public bool isTurn = false;
+	public bool isStartingTurn = true;
+	public bool fistTimeSelectUnit = true;
+	public bool specialTerrain = true;
+	public bool isLookingAtPopup = false;
+
+
 	public Vector4 color;
 
 	void Start() {
