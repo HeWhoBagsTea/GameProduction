@@ -28,7 +28,7 @@ public class TerrainPopUp : MonoBehaviour {
 		
 		if (stayActive && NewGameController.currentPlayer.specialTerrain) {
 			GUI.skin.box.wordWrap = true;
-			GUI.Box(new Rect(25, 200, 500, 300), "Terrain can impede a unit's movement, but can also grant them temporary buffs or debuffs uniwue to the unit.b");
+			GUI.Box(new Rect(25, 200, 500, 300), "Terrain can impede a unit's movement, but can also grant them temporary buffs or debuffs unique to the individual unit.");
 
 			if(GUI.Button(new Rect(390, 450, 125, 35), "Close"))
 			{
