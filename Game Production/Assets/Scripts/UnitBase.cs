@@ -320,7 +320,12 @@ public class UnitBase : MonoBehaviour {
 		this.isDone = false;
 		this.EatWell();
 		this.renderer.material = this.unitColors [this.controller.playerID];
-		this.transform.FindChild("unit").renderer.material = this.unitColors[this.controller.playerID];
+		if (this.transform.FindChild ("unit") != null) {
+			this.transform.FindChild ("unit").renderer.material = this.unitColors [this.controller.playerID];
+		}
+		else {
+			this.transform.renderer.material = this.unitColors[this.controller.playerID];
+		}
 		deselect ();
 	}
 
