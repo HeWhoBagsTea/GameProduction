@@ -13,22 +13,36 @@ public class TerrainPopUp : MonoBehaviour {
 	void OnMouseExit() {
 		hasEntered = false;
 	}		
+
+
 	
 	void OnGUI() {
-		if (hasEntered) {
-			if(NewGameController.currentPlayer.isTurn && !NewGameController.currentPlayer.isLookingAtPopup && NewGameController.currentPlayer.specialTerrain){ //&& NewGameController.selectedUnit != null && NewGameController.selectedUnit.controller == NewGameController.currentPlayer) {
+		GUI.skin.button.fontSize = Screen.height/50;
+
+		if (hasEntered && NewGameController.currentPlayer.isTurn && NewGameController.currentPlayer.specialTerrain && !NewGameController.currentPlayer.isLookingAtPopup) {
+			if(NewGameController.selectedUnit.controller == NewGameController.currentPlayer) {
 				stayActive = true;
 				NewGameController.currentPlayer.isLookingAtPopup = true;
 			}
 		}
+		
+		if (stayActive && NewGameController.currentPlayer.specialTerrain) {
+			GUI.skin.box.wordWrap = true;
+			GUI.Box(new Rect(25, 200, 500, 300), "Terrain can impede a unit's movement, but can also grant them temporary buffs or debuffs uniwue to the unit.b");
 
-		if (stayActive && NewGameController.currentPlayer.specialTerrain && NewGameController.selectedUnit == null && NewGameController.selectedUnit.controller == NewGameController.currentPlayer) {
-			GUI.Box(new Rect(10, 10, 500, 300), "Green to move red 3");
-			if(GUI.Button(new Rect(20, 400, 100, 20), "Close"))
+			if(GUI.Button(new Rect(390, 450, 125, 35), "Close"))
 			{
 				NewGameController.currentPlayer.specialTerrain = false;
 				NewGameController.currentPlayer.isLookingAtPopup = false;
 			}
 		}
+		
+		if (stayActive && NewGameController.selectedUnit == null) {
+			stayActive = false;
+			NewGameController.currentPlayer.isLookingAtPopup = false;
+		}
+
 	}
 }
+
+

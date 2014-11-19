@@ -6,13 +6,10 @@ public class UnitPopUp : MonoBehaviour
 	private bool hasEntered = false;
 	private bool stayActive = false;
 
-	void OnMouseEnter() {
+	void OnMouseUpAsButton()
+	{
 		hasEntered = true;
 	}
-		
-	void OnMouseExit() {
-		hasEntered = false;
-	}		
 
 	void OnGUI() {
 		if (hasEntered) {
@@ -23,12 +20,15 @@ public class UnitPopUp : MonoBehaviour
 		}
 
 		if (stayActive && NewGameController.currentPlayer.fistTimeSelectUnit && NewGameController.currentPlayer == this.gameObject.GetComponent<UnitBase>().controller) {
-			GUI.Box(new Rect(10, 10, 500, 300), "Green to move red 2");
-			if(GUI.Button(new Rect(20, 400, 100, 20), "Close"))
+			GUI.skin.box.wordWrap = true;
+			GUI.Box(new Rect(25, 200, 500, 300), "These are your units, your main source to victory. Their stats can be found in the top middle of your screen. Green highlights are their move range, and Orange are their attack range.");
+			if(GUI.Button(new Rect(390, 450, 125, 35), "Close"))
 			{
 				NewGameController.currentPlayer.fistTimeSelectUnit = false;
 				NewGameController.currentPlayer.isLookingAtPopup = false;
 			}
 		}
+
+		hasEntered = false;
 	}
 }
