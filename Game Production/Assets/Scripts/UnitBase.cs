@@ -18,7 +18,7 @@ public class UnitBase : MonoBehaviour {
 	public bool isDone = false;
 
 	//Upkeep Stuff
-	protected int UpkeepCost = 0;
+	public int UpkeepCost = 0;
 	public bool isFirstTurn = true;
 
 	//Units Stats

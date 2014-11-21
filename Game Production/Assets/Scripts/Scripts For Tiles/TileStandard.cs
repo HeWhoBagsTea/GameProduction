@@ -122,7 +122,7 @@ public class TileStandard : MonoBehaviour {
 				if (this.unitOnTile != null && NewGameController.currentPlayer == this.unitOnTile.controller) {
 					this.unitOnTile.selected ();
 				} 
-				else if(this.unitOnTile == null && this.isStructure) {
+				else if(this.unitOnTile == null && this.isStructure && this.controller == NewGameController.currentPlayer) {
 					NewGameController.deselectAllUnits();
 					gameObject.GetComponent<UnitBuilding>().enabled = true;
 					buildingSelected(NewGameController.currentPlayer.playerID);

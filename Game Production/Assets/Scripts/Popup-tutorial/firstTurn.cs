@@ -13,7 +13,7 @@ public class firstTurn : MonoBehaviour {
 
 		if (stayActive && NewGameController.currentPlayer.isStartingTurn && NewGameController.currentPlayer.isTurn) {
 			GUI.skin.box.wordWrap = true;
-			GUI.Box(new Rect(25, 200, 500, 300), "Welcome to Daren's Siege! The obejective is simple defeat all of your enemy's pieces. Best of luck");
+			GUI.Box(new Rect(25, 200, 500, 300), "Welcome to Daren's Siege! The objective is simple, defeat all of your enemy's pieces. Use W,A,S,D or arrow keys to move camera. Best of luck.");
 			if(GUI.Button(new Rect(390, 450, 125, 35), "Close"))
          	{
 				NewGameController.currentPlayer.isStartingTurn = false;
