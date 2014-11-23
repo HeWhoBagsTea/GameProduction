@@ -40,7 +40,6 @@ public class UnitBuilding : TileStandard {
 		BUTTON_HEIGHT = Screen.height/10;
 		BUTTON_SPACING = Screen.height/100 + Screen.height/10;
 
-		int Text = (int)Screen.height/47;
 	}
 	
 	public void OnGUI()

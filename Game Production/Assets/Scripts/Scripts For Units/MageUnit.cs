@@ -27,4 +27,22 @@ public class MageUnit : UnitBase {
 		this.unitClass = "Mage";
 		Debug.Log ("Mage Unit");
 	}
+
+	override protected void buffMe() {
+		if (this.currentSpace.TerrainName.Equals ("Forest")) {
+			//this.hasTempBuff = true;
+		} else if (this.currentSpace.TerrainName.Equals ("Hills")) {	
+			//this.attackPow = this.OriginalAttackPow + 1;
+			//this.hasTempBuff = true;
+		} else if (this.currentSpace.TerrainName.Equals ("Mana Well")) {	
+			this.attackPow = this.OriginalAttackPow + 1;
+			this.maxAttackRange = this.OriginalMaxAttackRange - 1;
+			//this.hasTempBuff = true;
+		} else {
+			this.minAttackRange = OriginalMinAttackRange;
+			this.maxAttackRange = OriginalMaxAttackRange;
+			this.movement = OriginalMovement;
+			this.attackPow = OriginalAttackPow;
+		}
+	}
 }

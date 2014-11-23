@@ -30,7 +30,7 @@ public class MeleeUnit : UnitBase {
 	override protected void buffMe() {
 		if (this.currentSpace.TerrainName.Equals ("Forest")) {
 			//this.hasTempBuff = true;
-		} else if (this.currentSpace.TerrainName.Equals ("Mountain")) {	
+		} else if (this.currentSpace.TerrainName.Equals ("Hills")) {	
 			this.attackPow = this.OriginalAttackPow + 1;
 			//this.hasTempBuff = true;
 		} else {

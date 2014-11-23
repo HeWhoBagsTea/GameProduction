@@ -85,7 +85,7 @@ public class TileStandard : MonoBehaviour {
 
 	//Called when tile is pressed
 	public void OnMouseUpAsButton() {
-		Debug.Log ("clicked");
+//		Debug.Log ("clicked");
 		if (!this.enabled)
 		{
 			return;

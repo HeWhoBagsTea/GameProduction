@@ -213,8 +213,8 @@ public class UnitBase : MonoBehaviour {
 		if (isSelected) {
 			Rect attackButton = new Rect (BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
 			Rect moveButton = new Rect (BUTTON_X_POS, attackButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-			Rect harvestButton = new Rect(BUTTON_X_POS, moveButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-			Rect captureButton = new Rect(BUTTON_X_POS, harvestButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+			//Rect harvestButton = new Rect(BUTTON_X_POS, moveButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+			Rect captureButton = new Rect(BUTTON_X_POS, moveButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
 			
 			
 			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
@@ -227,10 +227,10 @@ public class UnitBase : MonoBehaviour {
 				showMovement();
 			}
 			
-			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
-			if (GUI.Button (harvestButton, "Harvest")) {
-				harvestTile(this.currentSpace);
-			}
+			
+			//if (GUI.Button (harvestButton, "Harvest")) {
+			//	harvestTile(this.currentSpace);
+			//}
 			GUI.color = (!this.hasActioned && !this.hasMoved) ? Color.white : Color.gray;
 			if (GUI.Button (captureButton, "Capture")) {
 				captureTile(this.currentSpace);
@@ -281,27 +281,27 @@ public class UnitBase : MonoBehaviour {
 				}
 	}
 
-	//Harvest Method
-	public void harvestTile(TileStandard currentLocation){
-		if (!this.hasActioned && this.currentSpace.ResourceValue >0) {
-			this.currentSpace.hasBeenHarvested = true;
-			this.currentSpace.ResourceValue--;
-			if(this.currentSpace.ResourceType.Equals("Food"))
-			{
-				this.controller.FoodPool ++;
-			}
-			else if(this.currentSpace.ResourceType.Equals("Lumber"))
-			{
-				this.controller.LumberPool ++;
-			}
-			else if(this.currentSpace.ResourceType.Equals("Ore"))
-			{
-				this.controller.OrePool ++;
-			}
-			this.hasActioned = true;
-			deselect ();
-		}
-	}
+	////Harvest Method
+	//public void harvestTile(TileStandard currentLocation){
+	//	if (!this.hasActioned && this.currentSpace.ResourceValue >0) {
+	//		this.currentSpace.hasBeenHarvested = true;
+	//		this.currentSpace.ResourceValue--;
+	//		if(this.currentSpace.ResourceType.Equals("Food"))
+	//		{
+	//			this.controller.FoodPool ++;
+	//		}
+	//		else if(this.currentSpace.ResourceType.Equals("Lumber"))
+	//		{
+	//			this.controller.LumberPool ++;
+	//		}
+	//		else if(this.currentSpace.ResourceType.Equals("Ore"))
+	//		{
+	//			this.controller.OrePool ++;
+	//		}
+	//		this.hasActioned = true;
+	//		deselect ();
+	//	}
+	//}
 	//Capture
 	public void captureTile(TileStandard currentLocation){
 		if (!this.hasActioned && !this.hasMoved) {
