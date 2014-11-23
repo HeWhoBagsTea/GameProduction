@@ -51,6 +51,10 @@ public class OnGUIButtons : MonoBehaviour
 		
 	void OnGUI ()
 	{
+		if(NewGameController.isGameOver) {
+			return;
+		}
+
 		Rect endButton = new Rect (RESOURCE_X_POS, Screen.height - RESOURCE_SPACING, RESOURCE_WIDTH, RESOURCE_HEIGHT);
 		Rect oreButton = new Rect (RESOURCE_X_POS, endButton.position.y - RESOURCE_SPACING, RESOURCE_WIDTH, RESOURCE_HEIGHT);
 		Rect woodButton = new Rect(RESOURCE_X_POS, oreButton.position.y - RESOURCE_SPACING, RESOURCE_WIDTH, RESOURCE_HEIGHT);
@@ -61,6 +65,11 @@ public class OnGUIButtons : MonoBehaviour
 		GUI.Label (foodButton, "FoodPool " + NewGameController.currentPlayer.FoodPool);
 		GUI.Label (woodButton, "LumberPool " + NewGameController.currentPlayer.LumberPool);
 		GUI.Label (oreButton, "OrePool " + NewGameController.currentPlayer.OrePool);
+
+		if(FullTutorial.disableEndTurn)
+		{
+			return;
+		}
 
 		if (GUI.Button (endButton, "End Turn")) 
 		{
@@ -79,7 +88,7 @@ public class OnGUIButtons : MonoBehaviour
 				}
 			}
 
-//			Debug.Log("reached tile resolve end");
+			Debug.Log("reached tile resolve end");
 			nextPlayer();
 			cameraView = (NewGameController.currentPlayer.playerID == 1) ? 1 : 2;    
 			decidePlayerPOV ();

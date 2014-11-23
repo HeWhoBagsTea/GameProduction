@@ -17,6 +17,8 @@ public class UnitBase : MonoBehaviour {
 	protected bool hasActioned = false;
 	public bool isDone = false;
 
+	private bool show = true;
+
 	//Upkeep Stuff
 	public int UpkeepCost = 0;
 	public bool isFirstTurn = true;
@@ -113,11 +115,30 @@ public class UnitBase : MonoBehaviour {
 	
 	//Called when unit is pressed
 	void OnMouseUpAsButton() {
-		if (NewGameController.currentPlayer == this.controller) {
+		if(!enabled)
+		{
+			return;
+		}
+
+		if(NewGameController.selectedUnit == this && !this.hasMoved && !this.hasActioned)
+		{
+			if(show)
+			{
+				this.showAttack();
+				show = false;
+			}
+			else
+			{
+				this.showMovement();
+				show = true;
+			}
+		}
+		else if (NewGameController.currentPlayer == this.controller) {
 			this.selected ();
 		} else if (NewGameController.selectedUnit != null && this.currentSpace.canAttackUnitOnThis) {
 			NewGameController.selectedUnit.attackUnit(this);
 		}
+		
 
 		//if (NewGameController.currentPlayer == this.controller) {
 		//	this.selected ();
@@ -136,6 +157,11 @@ public class UnitBase : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if(!enabled)
+		{
+			return;
+		}
+
 		buffMe ();
 		if (this.hasMoved && this.hasActioned) {
 			this.isDone = true;
@@ -213,8 +239,8 @@ public class UnitBase : MonoBehaviour {
 		if (isSelected) {
 			Rect attackButton = new Rect (BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
 			Rect moveButton = new Rect (BUTTON_X_POS, attackButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-			//Rect harvestButton = new Rect(BUTTON_X_POS, moveButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-			Rect captureButton = new Rect(BUTTON_X_POS, moveButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+			Rect harvestButton = new Rect(BUTTON_X_POS, moveButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+			Rect captureButton = new Rect(BUTTON_X_POS, harvestButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
 			
 			
 			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
@@ -227,10 +253,10 @@ public class UnitBase : MonoBehaviour {
 				showMovement();
 			}
 			
-			
-			//if (GUI.Button (harvestButton, "Harvest")) {
-			//	harvestTile(this.currentSpace);
-			//}
+			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
+			if (GUI.Button (harvestButton, "Harvest")) {
+				harvestTile(this.currentSpace);
+			}
 			GUI.color = (!this.hasActioned && !this.hasMoved) ? Color.white : Color.gray;
 			if (GUI.Button (captureButton, "Capture")) {
 				captureTile(this.currentSpace);
@@ -257,6 +283,12 @@ public class UnitBase : MonoBehaviour {
 		this.currentSpace.unitOnTile = this;
 		this.transform.position = this.currentSpace.transform.position + this.posOffset;
 		this.hasMoved = true;
+
+		if(!FullTutorial.movedAUnit)
+		{
+			FullTutorial.movedAUnit = true;
+		}
+
 		if (this.hasActioned) {
 			deselect ();
 		} else {
@@ -281,27 +313,27 @@ public class UnitBase : MonoBehaviour {
 				}
 	}
 
-	////Harvest Method
-	//public void harvestTile(TileStandard currentLocation){
-	//	if (!this.hasActioned && this.currentSpace.ResourceValue >0) {
-	//		this.currentSpace.hasBeenHarvested = true;
-	//		this.currentSpace.ResourceValue--;
-	//		if(this.currentSpace.ResourceType.Equals("Food"))
-	//		{
-	//			this.controller.FoodPool ++;
-	//		}
-	//		else if(this.currentSpace.ResourceType.Equals("Lumber"))
-	//		{
-	//			this.controller.LumberPool ++;
-	//		}
-	//		else if(this.currentSpace.ResourceType.Equals("Ore"))
-	//		{
-	//			this.controller.OrePool ++;
-	//		}
-	//		this.hasActioned = true;
-	//		deselect ();
-	//	}
-	//}
+	//Harvest Method
+	public void harvestTile(TileStandard currentLocation){
+		if (!this.hasActioned && this.currentSpace.ResourceValue >0) {
+			this.currentSpace.hasBeenHarvested = true;
+			this.currentSpace.ResourceValue--;
+			if(this.currentSpace.ResourceType.Equals("Food"))
+			{
+				this.controller.FoodPool ++;
+			}
+			else if(this.currentSpace.ResourceType.Equals("Lumber"))
+			{
+				this.controller.LumberPool ++;
+			}
+			else if(this.currentSpace.ResourceType.Equals("Ore"))
+			{
+				this.controller.OrePool ++;
+			}
+			this.hasActioned = true;
+			deselect ();
+		}
+	}
 	//Capture
 	public void captureTile(TileStandard currentLocation){
 		if (!this.hasActioned && !this.hasMoved) {
@@ -349,6 +381,7 @@ public class UnitBase : MonoBehaviour {
 			NewGameController.selectedUnit = null;
 		}
 		NewGameController.clearHighlights ();
+		this.show = true;
 		isSelected = false;
 	}
 

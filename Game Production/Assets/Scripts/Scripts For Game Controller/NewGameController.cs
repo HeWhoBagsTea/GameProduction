@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class NewGameController : MonoBehaviour {
 	public List<Player> players;
 	public AudioClip clickSound;
-	public bool isGameOver = false;
+	public static bool isGameOver = false;
 	private int gameoverCount;
 
 	public static Player currentPlayer;
