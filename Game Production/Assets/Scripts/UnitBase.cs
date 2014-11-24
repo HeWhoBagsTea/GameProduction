@@ -253,12 +253,12 @@ public class UnitBase : MonoBehaviour {
 				showMovement();
 			}
 			
-			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
-			if (GUI.Button (harvestButton, "Harvest")) {
-				harvestTile(this.currentSpace);
-			}
+			//GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
+			//if (GUI.Button (harvestButton, "Harvest")) {
+			//	harvestTile(this.currentSpace);
+			//}
 			GUI.color = (!this.hasActioned && !this.hasMoved) ? Color.white : Color.gray;
-			if (GUI.Button (captureButton, "Capture")) {
+			if (GUI.Button (harvestButton, "Capture")) {
 				captureTile(this.currentSpace);
 			}
 		}
