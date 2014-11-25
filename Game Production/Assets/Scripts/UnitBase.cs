@@ -50,7 +50,7 @@ public class UnitBase : MonoBehaviour {
 	//Button Stuff;
 	private float BUTTON_X_POS = Screen.width - (Screen.width / 8);
 	private float BUTTON_WIDTH = Screen.width/9;
-	private float BUTTON_HEIGHT = Screen.height/20;
+	//private float BUTTON_HEIGHT = Screen.height/20;
 	private float BUTTON_SPACING = Screen.height/100 + Screen.height/20;
 	
 	//Unit Hp Stuff;

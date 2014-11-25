@@ -6,9 +6,8 @@ public class TileManaWell : TileStandard {
 	override public void init()
 	{
 		this.originalMoveCost = 1;
-		this.TerrainName = "Mana Well";
+		this.TerrainName = "ManaWell";
 	}
-	//Should units be able to shoot through mountain tiles?
 	
 	override protected void tempModsUpdate()
 	{

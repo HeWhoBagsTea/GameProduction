@@ -34,7 +34,8 @@ public class MageUnit : UnitBase {
 		} else if (this.currentSpace.TerrainName.Equals ("Hills")) {	
 			//this.attackPow = this.OriginalAttackPow + 1;
 			//this.hasTempBuff = true;
-		} else if (this.currentSpace.TerrainName.Equals ("Mana Well")) {	
+		} else if (this.currentSpace.TerrainName.Equals ("ManaWell")) {	
+			Debug.Log("Mage on ManaWell");
 			this.attackPow = this.OriginalAttackPow + 1;
 			this.maxAttackRange = this.OriginalMaxAttackRange - 1;
 			//this.hasTempBuff = true;
