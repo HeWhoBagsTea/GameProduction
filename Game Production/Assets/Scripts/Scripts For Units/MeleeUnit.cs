@@ -2,10 +2,18 @@ using UnityEngine;
 using System.Collections;
 
 public class MeleeUnit : UnitBase {
-	
+
+	public int customHP = 0;
+
 	override public void init() {
 		this.HPmax = 12;
-		this.HPcurr = this.HPmax;
+		if (customHP == 0) {
+			this.HPcurr = this.HPmax;
+		}
+		else{
+			this.HPcurr = this.customHP;
+		}
+
 
 		this.OriginalMinAttackRange = 1;
 		this.OriginalMaxAttackRange = 1;

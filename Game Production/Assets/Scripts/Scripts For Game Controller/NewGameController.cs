@@ -42,6 +42,15 @@ public class NewGameController : MonoBehaviour {
 			audio.PlayOneShot(clickSound);
 		}
 
+		if(Input.GetMouseButtonDown(1)) {
+			deselectAllUnits();
+		}
+
+		if (Input.GetMouseButtonDown (2) && NewGameController.selectedUnit != null) {
+			NewGameController.selectedUnit.captureTile(NewGameController.selectedUnit.currentSpace);
+		}
+
+
 		checkTurn ();
 
 	}

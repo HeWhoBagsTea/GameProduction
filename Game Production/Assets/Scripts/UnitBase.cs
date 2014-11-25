@@ -162,6 +162,7 @@ public class UnitBase : MonoBehaviour {
 			return;
 		}
 
+
 		buffMe ();
 		if (this.hasMoved && this.hasActioned) {
 			this.isDone = true;
@@ -236,32 +237,32 @@ public class UnitBase : MonoBehaviour {
 			}
 		}
 
-		if (isSelected) {
-			Rect attackButton = new Rect (BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-			Rect moveButton = new Rect (BUTTON_X_POS, attackButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-			Rect harvestButton = new Rect(BUTTON_X_POS, moveButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-			Rect captureButton = new Rect(BUTTON_X_POS, harvestButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
-			
-			
-			GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
-			if (GUI.Button (attackButton, "Attack")) {
-				showAttack();
-			}
-			
-			GUI.color = (!this.hasMoved) ? Color.white : Color.gray;
-			if (GUI.Button (moveButton, "Move")) {
-				showMovement();
-			}
-			
-			//GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
-			//if (GUI.Button (harvestButton, "Harvest")) {
-			//	harvestTile(this.currentSpace);
-			//}
-			GUI.color = (!this.hasActioned && !this.hasMoved) ? Color.white : Color.gray;
-			if (GUI.Button (harvestButton, "Capture")) {
-				captureTile(this.currentSpace);
-			}
-		}
+		//if (isSelected) {
+		//	Rect attackButton = new Rect (BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+		//	Rect moveButton = new Rect (BUTTON_X_POS, attackButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+		//	Rect harvestButton = new Rect(BUTTON_X_POS, moveButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+		//	Rect captureButton = new Rect(BUTTON_X_POS, harvestButton.position.y - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
+		//	
+		//	
+		//	GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
+		//	if (GUI.Button (attackButton, "Attack")) {
+		//		showAttack();
+		//	}
+		//	
+		//	GUI.color = (!this.hasMoved) ? Color.white : Color.gray;
+		//	if (GUI.Button (moveButton, "Move")) {
+		//		showMovement();
+		//	}
+		//	
+		//	//GUI.color = (!this.hasActioned) ? Color.white : Color.gray;
+		//	//if (GUI.Button (harvestButton, "Harvest")) {
+		//	//	harvestTile(this.currentSpace);
+		//	//}
+		//	GUI.color = (!this.hasActioned && !this.hasMoved) ? Color.white : Color.gray;
+		//	if (GUI.Button (harvestButton, "Capture")) {
+		//		captureTile(this.currentSpace);
+		//	}
+		//}
 	}
 
 	public void attackUnit (UnitBase target) {
@@ -269,6 +270,11 @@ public class UnitBase : MonoBehaviour {
 		this.hasActioned = true;
 		audio.PlayOneShot (attackingSound);
 		StartCoroutine (hurtSound (target));
+
+		if (!FullTutorial.unitAttack) {
+			FullTutorial.unitAttack = true;
+		}
+
 		if (this.hasMoved) {
 			deselect ();
 		} else {
@@ -336,7 +342,7 @@ public class UnitBase : MonoBehaviour {
 	}
 	//Capture
 	public void captureTile(TileStandard currentLocation){
-		if (!this.hasActioned && !this.hasMoved) {
+		if (!this.hasActioned && !this.hasMoved && this.currentSpace.controller != this.controller) {
 			this.currentSpace.hasBeenHarvested = true;
 			this.currentSpace.setControl (this.controller);
 			this.hasMoved = true;
