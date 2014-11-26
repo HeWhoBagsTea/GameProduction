@@ -19,22 +19,22 @@ public class CameraRotation : MonoBehaviour {
 
 			if(Input.GetKey(KeyCode.Q))
 			{
-				transform.RotateAround(target.transform.position, Vector3.up, Time.deltaTime * 15);
+				transform.RotateAround(target.transform.position, Vector3.down, Time.deltaTime * 15);
 			}
 
 			if(Input.GetKey(KeyCode.E))
 			{
-				transform.RotateAround(target.transform.position, Vector3.down, Time.deltaTime * 15);
+				transform.RotateAround(target.transform.position, Vector3.up, Time.deltaTime * 15);
 			}
 
 			if(Input.GetKey(KeyCode.R))
 			{
-				transform.RotateAround(target.transform.position, Vector3.forward, Time.deltaTime * 15);
+				transform.RotateAround(target.transform.position, Vector3.back, Time.deltaTime * 15);
 			}
 
 			if(Input.GetKey(KeyCode.F))
 			{
-				transform.RotateAround(target.transform.position, Vector3.back, Time.deltaTime * 15);
+				transform.RotateAround(target.transform.position, Vector3.forward, Time.deltaTime * 15);
 			}
 		}
 	}

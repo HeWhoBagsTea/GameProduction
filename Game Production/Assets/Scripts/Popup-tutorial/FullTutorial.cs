@@ -134,6 +134,10 @@ public class FullTutorial : MonoBehaviour {
 			if(GUI.Button( new Rect(nextButtonPos), "Next")) {
 				progress++;
 			}
+
+			if(GUI.Button( new Rect((nextButtonPos.x + 450), nextButtonPos.y, nextButtonPos.width, nextButtonPos.height), "Skip Details")) {
+				progress = 14;
+			}
 		}
 
 		if( progress == 7) {
@@ -142,6 +146,10 @@ public class FullTutorial : MonoBehaviour {
 			GUI.Label(popUpPos, "\nUPKEEP", mySkin.GetStyle("Label"));
 			if(GUI.Button( new Rect(nextButtonPos), "Next")) {
 				progress++;
+			}
+
+			if(GUI.Button( new Rect((nextButtonPos.x + 450), nextButtonPos.y, nextButtonPos.width, nextButtonPos.height), "Skip Details")) {
+				progress = 14;
 			}
 		}
 
@@ -153,6 +161,10 @@ public class FullTutorial : MonoBehaviour {
 			if(GUI.Button( new Rect(nextButtonPos), "Next")) {
 				progress++;
 			}
+
+			if(GUI.Button( new Rect((nextButtonPos.x + 450), nextButtonPos.y, nextButtonPos.width, nextButtonPos.height), "Skip Details")) {
+				progress = 14;
+			}
 		}
 
 		if( progress == 9) {
@@ -161,6 +173,10 @@ public class FullTutorial : MonoBehaviour {
 			if(GUI.Button( new Rect(nextButtonPos), "Next")) {
 				progress++;
 			}
+
+			if(GUI.Button( new Rect((nextButtonPos.x + 450), nextButtonPos.y, nextButtonPos.width, nextButtonPos.height), "Skip Details")) {
+				progress = 14;
+			}
 		}
 
 		if( progress == 10) {
@@ -168,6 +184,10 @@ public class FullTutorial : MonoBehaviour {
 			GUI.Label(popUpPos, "\nCONTROL", mySkin.GetStyle("Label"));
 			if(GUI.Button( new Rect(nextButtonPos), "Next")) {
 				progress++;
+			}
+
+			if(GUI.Button( new Rect((nextButtonPos.x + 450), nextButtonPos.y, nextButtonPos.width, nextButtonPos.height), "Skip Details")) {
+				progress = 14;
 			}
 		}
 
@@ -178,6 +198,10 @@ public class FullTutorial : MonoBehaviour {
 				disableAllForTut();
 				progress++;
 			}
+
+			if(GUI.Button( new Rect((nextButtonPos.x + 450), nextButtonPos.y, nextButtonPos.width, nextButtonPos.height), "Skip Details")) {
+				progress = 14;
+			}
 		}
 
 		if( progress == 12) {
@@ -187,12 +211,20 @@ public class FullTutorial : MonoBehaviour {
 			if(GUI.Button( new Rect(nextButtonPos), "Next")) {
 				progress++;
 			}
+
+			if(GUI.Button( new Rect((nextButtonPos.x + 450), nextButtonPos.y, nextButtonPos.width, nextButtonPos.height), "Skip Details")) {
+				progress = 14;
+			}
 		}
 		if( progress == 13) {
 			GUI.Box(popUpPos, "\n\n\nMountains supply us with ore \nto build swords, shields, and Magical focuses.\n\nForests supply wood for our bows, arrows, and staves. \n\nSome terrains affect units in even more ways, \nexperiment to find out.", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nTERRAIN", mySkin.GetStyle("Label"));
 			if(GUI.Button( new Rect(nextButtonPos), "Next")) {
 				progress++;
+			}
+
+			if(GUI.Button( new Rect((nextButtonPos.x + 450), nextButtonPos.y, nextButtonPos.width, nextButtonPos.height), "Skip Details")) {
+				progress = 14;
 			}
 		}
 		if( progress == 14) {
