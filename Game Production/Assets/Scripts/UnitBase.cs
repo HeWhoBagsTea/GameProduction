@@ -11,6 +11,7 @@ public class UnitBase : MonoBehaviour {
 	public AudioClip attackingSound;
 	public AudioClip takeDamageSound;
 	public GameObject damageParticleFX;
+	public GUISkin mySkin;
 
 	public bool isSelected = false;
 	protected bool hasMoved = false;
@@ -199,16 +200,16 @@ public class UnitBase : MonoBehaviour {
 
 		if (isSelected) {
 			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT), 
-			         "Unit Stats:");
+			         "Unit Stats:", mySkin.GetStyle("Box"));
 			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + (STAT_BOX_OFFSET * 1), STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			        "HP:" + this.HPcurr + "/"+this.HPmax +
-			        " AttackRange: " + this.minAttackRange + "-"+ this.maxAttackRange);
+			        " AttackRange: " + this.minAttackRange + "-"+ this.maxAttackRange, mySkin.GetStyle("Box"));
 			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + (STAT_BOX_OFFSET * 2), STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			        "Movement: " + this.movement +
-			        " Attack Power: " + this.attackPow);
+			        " Attack Power: " + this.attackPow, mySkin.GetStyle("Box"));
 			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + (STAT_BOX_OFFSET * 3), STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			        "Unit Type: " + this.unitClass +
-			        " Upkeep Cost: " + this.UpkeepCost);
+			        " Upkeep Cost: " + this.UpkeepCost, mySkin.GetStyle("Box"));
 		}
 
 
@@ -228,12 +229,12 @@ public class UnitBase : MonoBehaviour {
 			GUI.skin.box.fontStyle = FontStyle.Normal;
 			GUI.color = Color.cyan;
 			GUI.Box (new Rect (TILE_BOX_X_POS, TILE_BOX_Y_POS, BUTTON_WIDTH, STAT_BOX_HEIGHT),
-			         this.currentSpace.TerrainName + " " + this.currentSpace.ResourceType +  " " + this.currentSpace.ResourceValue);
+			         this.currentSpace.TerrainName + " " + this.currentSpace.ResourceType +  " " + this.currentSpace.ResourceValue, mySkin.GetStyle("Box"));
 			
 			if(this.controller != null) {
 				GUI.color = this.controller.getColor();
 				GUI.Box (new Rect (TILE_BOX_X_POS, TILE_BOX_Y_POS + STAT_BOX_OFFSET, BUTTON_WIDTH, STAT_BOX_HEIGHT),
-				         "Owner: " + this.controller.getPlayerID());
+				         "Owner: " + this.controller.getPlayerID(), mySkin.GetStyle("Box"));
 			}
 		}
 

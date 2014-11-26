@@ -55,16 +55,33 @@ public class OnGUIButtons : MonoBehaviour
 			return;
 		}
 
+
+
+
 		Rect endButton = new Rect (RESOURCE_X_POS, Screen.height - RESOURCE_SPACING, RESOURCE_WIDTH, RESOURCE_HEIGHT);
 		Rect oreButton = new Rect (RESOURCE_X_POS, endButton.position.y - RESOURCE_SPACING, RESOURCE_WIDTH, RESOURCE_HEIGHT);
 		Rect woodButton = new Rect(RESOURCE_X_POS, oreButton.position.y - RESOURCE_SPACING, RESOURCE_WIDTH, RESOURCE_HEIGHT);
 		Rect foodButton = new Rect(RESOURCE_X_POS, woodButton.position.y - RESOURCE_SPACING, RESOURCE_WIDTH, RESOURCE_HEIGHT);
-		
+		Rect upkeep = new Rect(RESOURCE_X_POS, foodButton.position.y - RESOURCE_SPACING, RESOURCE_WIDTH, RESOURCE_HEIGHT);
+
+		int currentUpkeep = 0;
+
 		GameObject[] units = GameObject.FindGameObjectsWithTag ("Unit");
 		GameObject[] tiles = GameObject.FindGameObjectsWithTag ("Tile");
-		GUI.Label (foodButton, "FoodPool " + NewGameController.currentPlayer.FoodPool);
-		GUI.Label (woodButton, "LumberPool " + NewGameController.currentPlayer.LumberPool);
-		GUI.Label (oreButton, "OrePool " + NewGameController.currentPlayer.OrePool);
+
+		foreach(GameObject u in units)
+		{
+			if(u.GetComponent<UnitBase>() != null && u.GetComponent<UnitBase>().controller == NewGameController.currentPlayer)
+			{
+				currentUpkeep += u.GetComponent<UnitBase>().UpkeepCost;
+			}
+		}
+
+
+		GUI.Label (foodButton, "Food Pool: " + NewGameController.currentPlayer.FoodPool);
+		GUI.Label (woodButton, "Lumber Pool: " + NewGameController.currentPlayer.LumberPool);
+		GUI.Label (oreButton, "Ore Pool: " + NewGameController.currentPlayer.OrePool);
+		GUI.Label (upkeep, "Current Upkeep: " + currentUpkeep);
 
 		if(FullTutorial.disableEndTurn)
 		{

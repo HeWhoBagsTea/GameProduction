@@ -12,6 +12,7 @@ public class TileStandard : MonoBehaviour {
 	public bool canMoveTo = false;
 	public bool canAttackUnitOnThis = false;
 	private bool isEnabled = true;
+	public GUISkin mySkin;
 
 	public int moveCost;
 	public int originalMoveCost = 1;
@@ -72,12 +73,12 @@ public class TileStandard : MonoBehaviour {
 		if (entered) {
 			GUI.color = Color.cyan;
 			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
-			         this.TerrainName + " " + this.ResourceType +  " " + this.ResourceValue);
+			         this.TerrainName + " " + this.ResourceType +  " " + this.ResourceValue, mySkin.GetStyle("Box"));
 			
 			if(this.controller != null) {
 				GUI.color = this.controller.getColor();
 				GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + STAT_BOX_OFFSET, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
-				         "Owner: " + this.controller.getPlayerID());
+				         "Owner: " + this.controller.getPlayerID(), mySkin.GetStyle("Box"));
 			}
 			
 		}
