@@ -74,6 +74,7 @@ public class UnitBase : MonoBehaviour {
 	//Text Sizing
 	private int TextSize = (int)Screen.height/50;
 
+
 	//Reused values
 	//private float HP_HEIGHT = Screen.height/30;
 	//private float TILE_BOX_HEIGHT = Screen.height/30;
@@ -139,17 +140,6 @@ public class UnitBase : MonoBehaviour {
 		} else if (NewGameController.selectedUnit != null && this.currentSpace.canAttackUnitOnThis) {
 			NewGameController.selectedUnit.attackUnit(this);
 		}
-		
-
-		//if (NewGameController.currentPlayer == this.controller) {
-		//	this.selected ();
-		//}
-		//else if (NewGameController.selectedUnit != null && this.currentSpace.canAttackUnitOnThis && !this.hasActioned) {
-		//	NewGameController.selectedUnit.attackUnit(this);
-		//}
-		//else {
-		//	NewGameController.deselectAllUnits();
-		//}
 	}
 
 	protected virtual void buffMe() {
@@ -181,6 +171,11 @@ public class UnitBase : MonoBehaviour {
 		}
 		
 		if (this.HPcurr <= 0) {
+			audio.PlayOneShot (takeDamageSound);
+			GameObject temp;
+			temp = Instantiate(damageParticleFX, this.transform.position, this.transform.rotation) as GameObject;
+			temp.particleSystem.Play();
+
 			Destroy(this.gameObject);
 		}
 	}
@@ -226,17 +221,23 @@ public class UnitBase : MonoBehaviour {
 			GUI.Box (new Rect (HP_X_POS, HP_Y_POS - STAT_BOX_OFFSET, HP_WIDTH, STAT_BOX_HEIGHT),
 			         "HP:" + this.HPcurr + "/" + this.HPmax);
 
+
+			TILE_BOX_X_POS = Camera.main.WorldToScreenPoint (this.transform.position).x - (BUTTON_WIDTH/2);
+			TILE_BOX_Y_POS = Screen.height - Camera.main.WorldToScreenPoint (this.transform.position).y + 30;
+
 			GUI.skin.box.fontStyle = FontStyle.Normal;
 			GUI.color = Color.cyan;
 			GUI.Box (new Rect (TILE_BOX_X_POS, TILE_BOX_Y_POS, BUTTON_WIDTH, STAT_BOX_HEIGHT),
 			         this.currentSpace.TerrainName + " " + this.currentSpace.ResourceType +  " " + this.currentSpace.ResourceValue, mySkin.GetStyle("Box"));
 			
-			if(this.controller != null) {
-				GUI.color = this.controller.getColor();
-				GUI.Box (new Rect (TILE_BOX_X_POS, TILE_BOX_Y_POS + STAT_BOX_OFFSET, BUTTON_WIDTH, STAT_BOX_HEIGHT),
-				         "Owner: " + this.controller.getPlayerID(), mySkin.GetStyle("Box"));
-			}
+			//if(this.controller != null) {
+			//	GUI.color = this.controller.getColor();
+			//	GUI.Box (new Rect (TILE_BOX_X_POS, TILE_BOX_Y_POS + STAT_BOX_OFFSET, BUTTON_WIDTH, STAT_BOX_HEIGHT),
+			//	         "Owner: " + this.controller.getPlayerID(), mySkin.GetStyle("Box"));
+			//}
 		}
+
+
 
 		//if (isSelected) {
 		//	Rect attackButton = new Rect (BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -270,7 +271,11 @@ public class UnitBase : MonoBehaviour {
 		target.HPcurr -= this.attackPow;
 		this.hasActioned = true;
 		audio.PlayOneShot (attackingSound);
-		StartCoroutine (hurtSound (target));
+
+		if(target.HPcurr > 0) {
+			StartCoroutine (hurtSound (target));
+			StartCoroutine (damageTaken(target));
+		}
 
 		if (!FullTutorial.unitAttack) {
 			FullTutorial.unitAttack = true;
@@ -348,6 +353,11 @@ public class UnitBase : MonoBehaviour {
 			this.currentSpace.setControl (this.controller);
 			this.hasMoved = true;
 			this.hasActioned = true;
+
+			if(FullTutorial.progress == 13){
+				FullTutorial.firstCapture = true;
+			}
+
 			deselect ();
 		}
 	}
@@ -452,31 +462,6 @@ public class UnitBase : MonoBehaviour {
 			}
 
 		}
-
-
-		//if (attackRange > 0) {
-		//	Collider[] hitColliders = Physics.OverlapSphere (tile.transform.position, 2);
-		//	List<TileStandard> tiles = new List<TileStandard>();
-		//	
-		//	foreach(Collider i in hitColliders) {
-		//		if(i.GetComponent<TileStandard>() != null) {
-		//			tiles.Add (i.GetComponent<TileStandard>());
-		//		}
-		//	}
-		//	
-		//	for(int i = 0; i < tiles.Count; i++) {
-		//		if(attackRange - 1 >= 0) {
-		//			if((tiles[i].unitOnTile != null && tiles[i].unitOnTile.controller != this.controller) || tiles[i].unitOnTile == null) {
-		//
-		//				tiles[i].canAttackUnitOnThis = true;
-		//				tiles[i].transform.FindChild("Terrain").GetComponentInChildren<MeshRenderer>().material = mat;
-		//
-		//
-		//			}
-		//			showAttackHelper(attackRange - 1, tiles[i], mat);
-		//		}
-		//	}
-		//}
 	}
 
 	protected void showMovement() {
@@ -525,6 +510,22 @@ public class UnitBase : MonoBehaviour {
 		}
 		
 		return closest.GetComponent<TileStandard>();
+	}
+
+	private IEnumerator damageTaken(UnitBase target) {
+		NewGameController.attackingUnitPow = this.attackPow;
+		NewGameController.xPos = Camera.main.WorldToScreenPoint (target.transform.position).x - 20;
+		NewGameController.yPos = Screen.height - Camera.main.WorldToScreenPoint (target.transform.position).y - 40;
+		NewGameController.yOffset = 0;
+
+		for(int i = 0; i < 50; i++){
+			yield return new WaitForSeconds (.005f);
+			NewGameController.yOffset += 1;
+		}
+
+   		NewGameController.xPos = -100;
+    	NewGameController.yPos = -100;
+
 	}
 
 	private IEnumerator hurtSound(UnitBase target){

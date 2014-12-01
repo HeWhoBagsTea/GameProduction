@@ -44,6 +44,11 @@ public class UnitBuilding : TileStandard {
 	
 	public void OnGUI()
 	{
+		if (!this.enabled)
+		{
+			return;
+		}
+
 		GUI.skin.button.fontSize = Text;
 		if (isSelected) {
 			Rect[] buildUnit = new Rect[units.Length];
@@ -124,7 +129,7 @@ public class UnitBuilding : TileStandard {
 		{
 			if(cost.Length > 0)
 			{
-				cost += "\t";
+				cost += "\n";
 			}
 			cost += "Lumber cost: " + unitInQuestion.lumberCost;
 		}
@@ -136,18 +141,18 @@ public class UnitBuilding : TileStandard {
 			}
 			else
 			{
-				cost += "\t";
+				cost += "\n";
 			}
 			cost += "Ore cost: " + unitInQuestion.oreCost;
 		}
-		if(unitInQuestion.UpkeepCost > 0)
-		{
-			if(cost.Length > 0)
-			{
-				cost += "\n";
-			}
-			cost += "Upkeep cost: " + unitInQuestion.UpkeepCost;
-		}
+		//if(unitInQuestion.UpkeepCost > 0)
+		//{
+		//	if(cost.Length > 0)
+		//	{
+		//		cost += "\n";
+		//	}
+		//	cost += "Upkeep cost: " + unitInQuestion.UpkeepCost;
+		//}
 		return cost;
 	}
 }

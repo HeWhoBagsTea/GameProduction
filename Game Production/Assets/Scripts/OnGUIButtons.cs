@@ -51,11 +51,12 @@ public class OnGUIButtons : MonoBehaviour
 		
 	void OnGUI ()
 	{
+		GUI.skin.box.fontStyle = FontStyle.Bold;
 		if(NewGameController.isGameOver) {
 			return;
 		}
 
-
+	
 
 
 		Rect endButton = new Rect (RESOURCE_X_POS, Screen.height - RESOURCE_SPACING, RESOURCE_WIDTH, RESOURCE_HEIGHT);
@@ -78,10 +79,10 @@ public class OnGUIButtons : MonoBehaviour
 		}
 
 
-		GUI.Label (foodButton, "Food Pool: " + NewGameController.currentPlayer.FoodPool);
-		GUI.Label (woodButton, "Lumber Pool: " + NewGameController.currentPlayer.LumberPool);
-		GUI.Label (oreButton, "Ore Pool: " + NewGameController.currentPlayer.OrePool);
-		GUI.Label (upkeep, "Current Upkeep: " + currentUpkeep);
+		GUI.Box (foodButton, "Food Pool: " + NewGameController.currentPlayer.FoodPool);
+		GUI.Box (woodButton, "Lumber Pool: " + NewGameController.currentPlayer.LumberPool);
+		GUI.Box (oreButton, "Ore Pool: " + NewGameController.currentPlayer.OrePool);
+		GUI.Box (upkeep, "Current Upkeep: " + currentUpkeep);
 
 		if(FullTutorial.disableEndTurn)
 		{
@@ -90,6 +91,8 @@ public class OnGUIButtons : MonoBehaviour
 
 		if (GUI.Button (endButton, "End Turn")) 
 		{
+			FullTutorial.progress++;
+
 			foreach(GameObject t in tiles)
 			{
 				if(t.GetComponent<TileStandard>() !=null)

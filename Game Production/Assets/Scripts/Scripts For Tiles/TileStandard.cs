@@ -32,6 +32,11 @@ public class TileStandard : MonoBehaviour {
 	private float STAT_BOX_HEIGHT = Screen.height/30;
 	private float STAT_BOX_OFFSET = Screen.height/100 + Screen.height/30;
 
+
+	private float HP_X_POS; //(Works just fine without this) = Screen.width * 0.45f;
+	private float HP_Y_POS; //(Works just fine without this) = 0;
+	private float HP_WIDTH = 100;
+
 	//Text Sizing
 	private int TextSize = (int)Screen.height/50;
 
@@ -71,15 +76,48 @@ public class TileStandard : MonoBehaviour {
 		GUI.color = new Vector4(0.23f, 0.75f, 0.54f, 1);
 		
 		if (entered) {
-			GUI.color = Color.cyan;
-			GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+
+			if(unitOnTile != null) {
+
+				if(this.unitOnTile.controller == NewGameController.currentPlayer){
+					GUI.color = new Vector4(0.2f, 1.0f, 0.2f, 1.0f);
+				}
+				else {
+					GUI.color =new Vector4(1.0f, 1.0f, 0.0f, 1.0f);
+				}
+
+				HP_X_POS = Camera.main.WorldToScreenPoint (this.unitOnTile.transform.position).x - (HP_WIDTH/2);
+				HP_Y_POS = Screen.height - Camera.main.WorldToScreenPoint (this.unitOnTile.transform.position).y - 40;
+
+				GUI.skin.box.fontStyle = FontStyle.Bold;
+				GUI.Box (new Rect (HP_X_POS, HP_Y_POS - STAT_BOX_OFFSET, HP_WIDTH, STAT_BOX_HEIGHT),
+			         "HP:" + this.unitOnTile.HPcurr + "/" + this.unitOnTile.HPmax);
+
+
+				STAT_BOX_X_POS = Camera.main.WorldToScreenPoint (this.unitOnTile.transform.position).x - (STAT_BOX_WIDTH/2);
+				STAT_BOX_Y_POS = Screen.height - Camera.main.WorldToScreenPoint (this.unitOnTile.transform.position).y + 30;
+				
+				
+				GUI.color = Color.cyan;
+				GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			         this.TerrainName + " " + this.ResourceType +  " " + this.ResourceValue, mySkin.GetStyle("Box"));
-			
-			if(this.controller != null) {
-				GUI.color = this.controller.getColor();
-				GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + STAT_BOX_OFFSET, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
-				         "Owner: " + this.controller.getPlayerID(), mySkin.GetStyle("Box"));
+
 			}
+			else {
+				STAT_BOX_X_POS = Camera.main.WorldToScreenPoint (this.transform.position).x - (STAT_BOX_WIDTH/2);
+				STAT_BOX_Y_POS = Screen.height - Camera.main.WorldToScreenPoint (this.transform.position).y - 30;
+				
+				
+				GUI.color = Color.cyan;
+				GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+				         this.TerrainName + " " + this.ResourceType +  " " + this.ResourceValue, mySkin.GetStyle("Box"));
+			}
+			
+			//if(this.controller != null) {
+			//	GUI.color = this.controller.getColor();
+			//	GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + STAT_BOX_OFFSET, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
+			//	         "Owner: " + this.controller.getPlayerID(), mySkin.GetStyle("Box"));
+			//}
 			
 		}
 	}

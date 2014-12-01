@@ -11,6 +11,11 @@ public class NewGameController : MonoBehaviour {
 	public static Player currentPlayer;
 	public static UnitBase selectedUnit;
 
+	public static float xPos = -100;
+	public static float yPos = -100;
+	public static float yOffset = 0;
+	public static int attackingUnitPow = 0;
+
 	// Use this for initialization
 	void Start () {
 		GameObject[] playersObjs = GameObject.FindGameObjectsWithTag ("Player"); 
@@ -61,6 +66,10 @@ public class NewGameController : MonoBehaviour {
 		{
 			GUI.Button(new Rect(Screen.width / 3, Screen.height / 4, Screen.width / 4, Screen.height / 5), "Game Over!\n" + currentPlayer.getPlayerColor() + " Wins!");
 		}
+
+		GUI.color = Color.red;
+		GUI.skin.label.fontSize = 28;
+		GUI.Label (new Rect (xPos, yPos - yOffset, 100, 35), "-" + attackingUnitPow);
 	}
 
 	private void checkTurn() {
