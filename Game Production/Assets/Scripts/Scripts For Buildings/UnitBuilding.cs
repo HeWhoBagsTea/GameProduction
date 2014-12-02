@@ -14,7 +14,7 @@ public class UnitBuilding : TileStandard {
 	private bool isSelected = false;
 	
 	//Text Sizing
-	private int Text = (int)Screen.height/47;
+	private int Text = (int)Screen.height/45;
 	
 	public GameObject[] units;
 	
@@ -48,8 +48,8 @@ public class UnitBuilding : TileStandard {
 		{
 			return;
 		}
-
 		GUI.skin.button.fontSize = Text;
+		GUI.skin.button.fontStyle = FontStyle.Bold;
 		if (isSelected) {
 			Rect[] buildUnit = new Rect[units.Length];
 			//sets up the Rects to go from bottom to top.
@@ -62,7 +62,7 @@ public class UnitBuilding : TileStandard {
 			}
 
 
-			GUI.Box(new Rect((Screen.width * 0.37f), 200, (Screen.width/(3.5f)), 400), "");
+			GUI.Box(new Rect((Screen.width * 0.37f), 200, (Screen.width/(3.5f)), 400), "", mySkin.GetStyle("Box"));
 			if(GUI.Button(new Rect(Screen.width * 0.57f, 550, (Screen.width/(12.5f)), 35), "Close"))
 			{
 				this.isSelected = false;
@@ -72,7 +72,7 @@ public class UnitBuilding : TileStandard {
 			for (int i = 0; i < buildUnit.Length; i++) {
 				string cost = resourceCost(units [i].GetComponent<UnitBase> ());
 				//GUI.color = (haveEnoughResources (units [i].GetComponent<UnitBase> ())) ? Color.white : Color.gray;
-				if (GUI.Button (buildUnit [i], "Build " + units [i].name + cost) && GUI.color == Color.white) {
+				if (GUI.Button (buildUnit [i], "Build " + units [i].name + cost, mySkin.GetStyle("Button")) && GUI.color == Color.white) {
 
 					if (haveEnoughResources (units [i].GetComponent<UnitBase> ())) {
 						this.isSelected = false;
@@ -146,14 +146,11 @@ public class UnitBuilding : TileStandard {
 			}
 			cost += "Ore cost: " + unitInQuestion.oreCost;
 		}
-		//if(unitInQuestion.UpkeepCost > 0)
-		//{
-		//	if(cost.Length > 0)
-		//	{
-		//		cost += "\n";
-		//	}
-		//	cost += "Upkeep cost: " + unitInQuestion.UpkeepCost;
-		//}
+		if(cost.Length > 20)
+		{
+			cost += "\n";
+		}
+		cost += "Upkeep: " + unitInQuestion.UpkeepCost;
 		return cost;
 	}
 }

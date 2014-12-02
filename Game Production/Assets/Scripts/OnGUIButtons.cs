@@ -78,10 +78,16 @@ public class OnGUIButtons : MonoBehaviour
 			}
 		}
 
-
+		GUI.color = new Vector4 (0.98f, 0.87f, 0.20f, 1.0f);
 		GUI.Box (foodButton, "Food Pool: " + NewGameController.currentPlayer.FoodPool);
+
+		GUI.color = new Vector4 (0.18f, 0.63f, 0.18f, 1.0f);
 		GUI.Box (woodButton, "Lumber Pool: " + NewGameController.currentPlayer.LumberPool);
+
+		GUI.color = new Vector4 (0.54f, 0.54f, 0.54f, 1.0f);
 		GUI.Box (oreButton, "Ore Pool: " + NewGameController.currentPlayer.OrePool);
+
+		GUI.color = new Vector4 (0.88f, 0.68f, 0.01f, 1.0f);
 		GUI.Box (upkeep, "Current Upkeep: " + currentUpkeep);
 
 

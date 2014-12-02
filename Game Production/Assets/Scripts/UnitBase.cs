@@ -49,10 +49,10 @@ public class UnitBase : MonoBehaviour {
 	public Vector3 posOffset;
 
 	//Button Stuff;
-	private float BUTTON_X_POS = Screen.width - (Screen.width / 8);
+//	private float BUTTON_X_POS = Screen.width - (Screen.width / 8);
 	private float BUTTON_WIDTH = Screen.width/9;
 	//private float BUTTON_HEIGHT = Screen.height/20;
-	private float BUTTON_SPACING = Screen.height/100 + Screen.height/20;
+	//private float BUTTON_SPACING = Screen.height/100 + Screen.height/20;
 	
 	//Unit Hp Stuff;
 	private float HP_X_POS; //(Works just fine without this) = Screen.width * 0.45f;
@@ -218,8 +218,8 @@ public class UnitBase : MonoBehaviour {
 				GUI.color =new Vector4(1.0f, 1.0f, 0.0f, 1.0f);
 			}
 			GUI.skin.box.fontStyle = FontStyle.Bold;
-			GUI.Box (new Rect (HP_X_POS, HP_Y_POS - STAT_BOX_OFFSET, HP_WIDTH, STAT_BOX_HEIGHT),
-			         "HP:" + this.HPcurr + "/" + this.HPmax);
+			GUI.Label (new Rect (HP_X_POS, HP_Y_POS - STAT_BOX_OFFSET, HP_WIDTH, STAT_BOX_HEIGHT),
+			           "HP:" + this.HPcurr + "/" + this.HPmax, mySkin.GetStyle("Box"));
 
 
 			TILE_BOX_X_POS = Camera.main.WorldToScreenPoint (this.transform.position).x - (BUTTON_WIDTH/2);
@@ -227,8 +227,8 @@ public class UnitBase : MonoBehaviour {
 
 			GUI.skin.box.fontStyle = FontStyle.Normal;
 			GUI.color = Color.cyan;
-			GUI.Box (new Rect (TILE_BOX_X_POS, TILE_BOX_Y_POS, BUTTON_WIDTH, STAT_BOX_HEIGHT),
-			         this.currentSpace.TerrainName + " " + this.currentSpace.ResourceType +  " " + this.currentSpace.ResourceValue, mySkin.GetStyle("Box"));
+			GUI.Label (new Rect (TILE_BOX_X_POS+(BUTTON_WIDTH/4), TILE_BOX_Y_POS, BUTTON_WIDTH/2, STAT_BOX_HEIGHT*2),
+			         this.currentSpace.TerrainName + "\n" + this.currentSpace.ResourceType +  " " + this.currentSpace.ResourceValue, mySkin.GetStyle("Box"));
 			
 			//if(this.controller != null) {
 			//	GUI.color = this.controller.getColor();
@@ -268,23 +268,37 @@ public class UnitBase : MonoBehaviour {
 	}
 
 	public void attackUnit (UnitBase target) {
+		if (!FullTutorial.TutorialActive) {
+			target.HPcurr -= this.attackPow;
+			this.hasActioned = true;
+			audio.PlayOneShot (attackingSound);
+			if (target.HPcurr > 0) {
+				StartCoroutine (hurtSound (target,new Vector4(1.0f,0.0f,0.0f,1.0f)));
+				StartCoroutine (damageTaken (target,new Vector4(1.0f,0.0f,0.0f,1.0f)));
+			}
+			if (this.hasMoved) {
+				deselect ();
+			} else {
+				buffMe ();
+				selected ();
+			}
+		} else {
+			TutorialAttackUnit(target);
+		}
+	}
+	public void TutorialAttackUnit (UnitBase target) {
 		target.HPcurr -= this.attackPow;
 		this.hasActioned = true;
 		audio.PlayOneShot (attackingSound);
-
+		
 		if(target.HPcurr > 0) {
-			StartCoroutine (hurtSound (target));
-			StartCoroutine (damageTaken(target));
+			StartCoroutine (hurtSound (target,new Vector4(1.0f,0.0f,0.0f,1.0f)));
+			StartCoroutine (damageTaken(target,new Vector4(1.0f,0.0f,0.0f,1.0f)));
 		}
-
+		
 		if (!FullTutorial.unitAttack) {
 			FullTutorial.unitAttack = true;
-		}
-
-		if (this.hasMoved) {
-			deselect ();
-		} else {
-			buffMe();
+			FullTutorial.TutorialActive = false;
 			selected();
 		}
 	}
@@ -313,16 +327,17 @@ public class UnitBase : MonoBehaviour {
 	public void EatWell()
 	{
 		if (this.controller == NewGameController.currentPlayer) {
-						if (!this.isFirstTurn) {
-								this.controller.FoodPool -= this.UpkeepCost;
-								if (this.controller.FoodPool < this.UpkeepCost) {
-										this.HPcurr--;
-								}
-						} else if (this.controller == NewGameController.currentPlayer) {
-
-								this.isFirstTurn = false;
-						}
+			if (!this.isFirstTurn) {
+				this.controller.FoodPool -= this.UpkeepCost;
+				if (this.controller.FoodPool < this.UpkeepCost) {
+					StartCoroutine(hurtSound(this,new Vector4 (0.88f, 0.68f, 0.01f, 1.0f)));
+					StartCoroutine(damageTaken(this,new Vector4 (0.88f, 0.68f, 0.01f, 1.0f)));
+					this.HPcurr--;
 				}
+			} else if (this.controller == NewGameController.currentPlayer) {
+				this.isFirstTurn = false;
+			}
+		}
 	}
 
 	//Harvest Method
@@ -512,10 +527,18 @@ public class UnitBase : MonoBehaviour {
 		return closest.GetComponent<TileStandard>();
 	}
 
-	private IEnumerator damageTaken(UnitBase target) {
+	private IEnumerator damageTaken(UnitBase target, Color damageType) {
+		Color Red = new Vector4(1.0f,0.0f,0.0f,1.0f);
+		
 		NewGameController.attackingUnitPow = this.attackPow;
-		NewGameController.xPos = Camera.main.WorldToScreenPoint (target.transform.position).x - 20;
-		NewGameController.yPos = Screen.height - Camera.main.WorldToScreenPoint (target.transform.position).y - 40;
+		if (damageType != Red) {
+			NewGameController.xPos = Camera.main.WorldToScreenPoint (target.transform.position).x;
+			NewGameController.yPos = Screen.height - Camera.main.WorldToScreenPoint (target.transform.position).y-440;
+			} else {
+			NewGameController.xPos = Camera.main.WorldToScreenPoint (target.transform.position).x - 20;
+			NewGameController.yPos = Screen.height - Camera.main.WorldToScreenPoint (target.transform.position).y - 40;
+			}
+				NewGameController.DamageColor = damageType;
 		NewGameController.yOffset = 0;
 
 		for(int i = 0; i < 50; i++){
@@ -528,11 +551,12 @@ public class UnitBase : MonoBehaviour {
 
 	}
 
-	private IEnumerator hurtSound(UnitBase target){
+	private IEnumerator hurtSound(UnitBase target, Color damageType){
 		yield return new WaitForSeconds (.25f);
 		audio.PlayOneShot (takeDamageSound);
 		GameObject temp;
 		temp = Instantiate(damageParticleFX, target.transform.position, this.transform.rotation) as GameObject;
+		temp.particleSystem.startColor = damageType;
 		temp.particleSystem.Play();
 	}
 }

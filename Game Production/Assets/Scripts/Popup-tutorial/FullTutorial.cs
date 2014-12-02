@@ -15,6 +15,8 @@ public class FullTutorial : MonoBehaviour {
 	public static bool unitAttack = false;
 	public static bool disableEndTurn = true;
 	public static bool firstCapture = false;
+	public static bool TutorialActive = true;
+
 
 	void disableAllForTut()
 	{
@@ -39,6 +41,32 @@ public class FullTutorial : MonoBehaviour {
 			if(u.GetComponent<UnitBase>() !=null)
 			{
 				u.GetComponent<UnitBase>().enabled = false;
+			}
+		}
+	}
+	void enableAllForTut()
+	{
+		GameObject[] tutUnits = GameObject.FindGameObjectsWithTag ("Unit");
+		GameObject[] tutTiles = GameObject.FindGameObjectsWithTag ("Tile");
+		foreach(GameObject t in tutTiles)
+		{
+			if(t.GetComponent<TileStandard>() !=null)
+			{
+				t.GetComponent<TileStandard>().enabled = true;
+			}
+			
+			
+			if(t.GetComponent<UnitBuilding>() != null) 
+			{
+				t.GetComponent<UnitBuilding>().enabled = true;
+			}
+		}
+		
+		foreach(GameObject u in tutUnits)
+		{
+			if(u.GetComponent<UnitBase>() !=null)
+			{
+				u.GetComponent<UnitBase>().enabled = true;
 			}
 		}
 	}
@@ -168,7 +196,7 @@ public class FullTutorial : MonoBehaviour {
 			}
 			enableMeleeUnits();
 			mySkin.GetStyle("Label").fontSize = 32;
-			GUI.Box(new Rect(popUpPos), "\n\n\n Units are your main source to victory.\n\n Select one of the four RED melee \nunits in the forward row. \n", mySkin.GetStyle("Box"));
+			GUI.Box(new Rect(popUpPos), "\n\n\n\n Units are your main source to victory.\n\n Select one of the four RED melee \nunits in the forward row. \n", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nUNITS", mySkin.GetStyle("Label"));
 			if(NewGameController.selectedUnit != null) {
 				progress++;
@@ -194,7 +222,8 @@ public class FullTutorial : MonoBehaviour {
 		
 		if (progress == 4) {
 			unitAttack= false;
-			disableAllForTut();
+			TutorialActive = true;
+			//disableAllForTut();
 			//enableTilesForTut();
 			GUI.Box(new Rect(popUpPos), "\n\n\n Good, the enemy unit lost \nhealth equal to your attack power. \n\nAttack power, along with other useful information \nis displayed in the selected unit's stat block.", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nCOMBAT", mySkin.GetStyle("Label"));
@@ -216,17 +245,16 @@ public class FullTutorial : MonoBehaviour {
 		
 		if (progress == 6) {
 			disableAllForTut();
-			disableEndTurn = false;
-			GUI.Box(new Rect(popUpPos), "\n\n\nVery good commander, keep this up \nand we shall win for sure.\n\nWhen you are done with your turn press\n the end turn button located in the bottom left corner.", mySkin.GetStyle("Box"));
+			GUI.Box(new Rect(popUpPos), "\n\n\nVery good Commander. \nKeep this up and we shall win for sure.\n\nWhen you are done with your turn press\n the end turn button located in the bottom left corner.", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nCOMBAT", mySkin.GetStyle("Label"));
 			if(GUI.Button( new Rect(nextButtonPos), "Close")) {
 				progress++;
+				disableEndTurn = false;
+				enableAllForTut();
 			}
 		}
 
 		if(progress == 7) {
-			enableTilesForTut();
-			enableUnitsForTut();
 			disableBarracks();
 		}
 
@@ -278,7 +306,7 @@ public class FullTutorial : MonoBehaviour {
 		}
 
 		if( progress == 14) {
-			GUI.Box(popUpPos, "\n\n\nYou have now claimed your first tile. \n\nNotice how the ring around the\n tile has changed to RED.", mySkin.GetStyle("Box"));
+			GUI.Box(popUpPos, "\n\n\nYou have now claimed your first tile. \n\nNotice how the ring around the\n tile has changed to RED.\n\n Go ahead and use the rest of your units.", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nDOMINANCE", mySkin.GetStyle("Label"));
 			if(GUI.Button( new Rect(nextButtonPos), "Close")) {
 				progress++;
@@ -305,7 +333,6 @@ public class FullTutorial : MonoBehaviour {
 
 		if(progress == 18) {
 			GUI.Box(popUpPos, "\n\n\n\nYou have now learned all the basics.\n\nGood luck in defeating the enemy!", mySkin.GetStyle("Box"));
-			//GUI.Label(popUpPos, "\nREINFORCEMENTS", mySkin.GetStyle("Label"));
 			if(GUI.Button( new Rect(nextButtonPos), "Close")) {
 				progress++;
 			}

@@ -90,8 +90,8 @@ public class TileStandard : MonoBehaviour {
 				HP_Y_POS = Screen.height - Camera.main.WorldToScreenPoint (this.unitOnTile.transform.position).y - 40;
 
 				GUI.skin.box.fontStyle = FontStyle.Bold;
-				GUI.Box (new Rect (HP_X_POS, HP_Y_POS - STAT_BOX_OFFSET, HP_WIDTH, STAT_BOX_HEIGHT),
-			         "HP:" + this.unitOnTile.HPcurr + "/" + this.unitOnTile.HPmax);
+				GUI.Label (new Rect (HP_X_POS, HP_Y_POS - STAT_BOX_OFFSET, HP_WIDTH, STAT_BOX_HEIGHT),
+				           "HP:" + this.unitOnTile.HPcurr + "/" + this.unitOnTile.HPmax, mySkin.GetStyle("Box"));
 
 
 				STAT_BOX_X_POS = Camera.main.WorldToScreenPoint (this.unitOnTile.transform.position).x - (STAT_BOX_WIDTH/2);
@@ -99,8 +99,8 @@ public class TileStandard : MonoBehaviour {
 				
 				
 				GUI.color = Color.cyan;
-				GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
-			         this.TerrainName + " " + this.ResourceType +  " " + this.ResourceValue, mySkin.GetStyle("Box"));
+				GUI.Label (new Rect (STAT_BOX_X_POS+(STAT_BOX_WIDTH/4), STAT_BOX_Y_POS, STAT_BOX_WIDTH/2, STAT_BOX_HEIGHT*2),
+			         this.TerrainName + "\n" + this.ResourceType +  " " + this.ResourceValue, mySkin.GetStyle("Box"));
 
 			}
 			else {
@@ -109,8 +109,8 @@ public class TileStandard : MonoBehaviour {
 				
 				
 				GUI.color = Color.cyan;
-				GUI.Box (new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS, STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
-				         this.TerrainName + " " + this.ResourceType +  " " + this.ResourceValue, mySkin.GetStyle("Box"));
+				GUI.Label (new Rect (STAT_BOX_X_POS+(STAT_BOX_WIDTH/4), STAT_BOX_Y_POS, STAT_BOX_WIDTH/2, STAT_BOX_HEIGHT*2),
+				         this.TerrainName + "\n" + this.ResourceType +  " " + this.ResourceValue, mySkin.GetStyle("Box"));
 			}
 			
 			//if(this.controller != null) {
