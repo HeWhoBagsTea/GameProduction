@@ -16,6 +16,8 @@ public class NewGameController : MonoBehaviour {
 	public static float yOffset = 0;
 	public static int attackingUnitPow = 0;
 
+	public static int AImovePriority = 0;
+
 	// Use this for initialization
 	void Start () {
 		GameObject[] playersObjs = GameObject.FindGameObjectsWithTag ("Player"); 
@@ -35,7 +37,7 @@ public class NewGameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-//		Debug.Log (selectedUnit);
+		Debug.Log (AImovePriority);
 
 		//isGameOver = true;
 		isGameOver = checkIfGameOver ();

@@ -84,6 +84,42 @@ public class OnGUIButtons : MonoBehaviour
 		GUI.Box (oreButton, "Ore Pool: " + NewGameController.currentPlayer.OrePool);
 		GUI.Box (upkeep, "Current Upkeep: " + currentUpkeep);
 
+
+
+		int numOfAI = 0;
+
+		foreach(SimpleAI a in FindObjectsOfType(typeof(SimpleAI)))
+		{
+			numOfAI++;
+		}
+
+		if(NewGameController.AImovePriority == numOfAI)
+		{
+			NewGameController.AImovePriority = 0;
+			FullTutorial.progress++;
+			FullTutorial.disableEndTurn = !FullTutorial.disableEndTurn;
+			
+			foreach(GameObject t in tiles)
+			{
+				if(t.GetComponent<TileStandard>() !=null)
+				{
+					t.GetComponent<TileStandard>().resolveTurn();
+				}
+			}
+			
+			foreach (GameObject u in units) 
+			{
+				if(u.GetComponent<UnitBase>() != null) {
+					u.GetComponent<UnitBase> ().resolveTurn ();
+				}
+			}
+			
+			Debug.Log("reached tile resolve end");
+			nextPlayer();
+			cameraView = (NewGameController.currentPlayer.playerID == 1) ? 1 : 2;    
+			decidePlayerPOV ();
+		}
+
 		if(FullTutorial.disableEndTurn)
 		{
 			return;
@@ -91,7 +127,9 @@ public class OnGUIButtons : MonoBehaviour
 
 		if (GUI.Button (endButton, "End Turn")) 
 		{
+			NewGameController.AImovePriority = 0;
 			FullTutorial.progress++;
+			FullTutorial.disableEndTurn = !FullTutorial.disableEndTurn;
 
 			foreach(GameObject t in tiles)
 			{

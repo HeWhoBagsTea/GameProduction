@@ -424,7 +424,7 @@ public class UnitBase : MonoBehaviour {
 		currentSpaceTile.material = highlight;
 	}
 
-	protected void showAttack() {
+	public void showAttack() {
 		if (!hasActioned) {
 			NewGameController.clearHighlights();
 			showAttackHelper(this.maxAttackRange, this.currentSpace, this.spaceHighlights[3]);
@@ -464,7 +464,7 @@ public class UnitBase : MonoBehaviour {
 		}
 	}
 
-	protected void showMovement() {
+	public void showMovement() {
 		if (!hasMoved) {
 			NewGameController.clearHighlights();
 			showMovementRangeHelper(this.movement, this.currentSpace);

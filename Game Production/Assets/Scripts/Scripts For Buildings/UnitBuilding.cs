@@ -75,6 +75,7 @@ public class UnitBuilding : TileStandard {
 				if (GUI.Button (buildUnit [i], "Build " + units [i].name + cost) && GUI.color == Color.white) {
 
 					if (haveEnoughResources (units [i].GetComponent<UnitBase> ())) {
+						this.isSelected = false;
 						Vector3 rotate = new Vector3 (0, 0, 0);
 						if (this.playerControl == 1)
 							rotate = new Vector3 (0, 90, 0);
