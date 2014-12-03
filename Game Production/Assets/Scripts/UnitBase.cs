@@ -204,7 +204,7 @@ public class UnitBase : MonoBehaviour {
 			        " Attack Power: " + this.attackPow, mySkin.GetStyle("Box"));
 			GUI.Box(new Rect (STAT_BOX_X_POS, STAT_BOX_Y_POS + (STAT_BOX_OFFSET * 3), STAT_BOX_WIDTH, STAT_BOX_HEIGHT),
 			        "Unit Type: " + this.unitClass +
-			        " Upkeep Cost: " + this.UpkeepCost, mySkin.GetStyle("Box"));
+			        " Upkeep Cost: " + this.UpkeepCost + " Defense Bonus: "+this.currentSpace.defensiveValue, mySkin.GetStyle("Box"));
 		}
 
 
@@ -268,13 +268,16 @@ public class UnitBase : MonoBehaviour {
 	}
 
 	public void attackUnit (UnitBase target) {
+		int Damage = 0;
 		if (!FullTutorial.TutorialActive) {
-			target.HPcurr -= this.attackPow;
+			Damage = this.attackPow;
+			Damage -=target.currentSpace.defensiveValue;
+			target.HPcurr -= Damage;
 			this.hasActioned = true;
 			audio.PlayOneShot (attackingSound);
 			if (target.HPcurr > 0) {
 				StartCoroutine (hurtSound (target,new Vector4(1.0f,0.0f,0.0f,1.0f)));
-				StartCoroutine (damageTaken (target,new Vector4(1.0f,0.0f,0.0f,1.0f)));
+				StartCoroutine (damageTaken (target,new Vector4(1.0f,0.0f,0.0f,1.0f),Damage));
 			}
 			if (this.hasMoved) {
 				deselect ();
@@ -287,13 +290,16 @@ public class UnitBase : MonoBehaviour {
 		}
 	}
 	public void TutorialAttackUnit (UnitBase target) {
-		target.HPcurr -= this.attackPow;
+		int Damage = 0;
+		Damage = this.attackPow;
+		Damage -=target.currentSpace.defensiveValue;
+		target.HPcurr -= Damage;
 		this.hasActioned = true;
 		audio.PlayOneShot (attackingSound);
 		
 		if(target.HPcurr > 0) {
 			StartCoroutine (hurtSound (target,new Vector4(1.0f,0.0f,0.0f,1.0f)));
-			StartCoroutine (damageTaken(target,new Vector4(1.0f,0.0f,0.0f,1.0f)));
+			StartCoroutine (damageTaken(target,new Vector4(1.0f,0.0f,0.0f,1.0f),Damage));
 		}
 		
 		if (!FullTutorial.unitAttack) {
@@ -331,7 +337,7 @@ public class UnitBase : MonoBehaviour {
 				this.controller.FoodPool -= this.UpkeepCost;
 				if (this.controller.FoodPool < this.UpkeepCost) {
 					StartCoroutine(hurtSound(this,new Vector4 (0.88f, 0.68f, 0.01f, 1.0f)));
-					StartCoroutine(damageTaken(this,new Vector4 (0.88f, 0.68f, 0.01f, 1.0f)));
+					StartCoroutine(damageTaken(this,new Vector4 (0.88f, 0.68f, 0.01f, 1.0f),1));
 					this.HPcurr--;
 				}
 			} else if (this.controller == NewGameController.currentPlayer) {
@@ -527,10 +533,10 @@ public class UnitBase : MonoBehaviour {
 		return closest.GetComponent<TileStandard>();
 	}
 
-	private IEnumerator damageTaken(UnitBase target, Color damageType) {
+	private IEnumerator damageTaken(UnitBase target, Color damageType, int DamageDealt) {
 		Color Red = new Vector4(1.0f,0.0f,0.0f,1.0f);
 		
-		NewGameController.attackingUnitPow = this.attackPow;
+		NewGameController.attackingUnitPow = DamageDealt;
 		if (damageType != Red) {
 			NewGameController.xPos = Camera.main.WorldToScreenPoint (target.transform.position).x;
 			NewGameController.yPos = Screen.height - Camera.main.WorldToScreenPoint (target.transform.position).y-440;

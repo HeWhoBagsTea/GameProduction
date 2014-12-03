@@ -6,6 +6,7 @@ public class TileMountains : TileStandard {
 	override public void init()
 	{
 		this.originalMoveCost = 3;
+		this.defensiveValue = 1;
 		this.TerrainName = "Mountain";
 		this.ResourceType = "Ore";
 		this.ResourceValue = Random.Range (0, 5);

@@ -16,6 +16,7 @@ public class TileStandard : MonoBehaviour {
 
 	public int moveCost;
 	public int originalMoveCost = 1;
+	public int defensiveValue = 0;
 
 	//Resource Implementation
 	public int ResourceValue = 0;

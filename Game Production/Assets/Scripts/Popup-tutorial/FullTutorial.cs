@@ -298,7 +298,7 @@ public class FullTutorial : MonoBehaviour {
 		if( progress == 13) {
 			disableAllForTut();
 			enableUnitsForCapture();
-			GUI.Box(popUpPos, "\n\n\nNow select a unit on unclaimed territory\n and press the middle mouse button down\n to claim the tile for your army.", mySkin.GetStyle("Box"));
+			GUI.Box(popUpPos, "\n\n\nSome terrains, such as walls, \nalso provide defensive bonuses. \n\nNow select a unit on unclaimed territory\n and press the middle mouse button down\n to claim the tile for your army.", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nDOMINANCE", mySkin.GetStyle("Label"));
 			if(firstCapture) {
 				progress++;
@@ -326,7 +326,7 @@ public class FullTutorial : MonoBehaviour {
 			enableBarracks();
 			GUI.Box(popUpPos, "\n\n\nIf you ever find yourself lacking units, \nyou can always train units from your barracks.\n\nNow select the barracks and train a unit", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nREINFORCEMENTS", mySkin.GetStyle("Label"));
-			if(NewGameController.currentPlayer.numberOfUnits == 8) {
+			if(NewGameController.currentPlayer.numberOfUnits == 9) {
 				progress++;
 			}
 		}
