@@ -20,6 +20,7 @@ public class UnitBuilding : TileStandard {
 	
 	override public void init()
 	{
+		this.TerrainName = "Barracks";
 		this.isStructure = true;
 	}
 	
@@ -146,11 +147,7 @@ public class UnitBuilding : TileStandard {
 			}
 			cost += "Ore cost: " + unitInQuestion.oreCost;
 		}
-		if(cost.Length > 20)
-		{
-			cost += "\n";
-		}
-		cost += "Upkeep: " + unitInQuestion.UpkeepCost;
+		cost += "\nUpkeep: " + unitInQuestion.UpkeepCost;
 		return cost;
 	}
 }

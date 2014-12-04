@@ -21,6 +21,8 @@ public class MeleeUnit : UnitBase {
 		this.OriginalAttackPow = 4;
 		this.hasBeenUpgraded = false;
 		this.UpkeepCost = 3;
+		//if you change upkeep change it on the asset as well.
+
 
 		this.minAttackRange = OriginalMinAttackRange;
 		this.maxAttackRange = OriginalMaxAttackRange;

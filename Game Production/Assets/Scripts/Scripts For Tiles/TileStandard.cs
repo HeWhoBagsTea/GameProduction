@@ -110,8 +110,15 @@ public class TileStandard : MonoBehaviour {
 				
 				
 				GUI.color = Color.cyan;
+				if(this.ResourceType != "")
+				{
 				GUI.Label (new Rect (STAT_BOX_X_POS+(STAT_BOX_WIDTH/4), STAT_BOX_Y_POS, STAT_BOX_WIDTH/2, STAT_BOX_HEIGHT*2),
 				         this.TerrainName + "\n" + this.ResourceType +  " " + this.ResourceValue, mySkin.GetStyle("Box"));
+				}
+				else{
+					GUI.Label (new Rect (STAT_BOX_X_POS+(STAT_BOX_WIDTH/4), STAT_BOX_Y_POS, STAT_BOX_WIDTH/2, STAT_BOX_HEIGHT),
+					           this.TerrainName, mySkin.GetStyle("Box"));
+				}
 			}
 			
 			//if(this.controller != null) {

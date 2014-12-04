@@ -203,7 +203,7 @@ public class FullTutorial : MonoBehaviour {
 		if (progress == 2) {
 			if(!doOnce) {
 				doOnce = true;
-				for(int i = 0; i < 5; i++) {
+				for(int i = 0; i < 10; i++) {
 					StartCoroutine(moveToSide());
 				}
 			}
@@ -339,7 +339,7 @@ public class FullTutorial : MonoBehaviour {
 			enableBarracks();
 			GUI.Box(popUpPos, "\n\n\nIf you ever find yourself lacking units, \nyou can always train units from your barracks.\n\nNow select the barracks and train a unit", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nREINFORCEMENTS", mySkin.GetStyle("Label"));
-			if(NewGameController.currentPlayer.numberOfUnits == 9) {
+			if(NewGameController.currentPlayer.numberOfUnits == 10) {
 				progress++;
 			}
 		}
@@ -368,7 +368,7 @@ public class FullTutorial : MonoBehaviour {
 	}
 
 	private IEnumerator moveToSide() {
-		for(int i = 0; i < 120; i++) {
+		for(int i = 0; i < 60; i++) {
 
 			yield return new WaitForSeconds(.00001f);
 			xOffset++;

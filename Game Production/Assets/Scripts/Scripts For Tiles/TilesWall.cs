@@ -12,11 +12,11 @@ public class TilesWall : TileStandard {
 	
 	override protected void tempModsUpdate()
 	{
-		if (this.controller.playerID != NewGameController.currentPlayer.playerID && this.getControlRingMatName() != "Neutral") {
-			this.originalMoveCost = 2;
-			} else {
-			this.originalMoveCost = 1;
-			}
+		//if (this.unitOnTile != null && this.controller.playerID != NewGameController.currentPlayer.playerID && this.getControlRingMatName() != "Neutral") {
+		//	this.originalMoveCost = 2;
+		//	} else {
+		//	this.originalMoveCost = 1;
+		//	}
 		//Debug.Log("is called");
 		//this.unitOnTile.transform.position = new Vector3(this.unitOnTile.transform.position.x, 3.0f, this.unitOnTile.transform.position.z);
 		
