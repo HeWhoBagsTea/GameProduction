@@ -6,7 +6,7 @@ public class TileForests : TileStandard {
 	override public void init()
 	{
 		this.originalMoveCost = 2;
-		this.defensiveValue = 2;
+		this.defensiveValue = 1;
 		this.TerrainName = "Forest";
 		this.ResourceType = "Lumber";
 		this.ResourceValue = Random.Range (0, 5);

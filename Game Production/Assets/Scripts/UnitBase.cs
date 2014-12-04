@@ -22,7 +22,7 @@ public class UnitBase : MonoBehaviour {
 
 	//Upkeep Stuff
 	public int UpkeepCost = 0;
-	public bool isFirstTurn = true;
+	public int isFirstTurn = 0;
 
 	//Units Stats
 	public int movement = 2;
@@ -342,7 +342,7 @@ public class UnitBase : MonoBehaviour {
 	public void EatWell()
 	{
 		if (this.controller == NewGameController.currentPlayer) {
-			if (!this.isFirstTurn) {
+			if (this.isFirstTurn > 2) {
 				this.controller.FoodPool -= this.UpkeepCost;
 				if (this.controller.FoodPool < this.UpkeepCost) {
 					StartCoroutine(hurtSound(this, foodColor));
@@ -351,7 +351,7 @@ public class UnitBase : MonoBehaviour {
 					this.controller.FoodPool = 0;
 				}
 			} else if (this.controller == NewGameController.currentPlayer) {
-				this.isFirstTurn = false;
+				this.isFirstTurn++;
 			}
 		}
 	}

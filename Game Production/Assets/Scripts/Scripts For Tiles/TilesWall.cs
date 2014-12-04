@@ -6,7 +6,7 @@ public class TilesWall : TileStandard {
 	override public void init()
 	{
 		this.originalMoveCost = 1;
-		this.defensiveValue = 3;
+		this.defensiveValue = 2;
 		this.TerrainName = "Wall";
 	}
 	

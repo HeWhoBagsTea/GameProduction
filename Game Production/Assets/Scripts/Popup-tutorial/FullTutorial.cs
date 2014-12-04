@@ -178,7 +178,7 @@ public class FullTutorial : MonoBehaviour {
 		GUI.skin.box.wordWrap = true;
 
 		if (progress == 0) {
-			disableAllForTut();
+			StartCoroutine(delay());
 
 			GUI.Box(new Rect(popUpPos), "", mySkin.GetStyle("Box"));
 			mySkin.GetStyle("Label").fontSize = 52;
@@ -373,5 +373,11 @@ public class FullTutorial : MonoBehaviour {
 			yield return new WaitForSeconds(.00001f);
 			xOffset++;
 		}
+	}
+
+	private IEnumerator delay(){
+		yield return new WaitForSeconds (.25f);
+		disableAllForTut ();
+
 	}
 }

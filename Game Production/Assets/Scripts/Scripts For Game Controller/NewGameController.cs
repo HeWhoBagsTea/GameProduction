@@ -16,6 +16,8 @@ public class NewGameController : MonoBehaviour {
 	public static float yOffset = 0;
 	public static int attackingUnitPow = 0;
 
+	private bool once = true;
+
 	public static int AImovePriority = 0;
 	//public static Vector4 DamageColor = new Vector4(1.0f,0.0f,0.0f,1.0f);
 
@@ -58,6 +60,18 @@ public class NewGameController : MonoBehaviour {
 			NewGameController.selectedUnit.captureTile(NewGameController.selectedUnit.currentSpace);
 		}
 
+
+		if(once) {
+			GameObject[] units = GameObject.FindGameObjectsWithTag ("Unit");
+			
+			foreach (GameObject u in units) 
+			{
+				if(u.GetComponent<UnitBase>() != null) {
+					u.GetComponent<UnitBase> ().startTurn ();
+				}
+			}
+			once = !once;
+		}
 
 		checkTurn ();
 
