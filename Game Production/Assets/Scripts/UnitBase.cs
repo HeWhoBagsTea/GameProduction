@@ -75,12 +75,19 @@ public class UnitBase : MonoBehaviour {
 	private int TextSize = (int)Screen.height/50;
 
 
+	private float FoodxDmg = -100;
+	private float FoodyDmg = -100;
+	private float FoodoffsetDmg = 0;
+
 	//Reused values
 	//private float HP_HEIGHT = Screen.height/30;
 	//private float TILE_BOX_HEIGHT = Screen.height/30;
 	//private float TILE_BOX_OFFSET = Screen.height/100 + Screen.height/30;
 	//private float TILE_BOX_WIDTH = Screen.width/9;
-	
+
+	private Vector4 foodColor= new Vector4 (0.88f, 0.68f, 0.01f, 1.0f);
+	private Vector4 red = new Vector4( 1.0f, 0, 0, 1.0f);
+
 	//use this to modify unit stats
 	public virtual void init() {
 
@@ -237,7 +244,9 @@ public class UnitBase : MonoBehaviour {
 			//}
 		}
 
-
+		GUI.color = foodColor;
+		GUI.skin.label.fontSize = 28;
+		GUI.Label (new Rect (this.FoodxDmg, this.FoodyDmg - this.FoodoffsetDmg, 100, 35), "-1");
 
 		//if (isSelected) {
 		//	Rect attackButton = new Rect (BUTTON_X_POS, Screen.height - BUTTON_SPACING, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -276,8 +285,8 @@ public class UnitBase : MonoBehaviour {
 			this.hasActioned = true;
 			audio.PlayOneShot (attackingSound);
 			if (target.HPcurr > 0) {
-				StartCoroutine (hurtSound (target,new Vector4(1.0f,0.0f,0.0f,1.0f)));
-				StartCoroutine (damageTaken (target,new Vector4(1.0f,0.0f,0.0f,1.0f),Damage));
+				StartCoroutine (hurtSound (target, red));
+				StartCoroutine (damageTaken (target,Damage));
 			}
 			if (this.hasMoved) {
 				deselect ();
@@ -298,8 +307,8 @@ public class UnitBase : MonoBehaviour {
 		audio.PlayOneShot (attackingSound);
 		
 		if(target.HPcurr > 0) {
-			StartCoroutine (hurtSound (target,new Vector4(1.0f,0.0f,0.0f,1.0f)));
-			StartCoroutine (damageTaken(target,new Vector4(1.0f,0.0f,0.0f,1.0f),Damage));
+			StartCoroutine (hurtSound (target, red));
+			StartCoroutine (damageTaken(target,Damage));
 		}
 		
 		if (!FullTutorial.unitAttack) {
@@ -336,9 +345,10 @@ public class UnitBase : MonoBehaviour {
 			if (!this.isFirstTurn) {
 				this.controller.FoodPool -= this.UpkeepCost;
 				if (this.controller.FoodPool < this.UpkeepCost) {
-					StartCoroutine(hurtSound(this,new Vector4 (0.88f, 0.68f, 0.01f, 1.0f)));
-					StartCoroutine(damageTaken(this,new Vector4 (0.88f, 0.68f, 0.01f, 1.0f),1));
+					StartCoroutine(hurtSound(this, foodColor));
+					StartCoroutine(this.tooLittleFood());
 					this.HPcurr--;
+					this.controller.FoodPool = 0;
 				}
 			} else if (this.controller == NewGameController.currentPlayer) {
 				this.isFirstTurn = false;
@@ -375,7 +385,7 @@ public class UnitBase : MonoBehaviour {
 			this.hasMoved = true;
 			this.hasActioned = true;
 
-			if(FullTutorial.progress == 13){
+			if(FullTutorial.progress == 14){
 				FullTutorial.firstCapture = true;
 			}
 
@@ -383,12 +393,16 @@ public class UnitBase : MonoBehaviour {
 		}
 	}
 
+	public void startTurn() {
+		this.EatWell();
+	}
+
 	public void resolveTurn() {
 		this.hasMoved = false;
 		this.hasActioned = false;
 
 		this.isDone = false;
-		this.EatWell();
+		//this.EatWell();
 		this.renderer.material = this.unitColors [this.controller.playerID];
 		if (this.transform.FindChild ("unit") != null) {
 			this.transform.FindChild ("unit").renderer.material = this.unitColors [this.controller.playerID];
@@ -533,18 +547,29 @@ public class UnitBase : MonoBehaviour {
 		return closest.GetComponent<TileStandard>();
 	}
 
-	private IEnumerator damageTaken(UnitBase target, Color damageType, int DamageDealt) {
-		Color Red = new Vector4(1.0f,0.0f,0.0f,1.0f);
-		
+	private IEnumerator tooLittleFood()
+	{
+		this.FoodxDmg = Camera.main.WorldToScreenPoint (this.transform.position).x - 20;
+		this.FoodyDmg = Screen.height - Camera.main.WorldToScreenPoint (this.transform.position).y - 40;
+
+		this.FoodoffsetDmg = 0;
+
+		for(int i = 0; i < 50; i++){
+			yield return new WaitForSeconds (.005f);
+			this.FoodoffsetDmg += 1;
+		}
+
+		this.FoodxDmg = -100;
+		this.FoodyDmg = -100;
+	}
+
+	private IEnumerator damageTaken(UnitBase target, int DamageDealt) {
 		NewGameController.attackingUnitPow = DamageDealt;
-		if (damageType != Red) {
-			NewGameController.xPos = Camera.main.WorldToScreenPoint (target.transform.position).x;
-			NewGameController.yPos = Screen.height - Camera.main.WorldToScreenPoint (target.transform.position).y-440;
-			} else {
-			NewGameController.xPos = Camera.main.WorldToScreenPoint (target.transform.position).x - 20;
-			NewGameController.yPos = Screen.height - Camera.main.WorldToScreenPoint (target.transform.position).y - 40;
-			}
-				NewGameController.DamageColor = damageType;
+
+		NewGameController.xPos = Camera.main.WorldToScreenPoint (target.transform.position).x - 20;
+		NewGameController.yPos = Screen.height - Camera.main.WorldToScreenPoint (target.transform.position).y - 40;
+
+
 		NewGameController.yOffset = 0;
 
 		for(int i = 0; i < 50; i++){
@@ -557,12 +582,12 @@ public class UnitBase : MonoBehaviour {
 
 	}
 
-	private IEnumerator hurtSound(UnitBase target, Color damageType){
+	private IEnumerator hurtSound(UnitBase target, Color particleColor){
 		yield return new WaitForSeconds (.25f);
 		audio.PlayOneShot (takeDamageSound);
 		GameObject temp;
 		temp = Instantiate(damageParticleFX, target.transform.position, this.transform.rotation) as GameObject;
-		temp.particleSystem.startColor = damageType;
+		temp.particleSystem.startColor = particleColor;
 		temp.particleSystem.Play();
 	}
 }

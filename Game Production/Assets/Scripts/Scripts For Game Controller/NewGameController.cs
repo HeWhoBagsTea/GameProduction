@@ -17,7 +17,7 @@ public class NewGameController : MonoBehaviour {
 	public static int attackingUnitPow = 0;
 
 	public static int AImovePriority = 0;
-	public static Vector4 DamageColor = new Vector4(1.0f,0.0f,0.0f,1.0f);
+	//public static Vector4 DamageColor = new Vector4(1.0f,0.0f,0.0f,1.0f);
 
 	// Use this for initialization
 	void Start () {
@@ -70,13 +70,18 @@ public class NewGameController : MonoBehaviour {
 			GUI.Button(new Rect(Screen.width / 3, Screen.height / 4, Screen.width / 4, Screen.height / 5), "Game Over!\n" + currentPlayer.getPlayerColor() + " Wins!");
 		}
 
-		GUI.color = DamageColor;
+
+		GUI.color = Color.red;
 		GUI.skin.label.fontSize = 28;
-		if (GUI.color != Color.red) {
-				GUI.Label (new Rect (xPos, yPos - yOffset, 100, 35), "-1");
-			} else {
-				GUI.Label (new Rect (xPos, yPos - yOffset, 100, 35), "-" + attackingUnitPow);
-			}
+		GUI.Label (new Rect (xPos, yPos - yOffset, 100, 35), "-" + attackingUnitPow);
+
+		//GUI.color = DamageColor;
+		//GUI.skin.label.fontSize = 28;
+		//if (GUI.color != Color.red) {
+		//		GUI.Label (new Rect (xPos, yPos - yOffset, 100, 35), "-1");
+		//	} else {
+		//		GUI.Label (new Rect (xPos, yPos - yOffset, 100, 35), "-" + attackingUnitPow);
+		//	}
 	}
 
 	private void checkTurn() {

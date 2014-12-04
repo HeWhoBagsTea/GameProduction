@@ -173,6 +173,7 @@ public class FullTutorial : MonoBehaviour {
 
 		Rect popUpPos = new Rect (popUpPosStart.position.x - xOffset, popUpPosStart.position.y, popUpPosStart.width, popUpPosStart.height);
 		Rect nextButtonPos = new Rect (nextButtonPosStart.position.x - xOffset, nextButtonPosStart.position.y, nextButtonPosStart.width, nextButtonPosStart.height);
+		Rect SecondButtonPos = new Rect (nextButtonPos.position.x + 150, nextButtonPos.position.y, nextButtonPos.width, nextButtonPos.height);
 		
 		GUI.skin.box.wordWrap = true;
 
@@ -186,8 +187,20 @@ public class FullTutorial : MonoBehaviour {
 				progress++;
 			}
 		}
-		
 		if (progress == 1) {
+			mySkin.GetStyle ("Label").fontSize = 32;
+			GUI.Box (new Rect (popUpPos), "\n\n\n\n Would you Like to play through the tutorial?", mySkin.GetStyle ("Box"));
+			GUI.Label (popUpPos, "\nTutorial", mySkin.GetStyle ("Label"));
+			if (GUI.Button (new Rect (nextButtonPos), "Yes")) {
+					progress++;
+			}
+			if (GUI.Button (new Rect (SecondButtonPos), "No")) {
+					progress = 20;
+			}
+		}
+
+
+		if (progress == 2) {
 			if(!doOnce) {
 				doOnce = true;
 				for(int i = 0; i < 5; i++) {
@@ -203,28 +216,26 @@ public class FullTutorial : MonoBehaviour {
 			}
 		}
 		
-		if (progress == 2) {
+		if (progress == 3) {
 			enableSpecificTiles();
-			GUI.Box(popUpPos, "\n\n\n The light blue highlighted spaces show \nwhere your unit can move.\n\nNow move the selected unit\n next to the wounded BLUE melee unit", mySkin.GetStyle("Box"));
+			GUI.Box(popUpPos, "\n\n\n The light blue highlighted spaces show \nwhere your unit can move.\n\nNow move the selected unit\n next to the wounded Neutral melee unit", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nMOVEMENT", mySkin.GetStyle("Label"));
 			if(movedAUnit) {
 				progress++;
 			}
 		}
 
-		if (progress == 3) {
-			GUI.Box(new Rect(popUpPos), "\n\n\n The orange highlighted spaces\n indicate your attack range.\n\nHover over the enemy unit to view its health. \n\nNow attack the enemy BLUE unit.", mySkin.GetStyle("Box"));
+		if (progress == 4) {
+			GUI.Box(new Rect(popUpPos), "\n\n\n The orange highlighted spaces\n indicate your attack range.\n\nHover over the enemy unit to view its health. \n\nNow attack the enemy Neutral unit.", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nCOMBAT", mySkin.GetStyle("Label"));
 			if(unitAttack) {
 				progress++;
 			}
 		}
 		
-		if (progress == 4) {
+		if (progress == 5) {
 			unitAttack= false;
 			TutorialActive = true;
-			//disableAllForTut();
-			//enableTilesForTut();
 			GUI.Box(new Rect(popUpPos), "\n\n\n Good, the enemy unit lost \nhealth equal to your attack power. \n\nAttack power, along with other useful information \nis displayed in the selected unit's stat block.", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nCOMBAT", mySkin.GetStyle("Label"));
 			if(GUI.Button( new Rect(nextButtonPos), "Next")) {
@@ -232,18 +243,17 @@ public class FullTutorial : MonoBehaviour {
 			}
 		}
 		
-		if (progress == 5) {
-			//enableUnitsForTut();
+		if (progress == 6) {
 			enableMeleeUnits();
 			enableSpecificTiles();
-			GUI.Box(new Rect(popUpPos), "\n\n\nScroll over the wounded BLUE unit \nto see its remaining HP. \n\nAnother good attack should end this foe.\nUse another melee unit to defeat the BLUE unit.", mySkin.GetStyle("Box"));
+			GUI.Box(new Rect(popUpPos), "\n\n\nScroll over the wounded Neutral unit \nto see its remaining HP. \n\nAnother good attack should end this foe.\nUse another melee unit to defeat the Neutral unit.", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nCOMBAT", mySkin.GetStyle("Label"));
 			if(unitAttack) {
 				progress++;
 			}
 		}
 		
-		if (progress == 6) {
+		if (progress == 7) {
 			disableAllForTut();
 			GUI.Box(new Rect(popUpPos), "\n\n\nVery good Commander. \nKeep this up and we shall win for sure.\n\nWhen you are done with your turn press\n the end turn button located in the bottom left corner.", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nCOMBAT", mySkin.GetStyle("Label"));
@@ -254,11 +264,11 @@ public class FullTutorial : MonoBehaviour {
 			}
 		}
 
-		if(progress == 7) {
+		if(progress == 8) {
 			disableBarracks();
 		}
 
-		if( progress == 9) {
+		if( progress == 10) {
 			disableEndTurn = true;
 			disableAllForTut();
 			GUI.Box(popUpPos, "\n\n\nAt the start of each turn you will lose food equal to your current upkeep located in the bottom left of the screen.\n\n Your upkeep is determined by the units you control. \nThe more units, the higher the upkeep.", mySkin.GetStyle("Box"));
@@ -268,7 +278,7 @@ public class FullTutorial : MonoBehaviour {
 			}
 		}
 
-		if( progress == 10) {
+		if( progress == 11) {
 			GUI.Box(popUpPos, "\n\n\nIf there is too little food, your units will begin to starve, \ntaking a point of damage at the start of each turn. \n\nThis will continue until there is enough food \nto feed all of your units.", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nUPKEEP", mySkin.GetStyle("Label"));
 			if(GUI.Button( new Rect(nextButtonPos), "Next")) {
@@ -276,7 +286,7 @@ public class FullTutorial : MonoBehaviour {
 			}
 		}
 
-		if( progress == 11) {
+		if( progress == 12) {
 			GUI.Box(popUpPos, "\n\n\nTile dominance is shown by the color of ring around it.\n\nRed for the RED army. \nBlue for the BLUE army. \nGrey for unclaimed territory.", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nDOMINANCE", mySkin.GetStyle("Label"));
 			if(GUI.Button( new Rect(nextButtonPos), "Next")) {
@@ -284,7 +294,7 @@ public class FullTutorial : MonoBehaviour {
 			}
 		}
 
-		if( progress == 12) {
+		if( progress == 13) {
 			enableTilesForTut();
 			NewGameController.deselectAllUnits();
 			GUI.Box(popUpPos, "\n\n\nTiles under your influence will\n provide you with resources each turn.\n\n Different tiles provide different resources.\n Scroll over different tiles to\n see what resources they provide.", mySkin.GetStyle("Box"));
@@ -295,17 +305,20 @@ public class FullTutorial : MonoBehaviour {
 			}
 		}
 
-		if( progress == 13) {
+		if( progress == 14) {
+				Debug.Log(progress);
+			
 			disableAllForTut();
 			enableUnitsForCapture();
 			GUI.Box(popUpPos, "\n\n\nSome terrains, such as walls, \nalso provide defensive bonuses. \n\nNow select a unit on unclaimed territory\n and press the middle mouse button down\n to claim the tile for your army.", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nDOMINANCE", mySkin.GetStyle("Label"));
 			if(firstCapture) {
 				progress++;
+				Debug.Log(progress);
 			}
 		}
 
-		if( progress == 14) {
+		if( progress == 15) {
 			GUI.Box(popUpPos, "\n\n\nYou have now claimed your first tile. \n\nNotice how the ring around the\n tile has changed to RED.\n\n Go ahead and use the rest of your units.", mySkin.GetStyle("Box"));
 			GUI.Label(popUpPos, "\nDOMINANCE", mySkin.GetStyle("Label"));
 			if(GUI.Button( new Rect(nextButtonPos), "Close")) {
@@ -313,14 +326,14 @@ public class FullTutorial : MonoBehaviour {
 			}
 		}
 
-		if(progress == 15) {
+		if(progress == 16) {
 			enableTilesForTut();
 			enableUnitsForTut();
 			disableBarracks();
 			disableEndTurn = false;
 		}
 
-		if( progress == 17) {
+		if( progress == 18) {
 			disableEndTurn = true;
 			disableAllForTut();
 			enableBarracks();
@@ -331,17 +344,25 @@ public class FullTutorial : MonoBehaviour {
 			}
 		}
 
-		if(progress == 18) {
+		if(progress == 19) {
 			GUI.Box(popUpPos, "\n\n\n\nYou have now learned all the basics.\n\nGood luck in defeating the enemy!", mySkin.GetStyle("Box"));
 			if(GUI.Button( new Rect(nextButtonPos), "Close")) {
 				progress++;
 			}
 		}
 
-		if(progress == 19) {
+		if(progress == 20) {
 			enableTilesForTut();
 			enableUnitsForTut();
 			disableEndTurn = false;
+
+			foreach(MeleeUnit a in FindObjectsOfType(typeof(MeleeUnit)))
+			{
+				if(a.GetComponent<EnableSelected>() != null){
+					Destroy(a.gameObject);
+
+				}
+			}
 		}
 
 	}

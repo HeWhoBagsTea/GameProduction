@@ -122,8 +122,18 @@ public class OnGUIButtons : MonoBehaviour
 			
 			Debug.Log("reached tile resolve end");
 			nextPlayer();
+
+
+
 			cameraView = (NewGameController.currentPlayer.playerID == 1) ? 1 : 2;    
 			decidePlayerPOV ();
+
+			foreach (GameObject u in units) 
+			{
+				if(u.GetComponent<UnitBase>() != null) {
+					u.GetComponent<UnitBase> ().startTurn ();
+				}
+			}
 		}
 
 		if(FullTutorial.disableEndTurn)
@@ -156,6 +166,13 @@ public class OnGUIButtons : MonoBehaviour
 			nextPlayer();
 			cameraView = (NewGameController.currentPlayer.playerID == 1) ? 1 : 2;    
 			decidePlayerPOV ();
+
+			foreach (GameObject u in units) 
+			{
+				if(u.GetComponent<UnitBase>() != null) {
+					u.GetComponent<UnitBase> ().startTurn ();
+				}
+			}
 			//smoothCamSwitch ();
 			
 			
