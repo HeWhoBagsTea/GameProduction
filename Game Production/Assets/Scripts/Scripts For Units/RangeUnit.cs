@@ -24,7 +24,7 @@ public class RangeUnit : UnitBase {
 		this.oreCost = 0;
 		this.unitType = "Infantry";
 		this.unitClass = "Archer";
-		Debug.Log ("Range Unit");
+		//Debug.Log ("Range Unit");
 	}
 
 	override protected void buffMe() {

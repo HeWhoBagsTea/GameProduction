@@ -34,7 +34,7 @@ public class MeleeUnit : UnitBase {
 		this.oreCost = 1;
 		this.unitType = "Infantry";
 		this.unitClass = "Melee";
-		Debug.Log ("Melee Unit");
+		//Debug.Log ("Melee Unit");
 	}
 
 	override protected void buffMe() {

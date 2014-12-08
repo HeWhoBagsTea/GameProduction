@@ -25,7 +25,7 @@ public class MageUnit : UnitBase {
 		this.oreCost = 1;
 		this.unitType = "Infantry";
 		this.unitClass = "Mage";
-		Debug.Log ("Mage Unit");
+		//Debug.Log ("Mage Unit");
 	}
 
 	override protected void buffMe() {

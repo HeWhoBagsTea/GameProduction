@@ -11,6 +11,7 @@ public class TileStandard : MonoBehaviour {
 	public bool isStructure = false;
 	public bool canMoveTo = false;
 	public bool canAttackUnitOnThis = false;
+	public bool canPlaceUnit = false;
 	private bool isEnabled = true;
 	public GUISkin mySkin;
 
@@ -26,12 +27,12 @@ public class TileStandard : MonoBehaviour {
 	public bool isControlled = false;
 
 	//UI Stat stuff
-	private bool entered = false;
-	private float STAT_BOX_X_POS = 10;
-	private float STAT_BOX_Y_POS = 10;
-	private float STAT_BOX_WIDTH = Screen.width/9;
-	private float STAT_BOX_HEIGHT = Screen.height/30;
-	private float STAT_BOX_OFFSET = Screen.height/100 + Screen.height/30;
+	protected bool entered = false;
+	protected float STAT_BOX_X_POS = 10;
+	protected float STAT_BOX_Y_POS = 10;
+	protected float STAT_BOX_WIDTH = Screen.width/9;
+	protected float STAT_BOX_HEIGHT = Screen.height/30;
+	protected float STAT_BOX_OFFSET = Screen.height/100 + Screen.height/30;
 
 
 	private float HP_X_POS; //(Works just fine without this) = Screen.width * 0.45f;
@@ -40,6 +41,9 @@ public class TileStandard : MonoBehaviour {
 
 	//Text Sizing
 	private int TextSize = (int)Screen.height/50;
+
+	//AI thing
+	public int Priority = 0;
 
 	public virtual void init() {
 
@@ -137,10 +141,16 @@ public class TileStandard : MonoBehaviour {
 		{
 			return;
 		}
-
+		if (this.isStructure) {
+			NewGameController.selectedBuilding = this;
+		}
 
 		if (this.unitOnTile == null) {
 			this.canAttackUnitOnThis = false;
+			if(this.canPlaceUnit)
+			{
+				SelectTarget(this);
+			}
 		}
 
 		if (this.unitOnTile == null && getTerrainMatName ().Equals ("defaultMat") && !isStructure) {
@@ -240,6 +250,7 @@ public class TileStandard : MonoBehaviour {
 		planeRenderer.material = defualtMat;
 		canMoveTo = false;
 		canAttackUnitOnThis = false;
+		canPlaceUnit = false;
 		deselectAction ();
 	}
 	
@@ -270,6 +281,9 @@ public class TileStandard : MonoBehaviour {
 				}
 			}
 		//}
+	}
+	public virtual void SelectTarget(TileStandard target)
+	{
 	}
 	
 }

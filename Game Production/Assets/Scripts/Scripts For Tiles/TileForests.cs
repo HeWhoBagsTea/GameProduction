@@ -20,6 +20,9 @@ public class TileForests : TileStandard {
 		//	this.unitOnTile.transform.position = new Vector3(this.unitOnTile.transform.position.x, 1.5f, this.unitOnTile.transform.position.z);
 		//		}
 	}
-
+	override public void SelectTarget(TileStandard target)
+	{
+		NewGameController.selectedBuilding.SelectTarget (target);
+	}
 
 }

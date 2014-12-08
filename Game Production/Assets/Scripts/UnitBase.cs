@@ -356,27 +356,27 @@ public class UnitBase : MonoBehaviour {
 		}
 	}
 
-	//Harvest Method
-	public void harvestTile(TileStandard currentLocation){
-		if (!this.hasActioned && this.currentSpace.ResourceValue >0) {
-			this.currentSpace.hasBeenHarvested = true;
-			this.currentSpace.ResourceValue--;
-			if(this.currentSpace.ResourceType.Equals("Food"))
-			{
-				this.controller.FoodPool ++;
-			}
-			else if(this.currentSpace.ResourceType.Equals("Lumber"))
-			{
-				this.controller.LumberPool ++;
-			}
-			else if(this.currentSpace.ResourceType.Equals("Ore"))
-			{
-				this.controller.OrePool ++;
-			}
-			this.hasActioned = true;
-			deselect ();
-		}
-	}
+	//Harvest Method -- Not Used
+	//public void harvestTile(TileStandard currentLocation){
+	//	if (!this.hasActioned && this.currentSpace.ResourceValue >0) {
+	//		this.currentSpace.hasBeenHarvested = true;
+	//		this.currentSpace.ResourceValue--;
+	//		if(this.currentSpace.ResourceType.Equals("Food"))
+	//		{
+	//			this.controller.FoodPool ++;
+	//		}
+	//		else if(this.currentSpace.ResourceType.Equals("Lumber"))
+	//		{
+	//			this.controller.LumberPool ++;
+	//		}
+	//		else if(this.currentSpace.ResourceType.Equals("Ore"))
+	//		{
+	//			this.controller.OrePool ++;
+	//		}
+	//		this.hasActioned = true;
+	//		deselect ();
+	//	}
+	//}
 	//Capture
 	public void captureTile(TileStandard currentLocation){
 		if (!this.hasActioned && !this.hasMoved && this.currentSpace.controller != this.controller) {

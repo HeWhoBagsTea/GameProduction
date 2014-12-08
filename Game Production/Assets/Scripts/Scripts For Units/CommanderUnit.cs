@@ -22,7 +22,8 @@ public class CommanderUnit : UnitBase {
 		this.lumberCost = 9999;
 		this.oreCost = 9999;
 		this.unitType = "Special";
-		Debug.Log ("Commander Unit");
+		this.unitClass = "Commander";
+		//Debug.Log ("Commander Unit");
 	}
 	override protected void buffMe() {
 		if (this.currentSpace.TerrainName.Equals ("Forest")) {

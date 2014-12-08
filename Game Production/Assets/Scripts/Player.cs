@@ -7,6 +7,7 @@ public class Player : MonoBehaviour{
 	public int playerID;
 	public Material playerColor;
 	public bool hasLost = false;
+	public bool hasCommand = false;
 
 	public int FoodPool = 10;
 	public int LumberPool = 2;
@@ -18,17 +19,30 @@ public class Player : MonoBehaviour{
 	public bool specialTerrain = true;
 	public bool isLookingAtPopup = false;
 
+	public ArrayList ListOfUnits; 
+
 
 	public Vector4 color;
 
 	void Start() {
+		ListOfUnits = new ArrayList();
 		numberOfUnits = getNumberOfControlledUnits ();
+
 	}
 
 	void Update() {
 		numberOfUnits = getNumberOfControlledUnits ();
+		//Debug.Log(this.ListOfUnits.Count);
 
-		if (numberOfUnits == 0) {
+		bool commander = false;
+		foreach(CommanderUnit a in FindObjectsOfType(typeof(CommanderUnit)))
+		{
+			if(a.controller == this){
+				commander = true;
+			}
+		}
+
+		if(!commander) {
 			hasLost = true;
 		}
 	}
@@ -51,8 +65,13 @@ public class Player : MonoBehaviour{
 		GameObject[] units = GameObject.FindGameObjectsWithTag ("Unit");
 		foreach(GameObject i in units) {
 			if(i.GetComponent<UnitBase>() != null && i.GetComponent<UnitBase>().controller == this) {
-				numUnits++;		
+				numUnits++;
+				ListOfUnits.Add(i);
 			}
+			//if(i.GetComponent<UnitBase>().unitClass.Equals("Commander") && ListOfUnits.Count == 0){
+			//	Debug.Log(i.GetComponent<UnitBase>().unitClass.ToString());
+			//	ListOfUnits.Add(i);
+			//}
 		}
 		return numUnits;
 	}

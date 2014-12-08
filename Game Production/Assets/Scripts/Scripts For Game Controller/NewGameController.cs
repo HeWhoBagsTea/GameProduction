@@ -10,6 +10,7 @@ public class NewGameController : MonoBehaviour {
 
 	public static Player currentPlayer;
 	public static UnitBase selectedUnit;
+	public static TileStandard selectedBuilding;
 
 	public static float xPos = -100;
 	public static float yPos = -100;
@@ -40,7 +41,7 @@ public class NewGameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log (AImovePriority);
+		//Debug.Log (AImovePriority);
 
 		//isGameOver = true;
 		isGameOver = checkIfGameOver ();

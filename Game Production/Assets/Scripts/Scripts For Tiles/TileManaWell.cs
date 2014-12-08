@@ -13,4 +13,8 @@ public class TileManaWell : TileStandard {
 	{
 		//Debug.Log("is called");
 	}
+	override public void SelectTarget(TileStandard target)
+	{
+		NewGameController.selectedBuilding.SelectTarget (target);
+	}
 }

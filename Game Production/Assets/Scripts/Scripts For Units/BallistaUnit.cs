@@ -23,7 +23,7 @@ public class BallistaUnit : UnitBase {
 		this.lumberCost = 5;
 		this.unitType = "Siege";
 		this.unitClass = "Ballista";
-		Debug.Log ("Ballista Unit");
+		//Debug.Log ("Ballista Unit");
 	}
 	override protected void buffMe() {
 		if (this.currentSpace.TerrainName.Equals ("Forest")) {

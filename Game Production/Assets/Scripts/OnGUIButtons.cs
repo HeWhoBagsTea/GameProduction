@@ -120,7 +120,7 @@ public class OnGUIButtons : MonoBehaviour
 				}
 			}
 			
-			Debug.Log("reached tile resolve end");
+			//Debug.Log("reached tile resolve end");
 			nextPlayer();
 
 
@@ -162,7 +162,7 @@ public class OnGUIButtons : MonoBehaviour
 				}
 			}
 
-			Debug.Log("reached tile resolve end");
+//			Debug.Log("reached tile resolve end");
 			nextPlayer();
 			cameraView = (NewGameController.currentPlayer.playerID == 1) ? 1 : 2;    
 			decidePlayerPOV ();
