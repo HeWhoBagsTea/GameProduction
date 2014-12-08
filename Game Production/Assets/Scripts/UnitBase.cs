@@ -129,6 +129,10 @@ public class UnitBase : MonoBehaviour {
 			return;
 		}
 
+		if (this.gameObject.GetComponent<SimpleAI> () != null && NewGameController.currentPlayer == this.controller) {
+			return;
+		}
+
 		if(NewGameController.selectedUnit == this && !this.hasMoved && !this.hasActioned)
 		{
 			if(show)

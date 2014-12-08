@@ -16,6 +16,7 @@ public class UnitBuilding : TileStandard {
 
 	public int playerControl = -1;
 	public bool isSelected = false;
+
 	public bool hasBuilt = false;
 	
 	//Text Sizing
@@ -52,9 +53,11 @@ public class UnitBuilding : TileStandard {
 	
 	public void OnGUI()
 	{
-
 		if (!this.enabled) {
 				return;
+		}
+		if (this.GetComponent<SimpleAI> () != null && NewGameController.currentPlayer == this.controller) {
+			return;
 		}
 		GUI.skin.button.fontSize = Text;
 		GUI.skin.button.fontStyle = FontStyle.Bold;

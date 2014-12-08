@@ -141,6 +141,10 @@ public class TileStandard : MonoBehaviour {
 		{
 			return;
 		}
+
+		if (this.unitOnTile != null && this.unitOnTile.GetComponent<SimpleAI> () != null && NewGameController.currentPlayer == this.unitOnTile.controller) {
+			return;
+		}
 		if (this.isStructure) {
 			NewGameController.selectedBuilding = this;
 		}

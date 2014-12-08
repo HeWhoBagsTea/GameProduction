@@ -92,7 +92,7 @@ public class OnGUIButtons : MonoBehaviour
 
 
 
-		int numOfAI = 0;
+		int numOfAI = -1;
 
 		foreach(SimpleAI a in FindObjectsOfType(typeof(SimpleAI)))
 		{
