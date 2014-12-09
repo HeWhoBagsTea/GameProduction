@@ -6,17 +6,24 @@ public class SimpleAI : MonoBehaviour {
 	
 	public Player controller;
 	public int priority;
-	public int HighestPri;
 	public int UnitToBuild = 0;
 	private bool once = true;
 	private UnitBase myUnit;
 	private UnitBuilding myBarracks;
 	private Vector3 myRotation;
+	private bool doneBuilding = false;
 	
 	void Start () {
+		if(this.gameObject.GetComponent<UnitBase>() != null) {
 		this.myUnit = this.gameObject.GetComponent<UnitBase> ();
+		}
+		else 
+		{
+			this.myUnit = null;
+		}
 		myRotation = new Vector3 (0, 270, 0);
-//		Debug.Log (this + " " + this.priority);
+
+		//		Debug.Log (this + " " + this.priority);
 	}
 	
 	void Update () {
@@ -24,11 +31,9 @@ public class SimpleAI : MonoBehaviour {
 		if (UnitToBuild > 2) {
 			UnitToBuild = 0;
 		}
-		int i = -1;
 		if(this.priority != 0) {
 			foreach(SimpleAI a in FindObjectsOfType(typeof(SimpleAI)))
 			{
-				i++;
 				if(a.priority == (this.priority - 1)){
 					previous = true;
 				}
@@ -37,13 +42,8 @@ public class SimpleAI : MonoBehaviour {
 					this.myBarracks = a.GetComponent<UnitBuilding>();
 				}
 			}
-			if(i > HighestPri)
-			{
-				HighestPri = i;
-			}
 			if(!previous) {
 				this.priority--;
-				HighestPri--;
 			}
 		}
 		if(this != null && this.myUnit && !this.myUnit.isDone)
@@ -51,7 +51,7 @@ public class SimpleAI : MonoBehaviour {
 			once = true;
 		}
 		
-		if(NewGameController.AImovePriority == this.priority  && this.myUnit.isDone && once)
+		if(/*(NewGameController.AImovePriority == this.priority && this.doneBuilding) || */(NewGameController.AImovePriority == this.priority && this.myUnit != null && this.myUnit.isDone && this.once))
 		{
 			once = false;
 			StartCoroutine(waitForNext());
@@ -86,8 +86,10 @@ public class SimpleAI : MonoBehaviour {
 			}
 		}
 
-		if(NewGameController.AImovePriority == (this.myBarracks.GetComponent<SimpleAI>().priority-1)){
+		if(!this.doneBuilding && this.myBarracks != null && this.myBarracks.GetComponent<SimpleAI>() != null && NewGameController.AImovePriority == (this.myBarracks.GetComponent<SimpleAI>().priority)){
 			BuildNextInBuildList(this.myBarracks.units);
+			this.doneBuilding = true;
+			NewGameController.AImovePriority++;
 			return;
 		}
 
@@ -197,6 +199,7 @@ public class SimpleAI : MonoBehaviour {
 //		Debug.Log ("Waiting.");
 		yield return new WaitForSeconds (1.0f);
 		NewGameController.AImovePriority++;
+		this.doneBuilding = false;
 	}
 	
 	//Negative Modification<First Avaliable<DefensiveValue<ResourceValue<Isnot Owned by Self with higer Resource<Positive Modification
@@ -276,7 +279,7 @@ public class SimpleAI : MonoBehaviour {
 			GameObject instantiate = Instantiate (
 				prefab, (this.myBarracks.BuildTarget.transform.position),
 				this.myBarracks.transform.rotation) as GameObject;
-			instantiate.GetComponent<SimpleAI> ().priority = HighestPri++;
+			instantiate.GetComponent<SimpleAI> ().priority = FindObjectsOfType(typeof(SimpleAI)).Length + 1;
 			instantiate.GetComponent<SimpleAI> ().controller = myBarracks.controller;
 			instantiate.GetComponent<SimpleAI> ().once = true;
 			instantiate.GetComponent<UnitBase> ().isDone = true;
