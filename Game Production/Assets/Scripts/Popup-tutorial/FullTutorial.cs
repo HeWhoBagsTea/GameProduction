@@ -355,7 +355,7 @@ public class FullTutorial : MonoBehaviour {
 			enableTilesForTut();
 			enableUnitsForTut();
 			disableEndTurn = false;
-
+			TutorialActive = false;
 			foreach(MeleeUnit a in FindObjectsOfType(typeof(MeleeUnit)))
 			{
 				if(a.GetComponent<EnableSelected>() != null){

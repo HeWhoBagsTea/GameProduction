@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -282,24 +282,27 @@ public class UnitBase : MonoBehaviour {
 
 	public void attackUnit (UnitBase target) {
 		int Damage = 0;
-		if (!FullTutorial.TutorialActive) {
-			Damage = this.attackPow;
-			Damage -=target.currentSpace.defensiveValue;
-			target.HPcurr -= Damage;
-			this.hasActioned = true;
-			audio.PlayOneShot (attackingSound);
-			if (target.HPcurr > 0) {
-				StartCoroutine (hurtSound (target, red));
-				StartCoroutine (damageTaken (target,Damage));
-			}
-			if (this.hasMoved) {
-				deselect ();
+		if(target.controller != this.controller){
+			if (!FullTutorial.TutorialActive) {
+				Damage = this.attackPow;
+				Damage -=target.currentSpace.defensiveValue;
+
+				target.HPcurr -= Damage;
+				this.hasActioned = true;
+				audio.PlayOneShot (attackingSound);
+				if (target.HPcurr > 0) {
+					StartCoroutine (hurtSound (target, red));
+					StartCoroutine (damageTaken (target,Damage));
+				}
+				if (this.hasMoved) {
+					deselect ();
+				} else {
+					buffMe ();
+					selected ();
+				}
 			} else {
-				buffMe ();
-				selected ();
+				TutorialAttackUnit(target);
 			}
-		} else {
-			TutorialAttackUnit(target);
 		}
 	}
 	public void TutorialAttackUnit (UnitBase target) {
@@ -406,7 +409,6 @@ public class UnitBase : MonoBehaviour {
 		this.hasActioned = false;
 
 		this.isDone = false;
-		//this.EatWell();
 		this.renderer.material = this.unitColors [this.controller.playerID];
 		if (this.transform.FindChild ("unit") != null) {
 			this.transform.FindChild ("unit").renderer.material = this.unitColors [this.controller.playerID];

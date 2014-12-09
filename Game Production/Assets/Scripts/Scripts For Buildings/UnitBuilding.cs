@@ -89,7 +89,9 @@ public class UnitBuilding : TileStandard {
 			}
 			GUI.Box (new Rect ((Screen.width * 0.37f), 200, (Screen.width / (3.5f)), 400), "", this.mySkin.GetStyle ("Box"));
 			if (GUI.Button (new Rect (Screen.width * 0.57f, 550, (Screen.width / (12.5f)), 35), "Close")) {
+				this.BuildTarget = null;
 				this.isSelected = false;
+				this.isSelected = true;
 			}
 			//Change string to fit name of unit.
 			for (int i = 0; i < buildUnit.Length; i++) {
@@ -156,7 +158,7 @@ public class UnitBuilding : TileStandard {
 		List<TileStandard> tiles = new List<TileStandard>();
 		
 		foreach(Collider i in hitCollider) {
-			if(i.GetComponent<TileStandard>() != null && i.GetComponent<TileStandard>().unitOnTile == false) {
+			if(i.GetComponent<TileStandard>() != null && i.GetComponent<TileStandard>().unitOnTile == false && i != this) {
 				tiles.Add(i.GetComponent<TileStandard>());
 			}
 		}

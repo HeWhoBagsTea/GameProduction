@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -16,11 +16,14 @@ public class SimpleAI : MonoBehaviour {
 	void Start () {
 		this.myUnit = this.gameObject.GetComponent<UnitBase> ();
 		myRotation = new Vector3 (0, 270, 0);
-
+//		Debug.Log (this + " " + this.priority);
 	}
 	
 	void Update () {
 		bool previous = false;
+		if (UnitToBuild > 2) {
+			UnitToBuild = 0;
+		}
 		int i = -1;
 		if(this.priority != 0) {
 			foreach(SimpleAI a in FindObjectsOfType(typeof(SimpleAI)))
@@ -38,43 +41,38 @@ public class SimpleAI : MonoBehaviour {
 			{
 				HighestPri = i;
 			}
-			//Debug.Log(HighestPri);
 			if(!previous) {
 				this.priority--;
+				HighestPri--;
 			}
 		}
-		if(!this.myUnit.isDone)
+		if(this != null && this.myUnit && !this.myUnit.isDone)
 		{
 			once = true;
 		}
 		
-		if(NewGameController.AImovePriority == this.priority && this.myUnit.isDone && once)
+		if(NewGameController.AImovePriority == this.priority  && this.myUnit.isDone && once)
 		{
 			once = false;
 			StartCoroutine(waitForNext());
 		}
-		if(NewGameController.currentPlayer != this.controller || this.myUnit.isDone) {
+		if(NewGameController.currentPlayer != this.controller || this.myUnit && this.myUnit.isDone) {
 			return;
 		}
 		
-		
-		if (NewGameController.AImovePriority == this.priority) {
-			//Debug.Log (this);
-			
+		if (NewGameController.AImovePriority == this.priority && this.myUnit) {
+//			Debug.Log (this);
+//			Debug.Log(NewGameController.AImovePriority);
+
 			if(tryAttack()) {
-				//Debug.Log("hit");
 				Attack(getUnitInAttackRange());
-				this.myUnit.isDone = true;
-				//StartCoroutine(waitForNext());
 				return;
 			}
 			else{
 				if(tryCapture()){
-					//StartCoroutine(waitForNext());
 					return;
 				}
 				else {
-					//Debug.Log("Moving");
 					if(tryMove()){
 						Move (getMoveTarget());
 					}
@@ -83,19 +81,16 @@ public class SimpleAI : MonoBehaviour {
 						Attack(getUnitInAttackRange());
 					}
 					this.myUnit.isDone = true;
-					//StartCoroutine(waitForNext());
 					return;
 				}
 			}
 		}
 
-
-
-		if(NewGameController.AImovePriority == this.myBarracks.Priority)
-		{
+		if(NewGameController.AImovePriority == (this.myBarracks.GetComponent<SimpleAI>().priority-1)){
 			BuildNextInBuildList(this.myBarracks.units);
 			return;
 		}
+
 	}
 	
 	bool tryAttack()
@@ -199,6 +194,7 @@ public class SimpleAI : MonoBehaviour {
 	
 	IEnumerator waitForNext()
 	{
+//		Debug.Log ("Waiting.");
 		yield return new WaitForSeconds (1.0f);
 		NewGameController.AImovePriority++;
 	}
@@ -222,6 +218,7 @@ public class SimpleAI : MonoBehaviour {
 		}
 		if ( target.GetComponent<TileStandard>().getControlRingMatName() != this.controller.playerColor.ToString()) {
 			target.Priority += 5;
+
 			isFirstAvaliable = false;
 		} 
 		if(isFirstAvaliable){
@@ -268,34 +265,26 @@ public class SimpleAI : MonoBehaviour {
 	public void BuildNextInBuildList(GameObject[] unitList)
 	{
 		//Finds the current HighestPriority in the running game.
-
+		
 		//First Check if you have the avaliable resources to build
-		if (CheckResources (unitList[UnitToBuild].GetComponent<UnitBase>())) {
+		if (CheckResources (unitList [UnitToBuild].GetComponent<UnitBase> ())) {
 			//If you can build check the spaces around barracks, take the first one you can build on
-			this.myBarracks.BuildTarget = findBuildtarget();
+			this.myBarracks.BuildTarget = findBuildtarget ();
 			//using the highestPri +=1, assign the new unit's priority value
-			GameObject prefab = unitList[UnitToBuild];
-			UnitToBuild ++;
+			GameObject prefab = unitList [UnitToBuild];
 			//when nextbuild unit is greater than the list's size reset to 0
-			if(UnitToBuild >2)
-			{
-				UnitToBuild = 0;
-			}
 			GameObject instantiate = Instantiate (
 				prefab, (this.myBarracks.BuildTarget.transform.position),
-				this.myBarracks.transform.rotation) as GameObject;	
-			instantiate.GetComponent<SimpleAI>().priority = HighestPri++;
-			instantiate.GetComponent<SimpleAI>().controller = myBarracks.controller;
-			instantiate.transform.rotation = Quaternion.Euler (myRotation);
+				this.myBarracks.transform.rotation) as GameObject;
+			instantiate.GetComponent<SimpleAI> ().priority = HighestPri++;
+			instantiate.GetComponent<SimpleAI> ().controller = myBarracks.controller;
+			instantiate.GetComponent<SimpleAI> ().once = true;
 			instantiate.GetComponent<UnitBase> ().isDone = true;
+			instantiate.transform.rotation = Quaternion.Euler (myRotation);
+			//this.myBarracks.BuildTarget.unitOnTile = instantiate.GetComponent<UnitBase>();
 			this.myBarracks.BuildTarget = null;
-			
-			//breaks the method everything after doesn't run
-			instantiate.GetComponent<UnitBase> ().giveControl (transform.FindChild ("ControlRing").GetComponentInChildren<MeshRenderer> ().material);
-		
-
-		}
-
+			UnitToBuild ++;
+		} 
 	}
 	
 	public bool CheckResources(UnitBase unitInQuestion)

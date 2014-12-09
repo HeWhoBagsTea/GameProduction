@@ -41,9 +41,6 @@ public class NewGameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//Debug.Log (AImovePriority);
-
-		//isGameOver = true;
 		isGameOver = checkIfGameOver ();
 		if (isGameOver) {
 			Debug.Log("GameOver");
